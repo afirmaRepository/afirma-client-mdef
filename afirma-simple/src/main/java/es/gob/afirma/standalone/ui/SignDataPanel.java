@@ -10,6 +10,8 @@
 
 package es.gob.afirma.standalone.ui;
 
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -63,6 +65,7 @@ import es.gob.afirma.standalone.crypto.CertAnalyzer;
 import es.gob.afirma.standalone.crypto.CertificateInfo;
 import es.gob.afirma.standalone.crypto.CompleteSignInfo;
 import es.gob.afirma.standalone.crypto.TimestampsAnalyzer;
+import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 final class SignDataPanel extends JPanel {
 
@@ -326,6 +329,7 @@ final class SignDataPanel extends JPanel {
         	LOGGER.severe("Error obteniendo los datos de la firma: " + e); //$NON-NLS-1$
             signInfo = null;
         }
+        
         final JScrollPane detailPanel = new JScrollPane(
     		signInfo == null ? null : SignDataPanel.getSignDataTree(signInfo, extKeyListener, SignDataPanel.this)
 		);
@@ -337,6 +341,13 @@ final class SignDataPanel extends JPanel {
         }
 
         final JLabel detailPanelText = new JLabel(SimpleAfirmaMessages.getString("SignDataPanel.22")); //$NON-NLS-1$
+
+        if(PreferencesManager.getBoolean( PREFERENCE_PADES_TIMESTAMP_CONFIGURE,false)){
+    		if (null == signInfo.getTimestampsInfo()  ||  signInfo.getTimestampsInfo().isEmpty()) {
+            	detailPanelText.setText(SimpleAfirmaMessages.getString("SignDataPanel.22.1",SimpleAfirmaMessages.getString("SignDataPanel.22")));        		
+        	}
+        }
+        
         detailPanelText.setLabelFor(detailPanel);
 
         // Establecemos la configuracion de color
