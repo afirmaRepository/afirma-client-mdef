@@ -90,7 +90,7 @@ InstallDir "$PROGRAMFILES64\AutoFirma"
 ; as install dir
 InstallDirRegKey HKLM SOFTWARE\AutoFirmacon@firma "Install_Dir"
 ;Mensaje que mostraremos para indicarle al usuario que seleccione un directorio
-DirText "Elija un directorio donde instalar la aplicación:"
+DirText "Elija un directorio donde instalar la aplicaci?n:"
 
 ;Indicamos que cuando la instalacion se complete no se cierre el instalador automaticamente
 AutoCloseWindow false
@@ -148,7 +148,7 @@ Section "Programa" sPrograma
 		;WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "NoModify" "1"
 		;WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "NoRepair" "1"
 		;WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "EstimatedSize" "100000"
-		;WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "Publisher" "Gobierno de España"
+		;WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "Publisher" "Gobierno de Espa?a"
 		;WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH_ID\" "DisplayVersion" "${VERSION}"
 
 	;WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -160,7 +160,7 @@ Section "Programa" sPrograma
 	
 	;Registro
 	;Firmar
-	WriteRegStr HKEY_CLASSES_ROOT "*\shell\afirma.sign" "" "Firmar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT "*\shell\afirma.sign" "" "Firmar"
 	WriteRegStr HKEY_CLASSES_ROOT "*\shell\afirma.sign" "Icon" "$INSTDIR\AutoFirma\AutoFirma.exe"
 	WriteRegStr HKEY_CLASSES_ROOT "*\shell\afirma.sign\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe sign -gui -i %1" 
 
@@ -228,7 +228,7 @@ Section "Programa" sPrograma
 	IfFileExists "$INSTDIR\AutoFirma\autofirma.pfx" 0 +1
 	Delete "$INSTDIR\AutoFirma\autofirma.pfx"
 	
-	;Se cierra Firefox y Chrome si están abiertos
+	;Se cierra Firefox y Chrome si est?n abiertos
 	${nsProcess::FindProcess} "firefox.exe" $R2
 	StrCmp $R2 0 0 +1
 	${nsProcess::KillProcess} "firefox.exe" $R0
@@ -249,7 +249,7 @@ Section "Programa" sPrograma
 	Call AddCertificateToStore
 	Pop $0
 	${If} $0 != success
-	  ;MessageBox MB_OK "Error en la importación: $0"
+	  ;MessageBox MB_OK "Error en la importaci?n: $0"
 	${EndIf}
 	
 	; Obtenemos la ruta de los ficheros de GoogleChrome para cada usuario
@@ -261,7 +261,7 @@ Section "Programa" sPrograma
 	StrCpy $chromePath "C:\Users\$1\AppData\Local\Google\Chrome\User Data"
 	${If} ${FileExists} "$chromePath\Local State"
 
-	;Se incluye AutoFirma como aplicación de confianza en Google Chrome
+	;Se incluye AutoFirma como aplicaci?n de confianza en Google Chrome
 	Push '"afirma":false,' #text to be replaced
 	Push '' #replace with
 	Push all #replace all ocurrences
@@ -364,7 +364,7 @@ Function AddCertificateToStore
  
       System::Call "crypt32::CertFreeCertificateContext(i r0)"
  
-      StrCpy $0 "No fue posible abrir el almacén de certificados"
+      StrCpy $0 "No fue posible abrir el almac?n de certificados"
  
     ${EndIf}
  
