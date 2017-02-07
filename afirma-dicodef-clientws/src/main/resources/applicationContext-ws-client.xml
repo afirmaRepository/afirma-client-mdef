@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:oxm="http://www.springframework.org/schema/oxm" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+ 
+    <context:annotation-config />
+    <context:component-scan base-package="es.gob.afirma.ws.client"/>
+ 
+    <context:property-placeholder location="classpath*:descargaScopus.properties" />			
+    
+    <!-- Define the SOAP version used by the WSDL -->
+    <bean id="soapMessageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
+        <property name="soapVersion">
+            <!--<util:constant static-field="org.springframework.ws.soap.SoapVersion.SOAP_12"/>-->
+            <util:constant static-field="org.springframework.ws.soap.SoapVersion.SOAP_11"/>
+        </property>
+    </bean>
+ 
+    <!-- The location of the generated Java files -->
+    <oxm:jaxb2-marshaller id="marshaller" contextPath="es.gob.afirma.ws.client.modelo"/>
+ 
+    <!-- Configure Spring Web Services -->
+    <bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+        <constructor-arg ref="soapMessageFactory"/>
+        <property name="marshaller" ref="marshaller"/>
+        <property name="unmarshaller" ref="marshaller"/>
+        <property name="defaultUri" value="${ws.consultaDicoef.wsdl}"/>
+<!--         <property name="interceptors">
+	        <list>
+	            <ref bean="payloadValidatingInterceptor" />
+	        </list>
+    	</property>
+ -->    </bean>
+    
+<!-- 	<bean id="payloadValidatingInterceptor"
+	    class="org.springframework.ws.client.support.interceptor.PayloadValidatingInterceptor">
+	    <property name="schema"
+	        value="file:src/main/resources/ConsultarDICODEF.xsd1.xsd" />
+	    <property name="validateRequest" value="true" />
+	    <property name="validateResponse" value="true" />
+	</bean>    
+-->
+</beans>

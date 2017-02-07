@@ -486,6 +486,13 @@ public final class PreferencesManager {
 	/** Preferencia solo. */
 	public static final String PREFERENCE_ADMIN_SHOW_SYMETRIC_CIPHER = "adminShowSymetricCipher"; //$NON-NLS-1$
 
+	// ********************************************************************************************
+	// ******************* PREFERENCIAS CONFIGURABLES PARA LOS SERVICIOS WEB **********************
+	// ********************************************************************************************
+
+	/** Url del wsdl para poder utlizar los servicios web de dicodef. */
+	public static final String PREFERENCE_URL_WEB_SERVICES_DICODEF = "urlWebServiceDicodef"; //$NON-NLS-1$
+	
 	/** Recupera el valor de una cadena de texto almacenada entre las preferencias de la
 	 * aplicaci&oacute;n.
 	 * @param key Clave del valor que queremos recuperar.

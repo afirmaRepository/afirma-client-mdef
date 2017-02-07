@@ -241,7 +241,12 @@
 			<artifactId>proxy-vole</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>es.gob.afirma</groupId>
+			<artifactId>afirma-dicodef-clientws</artifactId>
+			<version>3.3.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 	<scm>

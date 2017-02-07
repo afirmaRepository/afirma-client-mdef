@@ -475,7 +475,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
      * </ol>
      * @param args Par&aacute;metros en l&iacute;nea de comandos */
     public static void main(final String[] args) {
-
+    	
     	LookAndFeelManager.applyLookAndFeel();
 
        	AutoFirmaUtil.setProxySettings();
@@ -582,6 +582,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
     	}
     }
 
+    
 	private static boolean isSimpleAfirmaAlreadyRunning() {
     	final File appDir = new File(APPLICATION_HOME);
         if (!appDir.exists()) {

@@ -58,8 +58,8 @@ public final class DefenseDirectoryDialog extends JDialog implements KeyListener
 		this.certificate = cert;
 	}
 
-	private final FakeLDAPMDEFManager lm = new FakeLDAPMDEFManager();
-	FakeLDAPMDEFManager getLDAPMDEFManager() {
+	private final LDAPMDEFManager lm = new LDAPMDEFManager();
+	LDAPMDEFManager getLDAPMDEFManager() {
 		return this.lm;
 	}
 

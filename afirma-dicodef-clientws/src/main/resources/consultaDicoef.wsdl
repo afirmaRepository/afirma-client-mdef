@@ -1,0 +1,136 @@
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://consultardicodef.ws.comunicaciones.defensa.gob.es/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://consultardicodef.ws.comunicaciones.defensa.gob.es/"
+	name="ConsultarDicodefImplDummyService">
+	<import namespace="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd"
+		location="http://localhost:8080/HelloService/ConsultarDicodefImplDummy?wsdl=1" />
+	<binding xmlns:ns1="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd"
+		name="ConsultarDicodefImplDummyPortBinding" type="ns1:ConsultarDICODEF">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<operation name="ConsultarTarjeta">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent//ConsultarTarjeta" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarTarjetaFault">
+				<soap:fault name="ConsultarTarjetaFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="BusquedaPersonas">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/BusquedaPersonas" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarIdentidadFault">
+				<soap:fault name="ConsultarIdentidadFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarIdentidadExtendida">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent//ConsultarIdentidadExtendida" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarIdentidadExtendidaFault">
+				<soap:fault name="ConsultarIdentidadExtendidaFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarIdentidad">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/ConsultarIdentidad" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarIdentidadFault">
+				<soap:fault name="ConsultarIdentidadFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarIdentidadRes">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/ConsultarIdentidadRes" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarIdentidadResFault">
+				<soap:fault name="ConsultarIdentidadResFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarIdentidadSIPERDEF">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/ConsultarIdentidadSIPERDEF" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarIdentidadSIPERDEFFault">
+				<soap:fault name="ConsultarIdentidadSIPERDEFFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarRelacion">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/ConsultarRelacion" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarRelacionFault">
+				<soap:fault name="ConsultarRelacionFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="obtenerCertificado">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent/ConsultarDICODEFEndpoint1/obtenerCertificado" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ObtenerCertificadoFault">
+				<soap:fault name="ObtenerCertificadoFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="ConsultarRelacionSituacion">
+			<soap:operation
+				soapAction="/MINISDEF/DICODEF/Servicios/ConsultarDICODEF/ConsultarDICODEF.serviceagent//ConsultarRelacionSituacion" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="ConsultarRelacionSituacionFault">
+				<soap:fault name="ConsultarRelacionSituacionFault" use="literal" />
+			</fault>
+		</operation>
+	</binding>
+	<service name="ConsultarDicodefImplDummyService">
+		<port name="ConsultarDicodefImplDummyPort" binding="tns:ConsultarDicodefImplDummyPortBinding">
+			<soap:address
+				location="http://localhost:8080/HelloService/ConsultarDicodefImplDummy" />
+		</port>
+	</service>
+</definitions>
