@@ -17,8 +17,8 @@
 	
 	<modules>
 		<module>afirma-core-keystores</module>
-		<!-- <module>afirma-keystores-temd</module>  -->
-		<module>afirma-keyone</module>
+		<!-- <module>afirma-keystores-temd</module>  
+		<module>afirma-keyone</module>  -->
 		<module>afirma-crypto-validation</module>
 		<module>afirma-local-batch-sign</module>
 		<module>afirma-dicodef-clientws</module>

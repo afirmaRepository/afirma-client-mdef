@@ -493,6 +493,15 @@ public final class PreferencesManager {
 	/** Url del wsdl para poder utlizar los servicios web de dicodef. */
 	public static final String PREFERENCE_URL_WEB_SERVICES_DICODEF = "urlWebServiceDicodef"; //$NON-NLS-1$
 	
+
+	// ********************************************************************************************
+	// ******************* PREFERENCIAS CONFIGURABLES PARA LA FORMA DEL PDF ***********************
+	// ********************************************************************************************
+
+	/** Url del wsdl para poder utlizar los servicios web de dicodef. */
+	public static final String PREFERENCE_RUBRIC_IMAGE = "rubricImage"; //$NON-NLS-1$
+
+	
 	/** Recupera el valor de una cadena de texto almacenada entre las preferencias de la
 	 * aplicaci&oacute;n.
 	 * @param key Clave del valor que queremos recuperar.
@@ -511,6 +520,16 @@ public final class PreferencesManager {
 		return preferences.getBoolean(key, def);
 	}
 
+	/** Recupera el valor {@code true} o {@code false} almacenado entre las preferencias de la
+	 * aplicaci&oacute;n.
+	 * @param key Clave del valor que queremos recuperar.
+	 * @param def Valor que se devolver&aacute;a si la preferencia no se encontraba almacenada.
+	 * @return La preferencia almacenada o {@code def} si no se encontr&oacute;. */
+	public static byte[] getByteArray(final String key, final byte[] def) {
+		return preferences.getByteArray(key, def);
+	}
+	
+
 	/** Establece una cadena de texto en la configuraci&oacute;n de la aplicaci&oacute;n
 	 * identific&aacute;ndola con una clave. Para realizar el guardado completo, es
 	 * necesario ejecutar el m&eacute;todo {@code flush()}.
@@ -518,6 +537,15 @@ public final class PreferencesManager {
 	 * @param value Valor que se desea almacenar. */
 	public static void put(final String key, final String value) {
 		preferences.put(key, value);
+	}
+
+	/** Establece un {@code true} o {@code false} en la configuraci&oacute;n de la aplicaci&oacute;n
+	 * identific&aacute;ndolo con una clave. Para realizar el guardado completo, es
+	 * necesario ejecutar el m&eacute;todo {@code flush()}.
+	 * @param key Clave con la que identificaremos el valor.
+	 * @param value Valor que se desea almacenar. */
+	public static void putByteArray(final String key, final byte[] value) {
+		preferences.putByteArray(key, value);
 	}
 
 	/** Establece un {@code true} o {@code false} en la configuraci&oacute;n de la aplicaci&oacute;n
