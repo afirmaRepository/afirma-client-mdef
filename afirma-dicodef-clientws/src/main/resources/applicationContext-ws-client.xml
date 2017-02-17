@@ -27,19 +27,25 @@
         <property name="marshaller" ref="marshaller"/>
         <property name="unmarshaller" ref="marshaller"/>
         <property name="defaultUri" value="${ws.consultaDicoef.wsdl}"/>
-<!--         <property name="interceptors">
+         <property name="interceptors">
 	        <list>
-	            <ref bean="payloadValidatingInterceptor" />
+	            <!-- <ref bean="payloadValidatingInterceptor" /> -->
+	            <ref bean="payloadValidatingInterceptorWithSourceFix" />
 	        </list>
     	</property>
- -->    </bean>
+    </bean>
     
 <!-- 	<bean id="payloadValidatingInterceptor"
 	    class="org.springframework.ws.client.support.interceptor.PayloadValidatingInterceptor">
-	    <property name="schema"
+ 	    <property name="schema"
 	        value="file:src/main/resources/ConsultarDICODEF.xsd1.xsd" />
-	    <property name="validateRequest" value="true" />
+ -->
+<bean id="payloadValidatingInterceptorWithSourceFix"
+    class="es.gob.afirma.ws.client.services.PayloadValidatingInterceptorWithSourceFix"> 
+ 		<property name="schema"
+	        value="C:/temp/ConsultarDICODEF.xsd1.xsd" />
+ 	    <property name="validateRequest" value="true" />
 	    <property name="validateResponse" value="true" />
 	</bean>    
--->
+
 </beans>

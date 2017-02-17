@@ -96,9 +96,10 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
     private static final String PROTOCOL_URL_START_LOWER_CASE = "afirma://"; //$NON-NLS-1$
 
     /** Modo de depuraci&oacute;n para toda la aplicaci&oacute;n. */
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
+
 
     private final JFrame window = new MainScreen();
 
@@ -582,7 +583,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
     	}
     }
 
-    
+
 	private static boolean isSimpleAfirmaAlreadyRunning() {
     	final File appDir = new File(APPLICATION_HOME);
         if (!appDir.exists()) {
@@ -641,6 +642,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
     	// Configuramos, si procede, el log en fichero
     	try {
     		final String afirmaDebug = System.getProperty(SYSTEM_PROPERTY_DEBUG_FILE);
+    		//final String afirmaDebug = APPLICATION_HOME + File.separator + "logDebug";
     		if (afirmaDebug != null) {
     			configureFileLogger(afirmaDebug);
     		}
