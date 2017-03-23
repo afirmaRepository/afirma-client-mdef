@@ -247,6 +247,11 @@
 			<artifactId>afirma-dicodef-clientws</artifactId>
 			<version>3.3.2-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>es.gob.afirma</groupId>
+			<artifactId>afirma-client-pssdef</artifactId>
+			<version>3.3.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 	<scm>
@@ -321,7 +326,7 @@
 								<exclude>META-INF/*.SF</exclude>
 								<exclude>META-INF/*.DSA</exclude>
 								<exclude>META-INF/*.RSA</exclude>
-								<exclude>*.crt</exclude>
+								<!-- <exclude>*.crt</exclude>  -->
 							</excludes>
 						</filter>
 						<filter>

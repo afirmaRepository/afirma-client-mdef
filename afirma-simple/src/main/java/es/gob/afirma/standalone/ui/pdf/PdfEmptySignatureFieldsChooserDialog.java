@@ -29,8 +29,10 @@ public final class PdfEmptySignatureFieldsChooserDialog extends JDialog implemen
 
 	private static final long serialVersionUID = 4904673758490090781L;
 
-	private static final int PREFERRED_WIDTH = 500;
-	private static final int PREFERRED_HEIGHT = 615;
+	//private static final int PREFERRED_WIDTH = 500;
+	//private static final int PREFERRED_HEIGHT = 615;
+	private static final int PREFERRED_WIDTH = 650;
+	private static final int PREFERRED_HEIGHT = 815;
 
 	private final SignPdfDialogListener listener;
 	SignPdfDialogListener getListener() {

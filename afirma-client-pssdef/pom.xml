@@ -1,0 +1,154 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>es.gob.afirma</groupId>
+		<artifactId>afirma-client-mdef</artifactId>
+		<version>3.3.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>afirma-client-pssdef</artifactId>
+	<dependencies>
+		<!-- <dependency> <groupId>activation</groupId> <artifactId>activation</artifactId> 
+			<version>1.0.2</version> </dependency> -->
+		<dependency>
+			<groupId>org.jdesktop</groupId>
+			<artifactId>appframework</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.8</version>
+		</dependency>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis-saaj</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.netbeans.external</groupId> <artifactId>swing-layout-1.0.4</artifactId> 
+			<version>RELEASE802</version> </dependency> <dependency> <groupId>org.jdesktop</groupId> 
+			<artifactId>swing-worker</artifactId> <version>1.1</version> </dependency> -->
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+		<!-- <dependency> <groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> 
+			<version>2.0.0</version> </dependency> <dependency> <groupId>xml-apis</groupId> 
+			<artifactId>xml-apis</artifactId> <version>1.2.01</version> </dependency> -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>pssdef</groupId>
+			<artifactId>pssdef</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>trustedX.smartwrapper</groupId>
+			<artifactId>smartwrapper</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>trustedX.trustedx-client-axis-stub</groupId>
+			<artifactId>trustedx-client-axis-stub</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>trustedX.trustedx-client-axis</groupId>
+			<artifactId>trustedx-client-axis</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>trustedX.trustedx-provider</groupId>
+			<artifactId>trustedx-provider</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<!--<build> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-install-plugin</artifactId> <version>2.5.1</version> <configuration> 
+		<groupId>javax.activation</groupId> <artifactId>activation</artifactId> <version>1.0.2</version> 
+		<packaging>jar</packaging> <file>${basedir}/lib/activation.jar</file> <generatePom>true</generatePom> 
+		<groupId>pssdef</groupId> <artifactId>pssdef</artifactId> <version>1.0.2</version> 
+		<packaging>jar</packaging> <file>${basedir}/lib/PSSDEF.jar</file> <generatePom>true</generatePom> 
+		<groupId>trustedX.smartwrapper</groupId> <artifactId>smartwrapper</artifactId> 
+		<version>1.0.0</version> <packaging>jar</packaging> <file>${basedir}/lib/smartwrapper.jar</file> 
+		<generatePom>true</generatePom> <groupId>trustedX.trustedx-client-axis-stub</groupId> 
+		<artifactId>trustedx-client-axis-stub</artifactId> <version>1.0.0</version> 
+		<packaging>jar</packaging> <file>${basedir}/lib/trustedx-client-axis-stub.jar</file> 
+		<generatePom>true</generatePom> <groupId>trustedX.trustedx-client-axis</groupId> 
+		<artifactId>trustedx-client-axis</artifactId> <version>1.0.0</version> <packaging>jar</packaging> 
+		<file>${basedir}/lib/trustedx-client-axis.jar</file> <generatePom>true</generatePom> 
+		<groupId>trustedX.trustedx-provider</groupId> <artifactId>trustedx-provider</artifactId> 
+		<version>1.0.0</version> <packaging>jar</packaging> <file>${basedir}/lib/trustedx-provider.jar</file> 
+		<generatePom>true</generatePom> </configuration> <executions> <execution> 
+		<id>install-jar-lib</id> <goals> <goal>install-file</goal> </goals> <phase>validate</phase> 
+		</execution> </executions> </plugin> </plugins> </build> -->
+	<!-- instrucciones mvn clean install mvn validate -->
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<!-- <fork>true</fork> <compilerArgument>-XDignore.symbol.file</compilerArgument> -->
+				</configuration>
+			</plugin>
+		</plugins>
+        <resources>
+          <resource>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <filtering>false</filtering>
+            <includes>
+              <include>PSSDEF_Autofirma.crt</include>
+              <include>PSSDEF_Autofirma.jks</include>
+              <include>trustedx-inethandler.truststore</include>
+            </includes>
+          </resource>
+        </resources>		
+<!-- 		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
+		</resources> -->
+	</build>
+
+</project>

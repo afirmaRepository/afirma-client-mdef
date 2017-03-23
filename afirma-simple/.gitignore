@@ -1,1 +1,6 @@
 /target/
+/PSSDEF_Autofirma.crt
+/PSSDEF_Autofirma.jks
+/smartwrapper.properties
+/trustedx-inethandler.truststore
+/.gitignore

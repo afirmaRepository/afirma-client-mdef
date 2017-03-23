@@ -18,7 +18,9 @@ import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.KeyStoreConfiguration;
+import es.gob.afirma.keystores.KeyStoreConfigurationGroup;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
+
 
 /** Utilidades para sobres digitales.
  * @author Mariano Mart&iacute;nez. */
@@ -60,9 +62,9 @@ public final class EnvelopesUtils {
         final List<KeyStoreConfiguration> stores = new ArrayList<>();
 
         stores.add(new KeyStoreConfiguration(AOKeyStore.LDAPMDEF, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.SINGLE, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS12, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS11, null, null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.SINGLE, "Fichero local (PKCS#7/X.509)", null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS12, "Fichero local (PKCS#12/PFX)", null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS11, "Fichero local (PKCS#11)", null));
 
         return stores.toArray(new KeyStoreConfiguration[stores.size()]);
     }
@@ -77,13 +79,13 @@ public final class EnvelopesUtils {
 
         stores.add(new KeyStoreConfiguration(AOKeyStore.FRECUENTCERTS, null, null));
         stores.add(new KeyStoreConfiguration(AOKeyStore.LDAPMDEF, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.SINGLE, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS12, null, null));
-        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS11, null, null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.SINGLE, "Fichero local (PKCS#7/X.509)", null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS12, "Fichero local (PKCS#12/PFX)", null));
+        stores.add(new KeyStoreConfiguration(AOKeyStore.PKCS11, "Fichero local (PKCS#11)", null));
 
         return stores.toArray(new KeyStoreConfiguration[stores.size()]);
-    }
-
+    }    
+    
 	/** Recupera los almacenes compatibles con el sistema y preparados
      * para contener los certificados para la apertura de sobres.
      * @return Listado de almacenes. */

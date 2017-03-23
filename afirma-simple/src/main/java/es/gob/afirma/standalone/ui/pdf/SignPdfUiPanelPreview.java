@@ -1,7 +1,9 @@
 package es.gob.afirma.standalone.ui.pdf;
 
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_RUBRIC_IMAGE;
-
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_REASON;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_PRODUCTION_CITY;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGNER_POSITION;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -66,6 +68,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
@@ -98,7 +101,9 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1848879900511003335L;
 	static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
-	private static final int PREFERRED_WIDTH = 475;
+	//private static final int PREFERRED_WIDTH = 475;
+	//private static final int PREFERRED_HEIGHT = 200;
+	private static final int PREFERRED_WIDTH = 800;
 	private static final int PREFERRED_HEIGHT = 140;
 	private static final int MAX_TEXT_SIZE = 50;
 	private static final int MIN_TEXT_SIZE = 1;
@@ -113,6 +118,9 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 	private BufferedImage image;
 	private BufferedImage signImage;
 
+	private final JTextField padesSignReason = new JTextField();
+	private final JTextField padesSignProductionCity = new JTextField();
+	
 	BufferedImage getSignImage() {
 		return this.signImage;
 	}
@@ -238,6 +246,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 		this.style = 0;
 		this.image = im;
 		loadRubric();
+        loadPreferences();
 
 		createUI();
 	}
@@ -256,7 +265,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.insets = new Insets(10, 10, 0, 10);
 		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
+		//gbc.weighty = 1.0;
 		gbc.gridy = 0;
 		add(createPreviewPanel(), gbc);
 		gbc.gridy++;
@@ -602,6 +611,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 			}
 		});
 
+		
 		helpLabel.addHyperlinkListener(editorFocusManager);
 		helpLabel.addKeyListener(editorFocusManager);
 		helpLabel.setEditable(false);
@@ -629,8 +639,81 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 		c.gridy++;
 		c.gridwidth = 5;
 		c.insets = new Insets(10, 10, 10, 10);
+
+		
+		///
+
+	    final JLabel padesSignReasonLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanel.20")); //$NON-NLS-1$
+	    padesSignReasonLabel.setLabelFor(this.padesSignReason);
+	    panel.add(padesSignReasonLabel, c);
+
+	    c.gridy++;
+
+	    this.padesSignReason.getAccessibleContext().setAccessibleDescription(SimpleAfirmaMessages.getString("PreferencesPanel.63")); //$NON-NLS-1$
+		this.padesSignReason.addKeyListener(this);
+		this.padesSignReason.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+		});
+		
+	    panel.add(this.padesSignReason, c);
+
+	    c.gridy++;
+
+	    final JLabel padesSignProductionCityLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanel.21")); //$NON-NLS-1$
+	    padesSignProductionCityLabel.setLabelFor(this.padesSignProductionCity);
+	    panel.add(padesSignProductionCityLabel, c);
+
+	    c.gridy++;
+
+	    this.padesSignProductionCity.getAccessibleContext().setAccessibleDescription(SimpleAfirmaMessages.getString("PreferencesPanel.64")); //$NON-NLS-1$
+		this.padesSignProductionCity.addKeyListener(this);
+		this.padesSignProductionCity.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				ComposedTex();
+				showPreview();
+			}
+		});
+	    panel.add(this.padesSignProductionCity, c);
+
+	    c.gridy++;
+		
+		
+////		
+		
+		
+		
 		panel.add(helpLabel, c);
 
+		
 		return panel;
 	}
 
@@ -638,20 +721,20 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 
 		final JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		panel.setMinimumSize(new Dimension(400, 100));
+		panel.setMinimumSize(new Dimension(400, 130));
 
 		panel.setBorder(BorderFactory.createTitledBorder(SignPdfUiMessages.getString("SignPdfUiPreview.2")) //$NON-NLS-1$
 		);
-
+		
 		this.textArea.setEditable(true);
 		this.textArea.setBackground(Color.WHITE);
-		this.textArea.setText(SignPdfUiMessages.getString("SignPdfUiPreview.25")); //$NON-NLS-1$
+		//this.textArea.setText(SignPdfUiMessages.getString("SignPdfUiPreview.25")); //$NON-NLS-1$
 		this.textArea.setLineWrap(true);
 		this.textArea.setWrapStyleWord(true);
 		this.textArea.addKeyListener(this);
 		final JScrollPane scrollPane = new JScrollPane(this.textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setMinimumSize(new Dimension(300, 80));
+		scrollPane.setMinimumSize(new Dimension(300, 110));
 		scrollPane.addKeyListener(this);
 
 		this.textArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -684,7 +767,8 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 	private JPanel createButtonsPanel() {
 
 		final JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		//panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panel.setLayout(new FlowLayout(FlowLayout.RIGHT,3,3));
 
 		this.okButton.setMnemonic('A');
 		this.okButton.getAccessibleContext().setAccessibleDescription(SignPdfUiMessages.getString("SignPdfUiPanel.2") //$NON-NLS-1$
@@ -699,6 +783,8 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 					getProp().put("layer2FontSize", Integer.toString(getSelectedSize())); //$NON-NLS-1$
 					getProp().put("layer2FontStyle", Integer.toString(getStyleIndex())); //$NON-NLS-1$
 					getProp().put("layer2FontColor", getColorCombobox().getSelectedItem().getPdfColorKey()); //$NON-NLS-1$ */
+					getProp().put("signReason", padesSignReason.getText().toString());
+					getProp().put("signatureProductionCity", padesSignProductionCity.getText().toString());
 				}
 				if (getSignImage() != null) {
 					getProp().put("signatureRubricImage", getInsertImageBase64()); //$NON-NLS-1$
@@ -1209,5 +1295,29 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 			LOGGER.warning("No se ha podido cargar la rubrica por defecto: " + e); //$NON-NLS-1$
 			this.signImageDefault = null;
 		}
+	}
+	
+	private void loadPreferences() {
+		this.padesSignReason.setText(PreferencesManager.get(PREFERENCE_PADES_SIGN_REASON, null)); //$NON-NLS-1$
+		this.padesSignProductionCity.setText(PreferencesManager.get(PREFERENCE_PADES_SIGN_PRODUCTION_CITY, null)); //$NON-NLS-1$
+		ComposedTex();
+	}
+
+	
+	private void ComposedTex(){
+		String text =SignPdfUiMessages.getString("SignPdfUiPreview.25");
+		if(!PreferencesManager.get(PREFERENCE_PADES_SIGNER_POSITION, "").isEmpty()){
+			text = text + "\n" + SignPdfUiMessages.getString("SignPdfUiPreview.31") +PreferencesManager.get(PREFERENCE_PADES_SIGNER_POSITION, null);
+		}
+
+		if(!padesSignReason.getText().isEmpty()){
+			text = text + "\n" + SignPdfUiMessages.getString("SignPdfUiPreview.32") +padesSignReason.getText();
+		}
+		if(!padesSignProductionCity.getText().isEmpty()){
+			text = text + "\n" + SignPdfUiMessages.getString("SignPdfUiPreview.33") +padesSignProductionCity.getText();
+		}
+		this.textArea.setText(text);
+		
+//		return text;
 	}
 }

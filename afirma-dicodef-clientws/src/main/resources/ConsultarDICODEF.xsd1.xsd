@@ -1,444 +1,290 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
-            
-<xs:simpleType name="Caracteres255Type">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value=".{1,255}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="CaracteresMayuscula255Type">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="([A-Z]|( )){1,255}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:complexType name="CertificadoType">
-                
-<xs:sequence>
-                    
-<xs:element name="certificado" form="unqualified" type="xs:hexBinary"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="CnType">
-                
-<xs:sequence>
-                    
-<xs:element name="cn" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="ConsultarIdentidadExtendidaRequestType"/>
-            
-<xs:complexType name="ConsultarIdentidadExtendidaResponseType"/>
-            
-<xs:complexType name="ConsultarRelacionSituacionResponseType">
-                
-<xs:sequence>
-                    
-<xs:element name="NumeroEmpleado" form="unqualified" type="tns:NumeroEmpleadoType" minOccurs="0"/>
-                    
-<xs:element name="RelacionCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="RelacionDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EmpleoCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EmpleoDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EjercitoCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EjercitoDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="CuerpoEscalaCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="CuerpoEscalaDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="CuerpoCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="CuerpoDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EspecialidadCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EspecialidadDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EspecialidadComplementariaCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EspecialidadComplementariaDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="UnidadDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="OrganismoDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="OrganismoCodigo" form="unqualified" type="tns:OrganismoCodigoType" minOccurs="0"/>
-                    
-<xs:element name="SituacionCodigo" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="SituacionDescripcion" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    
-<xs:element name="EstadoLogico" form="unqualified" type="tns:EstadoLogicoType" minOccurs="0"/>
-                    
-<xs:element name="Empresa" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:simpleType name="DNIType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:minLength value="6"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="EstadoLogicoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="(N)|(PB)|(BL)"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="FechaNacimientoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="\d{4,4}((0)\d|(10)|(11)|(12))((0)\d|(1)\d|(2)\d|(3)(0)|(3)(1))|(0)"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:complexType name="IdentidadExtendidaType">
-                
-<xs:sequence>
-                    
-<xs:element name="UID" form="unqualified" type="tns:UIDType" minOccurs="0"/>
-                    
-<xs:element name="Nombre" form="unqualified" type="tns:CaracteresMayuscula255Type" minOccurs="0"/>
-                    
-<xs:element name="Apellido1" form="unqualified" type="tns:CaracteresMayuscula255Type" minOccurs="0"/>
-                    
-<xs:element name="Apellido2" form="unqualified" type="tns:CaracteresMayuscula255Type" minOccurs="0"/>
-                    
-<xs:element name="NombreCompleto" form="unqualified" type="tns:NombreCompletoType" minOccurs="0"/>
-                    
-<xs:element name="DNI" form="unqualified" type="tns:DNIType" minOccurs="0"/>
-                    
-<xs:element name="Mail" form="unqualified" type="tns:MailType" minOccurs="0"/>
-                    
-<xs:element name="NumeroEmpleado" form="unqualified" type="tns:NumeroEmpleadoType" minOccurs="0"/>
-                    
-<xs:element name="Sexo" form="unqualified" type="tns:SexoType" minOccurs="0"/>
-                    
-<xs:element name="FechaNacimiento" form="unqualified" type="tns:FechaNacimientoType" minOccurs="0"/>
-                    
-<xs:element name="SIPERDEFlogin" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="IdentidadResType">
-                
-<xs:sequence>
-                    
-<xs:element name="uid" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombre" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido1" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido2" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombreCompleto" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="DNI" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="mail" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="numEmpleado" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="sexo" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="fecNacimiento" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="IdentidadSIPERDEFType">
-                
-<xs:sequence>
-                    
-<xs:element name="uid" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombre" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido1" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido2" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombreCompleto" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="DNI" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="mail" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="numEmpleado" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="UsuarioSIPERDEF" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="IdentidadType">
-                
-<xs:sequence>
-                    
-<xs:element name="uid" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombre" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido1" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="apellido2" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="nombreCompleto" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="DNI" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="mail" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="numEmpleado" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:simpleType name="MailType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="(.+(@).+){1,255}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="NombreCompletoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="(.+(,).+){1,255}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="NumeroEmpleadoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="\d{9,9}|(Externo)|(Ajeno)"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="OrganismoCodigoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value=".{1,12}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:complexType name="RelacionType">
-                
-<xs:sequence>
-                    
-<xs:element name="codRelacion" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="descRelacion" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="codEmpleo" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="descEmpleo" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="codEjercito" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="numEmpleado" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="escala" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="cuerpo" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="especialidad" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="dependencia" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:complexType name="ServiciosDicodefFaultType">
-                
-<xs:annotation>
-                    
-<xs:documentation/>
-                </xs:annotation>
-                
-<xs:sequence>
-                    
-<xs:element name="codigo" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="descripcion" form="unqualified" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            
-<xs:simpleType name="SexoType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="(H)|(M)"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="TarjetaNSerieFCaducidadType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:pattern value="(.+(,)(((0)\d|(1)\d|(2)\d|(3)(0)|(3)(1))((0)\d|(10)|(11)|(12))\d{4,4})){1,255}"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:simpleType name="UIDType">
-                
-<xs:restriction base="xs:string">
-                    
-<xs:minLength value="1"/>
-                    
-<xs:maxLength value="20"/>
-                </xs:restriction>
-            </xs:simpleType>
-            
-<xs:complexType name="UsuarioSistemaType">
-                
-<xs:choice>
-                    
-<xs:element name="CN" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="DNI" form="unqualified" type="xs:string"/>
-                    
-<xs:element name="uid" form="unqualified" type="xs:string"/>
-
-</xs:choice>
-
-</xs:complexType>
-
-<!--
-  <xs:complexType name="ListaUsuarioSistemaType">
-      <xs:sequence>
-        <xs:element name="UsuarioSistema" maxOccurs="unbounded" minOccurs="0">
-          <xs:complexType>
-            <xs:sequence>
-		<xs:element name="mail" form="unqualified" type="xs:string"/>
-		<xs:element name="CN" form="unqualified" type="xs:string"/>                    
-		<xs:element name="DNI" form="unqualified" type="xs:string"/>                    
-		<xs:element name="uid" form="unqualified" type="xs:string"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>-->
-           
-<!-- <xs:complexType name="ListaUsuarioSistemaType">
-      <xs:sequence>
-        <xs:element name="UsuarioSistemaExtends" maxOccurs="unbounded" minOccurs="0"/>
-      </xs:sequence>
-   </xs:complexType>
- 
-<xs:element name = "UsuarioSistemaExtends">
-   <xs:complexType>   
-      <xs:sequence>
-		<xs:element name="mail" form="unqualified" type="xs:string"/>
-		<xs:element name="CN" form="unqualified" type="xs:string"/>                    
-		<xs:element name="DNI" form="unqualified" type="xs:string"/>                    
-		<xs:element name="uid" form="unqualified" type="xs:string"/>
-      </xs:sequence>
-   </xs:complexType>
-</xs:element>
--->
-        <xs:complexType name="UsuarioSistemaExtendType">
-            <xs:sequence>
-		<xs:element name="mail" form="unqualified" type="xs:string"/>
-		<xs:element name="CN" form="unqualified" type="xs:string"/>                    
-		<xs:element name="DNI" form="unqualified" type="xs:string"/>                    
-		<xs:element name="uid" form="unqualified" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-
-	<!--<xs:element name = "UsuarioSistemaExtend" type = "tns:UsuarioSistemaExtendType" />-->
-
-  <xs:complexType name="ListaUsuarioSistemaType">
-      <xs:sequence>
-        <xs:element name="UsuarioSistemaExtend" type = "tns:UsuarioSistemaExtendType" maxOccurs="unbounded" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-
-
-<xs:element name="ConsultarIdentidadExtendidaFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarIdentidadExtendidaRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarIdentidadExtendidaResponse" type="tns:IdentidadExtendidaType"/>
-            
-<xs:element name="ConsultarIdentidadFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarIdentidadRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarIdentidadResFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarIdentidadResRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarIdentidadResResponse" type="tns:IdentidadResType"/>
-            
-<xs:element name="ConsultarIdentidadResponse" type="tns:IdentidadType"/>
-            
-<xs:element name="ConsultarIdentidadSIPERDEFFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarIdentidadSIPERDEFRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarIdentidadSIPERDEFResponse" type="tns:IdentidadSIPERDEFType"/>
-            
-<xs:element name="ConsultarRelacionFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarRelacionRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarRelacionResponse" type="tns:RelacionType"/>
-            
-<xs:element name="ConsultarRelacionSituacionFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarRelacionSituacionRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="ConsultarRelacionSituacionResponse" type="tns:ConsultarRelacionSituacionResponseType"/>
-            
-<xs:element name="ConsultarTarjetaFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="ConsultarTarjetaRequest" type="tns:UsuarioSistemaType"/>
-
-<xs:element name="BusquedaPersonaRequest" type="tns:IdentidadResType"/>
-            
-<xs:element name="BusquedaPersonaResponse" type="tns:ListaUsuarioSistemaType"/>
-
-<xs:element name="ConsultarTarjetaResponse">
-                
-
-<xs:complexType>
-                    
-<xs:sequence>
-                        
-<xs:element name="Fotografia" form="unqualified" type="xs:base64Binary" minOccurs="0"/>
-                        
-<xs:element name="TarjetaNSerieFCaducidad" form="unqualified" type="tns:TarjetaNSerieFCaducidadType" minOccurs="0"/>
-                        
-<xs:element name="RequiereCertificado" form="unqualified" type="tns:Caracteres255Type" minOccurs="0"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
-<xs:element name="obtenerCertificadoFault" type="tns:ServiciosDicodefFaultType"/>
-            
-<xs:element name="obtenerCertificadoRequest" type="tns:UsuarioSistemaType"/>
-            
-<xs:element name="obtenerCertificadoResponse" type="tns:CertificadoType"/>
-        </xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	targetNamespace="http://servicios.mdef.es/dicodef/consultarDICODEF.xsd"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="Caracteres255Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value=".{0,255}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CaracteresMayuscula255Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Z]|Ñ|( )){1,255}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CertificadoType">
+		<xs:sequence>
+			<xs:element name="certificado" form="unqualified" type="xs:hexBinary" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CnType">
+		<xs:sequence>
+			<xs:element name="cn" form="unqualified" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConsultarIdentidadExtendidaRequestType" />
+	<xs:complexType name="ConsultarIdentidadExtendidaResponseType" />
+	<xs:complexType name="ConsultarRelacionSituacionResponseType">
+		<xs:sequence>
+			<xs:element name="NumeroEmpleado" form="unqualified"
+				type="tns:NumeroEmpleadoType" minOccurs="0" />
+			<xs:element name="RelacionCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="RelacionDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EmpleoCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EmpleoDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EjercitoCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EjercitoDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EscalaCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EscalaDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="CuerpoEscalaCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="CuerpoEscalaDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="CuerpoCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="CuerpoDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EspecialidadCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EspecialidadDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EspecialidadComplementariaCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EspecialidadComplementariaDescripcion"
+				form="unqualified" type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="UnidadDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="OrganismoDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="OrganismoCodigo" form="unqualified"
+				type="tns:OrganismoCodigoType" minOccurs="0" />
+			<xs:element name="SituacionCodigo" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="SituacionDescripcion" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+			<xs:element name="EstadoLogico" form="unqualified"
+				type="tns:EstadoLogicoType" minOccurs="0" />
+			<xs:element name="Empresa" form="unqualified" type="tns:Caracteres255Type"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="DNIType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="6" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EstadoLogicoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(N)|(PB)|(BL)" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FechaNacimientoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="\d{4,4}((0)\d|(10)|(11)|(12))((0)\d|(1)\d|(2)\d|(3)(0)|(3)(1))|(0)" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="IdentidadExtendidaType">
+		<xs:sequence>
+			<xs:element name="UID" form="unqualified" type="tns:UIDType"
+				minOccurs="0" />
+			<xs:element name="Nombre" form="unqualified"
+				type="tns:CaracteresMayuscula255Type" minOccurs="0" />
+			<xs:element name="Apellido1" form="unqualified"
+				type="tns:CaracteresMayuscula255Type" minOccurs="0" />
+			<xs:element name="Apellido2" form="unqualified"
+				type="tns:CaracteresMayuscula255Type" minOccurs="0" />
+			<xs:element name="NombreCompleto" form="unqualified"
+				type="tns:NombreCompletoType" minOccurs="0" />
+			<xs:element name="DNI" form="unqualified" type="tns:DNIType"
+				minOccurs="0" />
+			<xs:element name="Mail" form="unqualified" type="tns:MailType"
+				minOccurs="0" />
+			<xs:element name="NumeroEmpleado" form="unqualified"
+				type="tns:NumeroEmpleadoType" minOccurs="0" />
+			<xs:element name="Sexo" form="unqualified" type="tns:SexoType"
+				minOccurs="0" />
+			<xs:element name="FechaNacimiento" form="unqualified"
+				type="tns:FechaNacimientoType" minOccurs="0" />
+			<xs:element name="SIPERDEFlogin" form="unqualified"
+				type="tns:Caracteres255Type" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentidadResType">
+		<xs:sequence>
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+			<xs:element name="nombre" form="unqualified" type="xs:string" />
+			<xs:element name="apellido1" form="unqualified" type="xs:string" />
+			<xs:element name="apellido2" form="unqualified" type="xs:string" />
+			<xs:element name="nombreCompleto" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="mail" form="unqualified" type="xs:string" />
+			<xs:element name="numEmpleado" form="unqualified" type="xs:string" />
+			<xs:element name="sexo" form="unqualified" type="xs:string" />
+			<xs:element name="fecNacimiento" form="unqualified" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentidadSIPERDEFType">
+		<xs:sequence>
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+			<xs:element name="nombre" form="unqualified" type="xs:string" />
+			<xs:element name="apellido1" form="unqualified" type="xs:string" />
+			<xs:element name="apellido2" form="unqualified" type="xs:string" />
+			<xs:element name="nombreCompleto" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="mail" form="unqualified" type="xs:string" />
+			<xs:element name="numEmpleado" form="unqualified" type="xs:string" />
+			<xs:element name="UsuarioSIPERDEF" form="unqualified"
+				type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentidadTelefonoType">
+		<xs:sequence>
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+			<xs:element name="nombre" form="unqualified" type="xs:string" />
+			<xs:element name="apellido1" form="unqualified" type="xs:string" />
+			<xs:element name="apellido2" form="unqualified" type="xs:string" />
+			<xs:element name="nombreCompleto" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="mail" form="unqualified" type="xs:string" />
+			<xs:element name="numEmpleado" form="unqualified" type="xs:string" />
+			<xs:element name="telefono" form="unqualified" type="xs:string"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentidadType">
+		<xs:sequence>
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+			<xs:element name="nombre" form="unqualified" type="xs:string" />
+			<xs:element name="apellido1" form="unqualified" type="xs:string" />
+			<xs:element name="apellido2" form="unqualified" type="xs:string" />
+			<xs:element name="nombreCompleto" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="mail" form="unqualified" type="xs:string" />
+			<xs:element name="numEmpleado" form="unqualified" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="MailType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(.+(@).+){1,255}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NombreCompletoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(.+(,).+){1,255}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumeroEmpleadoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{9,9}|(Externo)|(Ajeno)" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrganismoCodigoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value=".{1,12}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="RelacionType">
+		<xs:sequence>
+			<xs:element name="codRelacion" form="unqualified" type="xs:string" />
+			<xs:element name="descRelacion" form="unqualified" type="xs:string" />
+			<xs:element name="codEmpleo" form="unqualified" type="xs:string" />
+			<xs:element name="descEmpleo" form="unqualified" type="xs:string" />
+			<xs:element name="codEjercito" form="unqualified" type="xs:string" />
+			<xs:element name="numEmpleado" form="unqualified" type="xs:string" />
+			<xs:element name="escala" form="unqualified" type="xs:string" />
+			<xs:element name="cuerpo" form="unqualified" type="xs:string" />
+			<xs:element name="especialidad" form="unqualified" type="xs:string" />
+			<xs:element name="dependencia" form="unqualified" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiciosDicodefFaultType">
+		<xs:annotation>
+			<xs:documentation />
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="codigo" form="unqualified" type="xs:string" />
+			<xs:element name="descripcion" form="unqualified" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="SexoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(H)|(M)" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TarjetaNSerieFCaducidadType">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="(.+(,)(((0)\d|(1)\d|(2)\d|(3)(0)|(3)(1))((0)\d|(10)|(11)|(12))\d{4,4})){1,255}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UIDType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="UsuarioSistemaMailType">
+		<xs:choice>
+			<xs:element name="CN" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="mail" form="unqualified" type="xs:string" />
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="UsuarioSistemaType">
+		<xs:choice>
+			<xs:element name="CN" form="unqualified" type="xs:string" />
+			<xs:element name="DNI" form="unqualified" type="xs:string" />
+			<xs:element name="uid" form="unqualified" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="ConsultarIdentidadExtendidaFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarIdentidadExtendidaRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarIdentidadExtendidaResponse" type="tns:IdentidadExtendidaType" />
+	<xs:element name="ConsultarIdentidadFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarIdentidadRequest" type="tns:UsuarioSistemaMailType" />
+	<xs:element name="ConsultarIdentidadResFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarIdentidadResRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarIdentidadResResponse" type="tns:IdentidadResType" />
+	<xs:element name="ConsultarIdentidadResponse" type="tns:IdentidadType" />
+	<xs:element name="ConsultarIdentidadSIPERDEFFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarIdentidadSIPERDEFRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarIdentidadSIPERDEFResponse" type="tns:IdentidadSIPERDEFType" />
+	<xs:element name="ConsultarIdentidadTelefonoFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarIdentidadTelefonoRequest" type="tns:UsuarioSistemaMailType" />
+	<xs:element name="ConsultarIdentidadTelefonoResponse" type="tns:IdentidadTelefonoType" />
+	<xs:element name="ConsultarRelacionFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarRelacionRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarRelacionResponse" type="tns:RelacionType" />
+	<xs:element name="ConsultarRelacionSituacionFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarRelacionSituacionRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarRelacionSituacionResponse"
+		type="tns:ConsultarRelacionSituacionResponseType" />
+	<xs:element name="ConsultarTarjetaFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="ConsultarTarjetaRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="ConsultarTarjetaResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Fotografia" form="unqualified" type="xs:base64Binary"
+					minOccurs="0" />
+				<xs:element name="TarjetaNSerieFCaducidad" form="unqualified"
+					type="tns:TarjetaNSerieFCaducidadType" minOccurs="0" />
+				<xs:element name="RequiereCertificado" form="unqualified"
+					type="tns:Caracteres255Type" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="obtenerCertificadoFault" type="tns:ServiciosDicodefFaultType" />
+	<xs:element name="obtenerCertificadoRequest" type="tns:UsuarioSistemaType" />
+	<xs:element name="obtenerCertificadoResponse" type="tns:CertificadoType" />
+</xs:schema>

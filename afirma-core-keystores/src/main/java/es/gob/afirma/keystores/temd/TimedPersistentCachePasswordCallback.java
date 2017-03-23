@@ -99,14 +99,14 @@ public final class TimedPersistentCachePasswordCallback extends PasswordCallback
 
 	@Override
 	public char[] getPassword() {
-		final String pin = preferences.get(KEY_TEMD_OBJ, null);
+		final String pin = new String (preferences.getByteArray(KEY_TEMD_OBJ, null));
 		if (pin != null && !isObjectExpired()) {
 			resetTimer();
 			return pin.toCharArray();
 		}
 		final char[] newpin = new UIPasswordCallback(this.dialogMsg, this.parent).getPassword();
 		if (this.milisecondsToClose != 0) {
-			preferences.put(KEY_TEMD_OBJ, new String(newpin));
+			preferences.putByteArray(KEY_TEMD_OBJ, (new String(newpin)).getBytes());
 		}
 		resetTimer();
 		return newpin;
@@ -123,7 +123,7 @@ public final class TimedPersistentCachePasswordCallback extends PasswordCallback
 		if (password != null && !(password.length < 1)) {
 			super.setPassword(password);
 			if (this.milisecondsToClose != 0) {
-				preferences.put(KEY_TEMD_OBJ, new String(password));
+				preferences.putByteArray(KEY_TEMD_OBJ, new String(password).getBytes());
 			}
 			resetTimer();
 		}

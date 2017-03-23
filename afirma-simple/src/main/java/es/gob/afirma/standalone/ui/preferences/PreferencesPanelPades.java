@@ -6,6 +6,7 @@ import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERE
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_POLICY_IDENTIFIER_HASH_ALGORITHM;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_POLICY_QUALIFIER;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGNER_CONTACT;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGNER_POSITION;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_PRODUCTION_CITY;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_REASON;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
@@ -67,6 +68,7 @@ final class PreferencesPanelPades extends JPanel {
 	private final JTextField padesSignReason = new JTextField();
 	private final JTextField padesSignProductionCity = new JTextField();
 	private final JTextField padesSignerContact = new JTextField();
+	private final JTextField padesSignerPosition = new JTextField();
 	private final JCheckBox visiblePdfSignature = new JCheckBox(SimpleAfirmaMessages.getString("PreferencesPanel.79")); //$NON-NLS-1$
     final JButton configureTimeStampOptionsButton = new JButton(SimpleAfirmaMessages.getString("PreferencesPanel.119")); //$NON-NLS-1$
 
@@ -157,6 +159,18 @@ final class PreferencesPanelPades extends JPanel {
 	    metadataPanel.add(this.padesSignerContact, c);
 
 	    c.gridy++;
+
+	    final JLabel padesSignerPositontLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanel.144")); //$NON-NLS-1$
+	    padesSignerContactLabel.setLabelFor(this.padesSignerPosition);
+	    metadataPanel.add(padesSignerPositontLabel, c);
+
+	    c.gridy++;
+
+	    this.padesSignerPosition.getAccessibleContext().setAccessibleDescription(SimpleAfirmaMessages.getString("PreferencesPanel.145")); //$NON-NLS-1$
+	    this.padesSignerPosition.addKeyListener(modificationListener);
+	    this.padesSignerPosition.addKeyListener(keyListener);
+	    metadataPanel.add(this.padesSignerPosition, c);
+
 	    c.weighty = 1.0;
 	    metadataPanel.add(new JPanel(), c);
 
@@ -298,7 +312,7 @@ final class PreferencesPanelPades extends JPanel {
 
 	    gbc.gridy++;
 	    gbc.weighty = 1.0;
-	    add(new JPanel(), gbc); // Panel de relleno
+	    //add(new JPanel(), gbc); // Panel de relleno
 	}
 
 	private JPanel createVisiblePdfPanel(final KeyListener keyListener, final ModificationListener modificationListener) {
@@ -353,6 +367,13 @@ final class PreferencesPanelPades extends JPanel {
 		else {
 			PreferencesManager.put(PREFERENCE_PADES_SIGNER_CONTACT, this.padesSignerContact.getText());
 		}
+		if ("".equals(this.padesSignerPosition.getText())) { //$NON-NLS-1$
+			PreferencesManager.remove(PREFERENCE_PADES_SIGNER_POSITION);
+		}
+		else {
+			PreferencesManager.put(PREFERENCE_PADES_SIGNER_POSITION, this.padesSignerPosition.getText());
+		}		
+		
 		if ("".equals(this.padesSignProductionCity.getText())) { //$NON-NLS-1$
 			PreferencesManager.remove(PREFERENCE_PADES_SIGN_PRODUCTION_CITY);
 		}
@@ -393,6 +414,7 @@ final class PreferencesPanelPades extends JPanel {
 		this.padesSignReason.setText(PreferencesManager.get(PREFERENCE_PADES_SIGN_REASON, "")); //$NON-NLS-1$
 		this.padesSignProductionCity.setText(PreferencesManager.get(PREFERENCE_PADES_SIGN_PRODUCTION_CITY, "")); //$NON-NLS-1$
 		this.padesSignerContact.setText(PreferencesManager.get(PREFERENCE_PADES_SIGNER_CONTACT, "")); //$NON-NLS-1$
+		this.padesSignerPosition.setText(PreferencesManager.get(PREFERENCE_PADES_SIGNER_POSITION, "")); //$NON-NLS-1$
 		this.visiblePdfSignature.setSelected(Boolean.parseBoolean(PreferencesManager.get(PREFERENCE_PADES_VISIBLE, "false"))); //$NON-NLS-1$
 		this.certificationLevel.setSelectedItem(
 			CertificationLevelResources.getName(

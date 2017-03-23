@@ -236,6 +236,9 @@ public final class PreferencesManager {
 	/** Contacto del firmante en firmas PAdES. */
 	public static final String PREFERENCE_PADES_SIGNER_CONTACT = "padesSignerContact"; //$NON-NLS-1$
 
+	/** Cargo del firmante en firmas PAdES. */
+	public static final String PREFERENCE_PADES_SIGNER_POSITION = "padesSignerPosition"; //$NON-NLS-1$
+	
 	/** Formato de firma PAdES (PAdES B&aacute;sico o PAdES-BES).
 	 * Esta preferencia debe tener uno de estos valores:
 	 * <ul>

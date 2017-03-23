@@ -46,12 +46,17 @@ final class LDAPMDEFManager implements CertificateDirectoryProvider {
 		// se utiliza la entidad de entrada creada en el xsd del servicio web
 		IdentidadResType identidad = new IdentidadResType();
 		// se llama al servcio web de la búsqueda de personas en el ldap
-		ListaUsuarioSistemaType listaUsuarioSistema = client.busquedaPersonas(identidad);
+//		ListaUsuarioSistemaType listaUsuarioSistema = client.busquedaPersonas(identidad);
 		final List<Users> users = new ArrayList<>();
-		for (UsuarioSistemaExtendType usuarioSistemaExtend : listaUsuarioSistema.getUsuarioSistemaExtend()) {
-			users.add(new Users(usuarioSistemaExtend.getCN(), usuarioSistemaExtend.getMail(),
-					usuarioSistemaExtend.getUid())); // $NON-NLS-1$
-		}
+//		for (UsuarioSistemaExtendType usuarioSistemaExtend : listaUsuarioSistema.getUsuarioSistemaExtend()) {
+//			users.add(new Users(usuarioSistemaExtend.getCN(), usuarioSistemaExtend.getMail(),
+//					usuarioSistemaExtend.getUid())); // $NON-NLS-1$
+//		}
+		users.add(new Users("cn1", "prueba@prueba1.com",
+				"ui1")); // $NON-NLS-1$
+		users.add(new Users("cn2", "prueba@prueba2.com",
+				"ui2")); // $NON-NLS-1$
+		
 		return users.toArray(new Users[0]);
 	}
 

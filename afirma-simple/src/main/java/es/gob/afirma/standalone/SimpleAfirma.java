@@ -54,6 +54,7 @@ import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
 import es.gob.afirma.standalone.protocol.ProtocolInvocationLauncher;
+import es.gob.afirma.standalone.smartWaper.configurePssdefPropeties;
 import es.gob.afirma.standalone.ui.ClosePanel;
 import es.gob.afirma.standalone.ui.DNIeWaitPanel;
 import es.gob.afirma.standalone.ui.MainMenu;
@@ -193,6 +194,9 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
         	if (preSelectedFile != null) {
         		loadFileToSign(preSelectedFile);
         	}
+        	
+        	//configuración de pssdef
+        	configurePssdefPropeties.inizializerProperties();
 //        }
     }
 
@@ -729,6 +733,8 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/** Imprime a traves del log la informacion b&aacute;sica del sistema. */
 	private static void printSystemInfo() {
 
+		//cambio de direccion jre
+		//System.setProperty("java.home","C:/Program Files/Java/defensa/jdk1.8.0_111/jre");
     	// Logs de informacion basica
        	LOGGER.info("Resolucion DPI de pantalla: " + AutoFirmaUtil.getDPI()); //$NON-NLS-1$
 		LOGGER.info("Sistema operativo: " + System.getProperty("os.name")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -740,5 +746,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		LOGGER.info("Tamano actual en memoria: " + Runtime.getRuntime().totalMemory()/(1024*1024) + "MB"); //$NON-NLS-1$ //$NON-NLS-2$
 		LOGGER.info("Tamano maximo de memoria: " + Runtime.getRuntime().maxMemory()/(1024*1024) + "MB"); //$NON-NLS-1$ //$NON-NLS-2$
 		LOGGER.info("Memoria actualmente libre: " + Runtime.getRuntime().freeMemory()/(1024*1024) + "MB"); //$NON-NLS-1$ //$NON-NLS-2$
+		LOGGER.info("Direccion jre: " + System.getProperty("java.class.path")); //$NON-NLS-1$ //$NON-NLS-2$
+		LOGGER.info("Direccion jhome: " + System.getProperty("java.home")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
