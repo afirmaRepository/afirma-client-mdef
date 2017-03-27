@@ -60,7 +60,8 @@ public class ValidaCertificadoImpl implements ValidaCertificado {
 	private String messageValidateCert(boolean validateCert, DatosCertificadosBean datosCertificado) {
 		String message = "";
 		if (validateCert) {
-			message = PssdefConstants.certOK + PssdefConstants.confianceDegree + datosCertificado.getNivelConfianza();
+			message = PssdefConstants.certOK; //+ PssdefConstants.confianceDegree + datosCertificado.getNivelConfianza()
+			
 		} else {
 			switch (datosCertificado.getEstadoCertificado()) {
 			case Constants.PSSDEF_CERTIFICATE_STATE_EXPIRE:

@@ -152,26 +152,26 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 					if (!usuario.getNombre().isEmpty()) {
 						AOUIFactory.showMessageDialog(getParent(),
-								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.20"), //$NON-NLS-1$
-								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.19"), //$NON-NLS-1$
+								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.24"), //$NON-NLS-1$
+								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.15"), //$NON-NLS-1$
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						LOGGER.info("no ha recuperado NADA Y ENTRA POR AQUI");
 						AOUIFactory.showErrorMessage(getParent(),
-								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.18"), //$NON-NLS-1$
+								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.23"), //$NON-NLS-1$
 								SimpleAfirmaMessages.getString("PreferencesPanelCipherment.19"), //$NON-NLS-1$
 								JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (URISyntaxException e1) {
 					LOGGER.info("excepción uri"+e1.getMessage());
 					AOUIFactory.showErrorMessage(getParent(),
-							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.18"), //$NON-NLS-1$
+							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.23"), //$NON-NLS-1$
 							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.19"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e1) {
 					LOGGER.info("excepción común"+e1.getMessage());
 					AOUIFactory.showErrorMessage(getParent(),
-							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.18"), //$NON-NLS-1$
+							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.23"), //$NON-NLS-1$
 							SimpleAfirmaMessages.getString("PreferencesPanelCipherment.19"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}

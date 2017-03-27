@@ -60,6 +60,7 @@ import es.gob.afirma.core.signers.AOSimpleSignInfo;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.pssdef.PssdefValidaException;
 import es.gob.afirma.pssdef.ValidaCertificadoImpl;
+import es.gob.afirma.pssdef.config.PssdefConstants;
 import es.gob.afirma.standalone.DataAnalizerUtil;
 import es.gob.afirma.standalone.LookAndFeelManager;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
@@ -259,18 +260,25 @@ final class SignDataPanel extends JPanel {
 							int validationMessageType = JOptionPane.ERROR_MESSAGE;
 							switch (vr) {
 							case VALID:
-								validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.19"); //$NON-NLS-1$
-								validationMessage = validationMessage
-										+"\n" +SimpleAfirmaMessages.getString("SignDataPanel.19.1");
+//								validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.19"); //$NON-NLS-1$
+//								validationMessage = validationMessage
+//										+"\n" +SimpleAfirmaMessages.getString("SignDataPanel.19.1");
 								ValidaCertificadoImpl validaCertificado = new ValidaCertificadoImpl();
+								validationMessageType = JOptionPane.INFORMATION_MESSAGE;
 								try {
-									validationMessage = validationMessage + "\n"+ validaCertificado.validaCert(cert);
+									validationMessage = validaCertificado.validaCert(cert);
+									if(validationMessage.trim().equals(PssdefConstants.certOK)){
+										validationMessageType = JOptionPane.OK_OPTION;
+									}else{
+										validationMessageType = JOptionPane.ERROR_MESSAGE;
+									}
 								} catch (PssdefValidaException e) {
 									LOGGER.severe(e.getMessage()+e);
-									validationMessage = validationMessage + "\n"+ "Error en la conexión de los servicios";
+									validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.43");
+									validationMessageType = JOptionPane.WARNING_MESSAGE;
+									//validationMessage = validationMessage + "\n"+ "Error en la conexión de los servicios";
 								}
 
-								validationMessageType = JOptionPane.INFORMATION_MESSAGE;
 								break;
 							case EXPIRED:
 								validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.32"); //$NON-NLS-1$
