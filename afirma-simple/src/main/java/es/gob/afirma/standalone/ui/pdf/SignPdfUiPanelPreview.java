@@ -263,7 +263,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 		final GridBagConstraints gbc = new GridBagConstraints();
 
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = new Insets(10, 10, 0, 10);
+		gbc.insets = new Insets(1, 10, 0, 10);
 		gbc.weightx = 1.0;
 		//gbc.weighty = 1.0;
 		gbc.gridy = 0;
@@ -767,8 +767,8 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 	private JPanel createButtonsPanel() {
 
 		final JPanel panel = new JPanel();
-		//panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT,3,3));
+		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		//panel.setLayout(new FlowLayout(FlowLayout.RIGHT,3,3));
 
 		this.okButton.setMnemonic('A');
 		this.okButton.getAccessibleContext().setAccessibleDescription(SignPdfUiMessages.getString("SignPdfUiPanel.2") //$NON-NLS-1$
