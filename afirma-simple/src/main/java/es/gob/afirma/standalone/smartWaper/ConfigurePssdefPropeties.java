@@ -1,7 +1,12 @@
 package es.gob.afirma.standalone.smartWaper;
 
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_PSSDEF_SERVICE;
+
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,36 +14,50 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
-import org.springframework.security.crypto.codec.Base64;
-
 import es.gob.afirma.core.misc.Platform;
+import es.gob.afirma.pssdef.config.ConfigPssdef;
+import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 
 /** clase que crea el entorno necesario para acceder a los servicios de PSSDEF.
  * @author Fernando Hern&aacute;ndez Cebri&aacute;n. */
-public class configurePssdefPropeties {
+public class ConfigurePssdefPropeties {
 
 	static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
 
 	public static final String APPLICATION_HOME_PSSDEF = Platform.getUserHome() + File.separator + ".afirma"
 			+ File.separator + "AutoFirma" + File.separator + "PssdefService"; //$NON-NLS-1$ //$NON-NLS-2$
 
-	private static configurePssdefPropeties configurePssdefPropeties;
+	private static ConfigurePssdefPropeties configurePssdefPropeties;
 
 	public static void inizializerProperties() {
 
 		if (configurePssdefPropeties == null) {
 
-			configurePssdefPropeties = new configurePssdefPropeties();
+			configurePssdefPropeties = new ConfigurePssdefPropeties();
 		}
 	}
+	
 
+	public static void chagePssdefProperties() {
+
+		if(!configurePssdefPropeties.checkValuesPssdefProperties()){
+			try {
+				configurePssdefPropeties.writePssdefProperties("PSSDEF.properties");
+			} catch (IOException e) {
+				LOGGER.severe("Error en el fichero pssdef " + e.getMessage());
+			}
+		}
+	}
+	
+	
 	/** Inicia todos los procesos necesarios para construir 
 	 * el entorno necesario para los servicios PSSDEF.
 	 */
-	private configurePssdefPropeties() {
+	private ConfigurePssdefPropeties() {
 		try {
 			createDirectory();
 			if (!fileExit("trustedx-inethandler.truststore")) {
@@ -53,7 +72,7 @@ public class configurePssdefPropeties {
 			if (!fileExit("smartwrapper.properties")) {
 				writeSmartWapper("smartwrapper.properties");
 			}
-			if (!fileExit("PSSDEF.properties")) {
+			if (!fileExit("PSSDEF.properties") || !checkValuesPssdefProperties()) {
 				writePssdefProperties("PSSDEF.properties");
 			}
 			mappingToSystemProperties();
@@ -73,7 +92,6 @@ public class configurePssdefPropeties {
 		if (filePro.exists()) {
 			result = true;
 		}
-		System.out.println("existe archivo : " + result);
 		return result;
 	}
 
@@ -112,6 +130,7 @@ public class configurePssdefPropeties {
 
 		Map<String, String> doc = PssdefMapping.getprepareDocumentPublicacioMap();
 		for (Entry<String, String> entrada : doc.entrySet()) {
+			checksValuesRegistry(entrada);
 			out.write(entrada.getKey().concat(" = ").concat(entrada.getValue()) + "\n");
 		}
 		out.close();
@@ -157,5 +176,79 @@ public class configurePssdefPropeties {
 		System.setProperty("pssdf.propertiesFile", APPLICATION_HOME_PSSDEF + File.separator + "PSSDEF.properties");
 
 	}
+
+	/** Cambia los valores de pssdef si hay contenido en las variables de  
+	 * entorno del registro del sistema  
+	 */
+	private void checksValuesRegistry(Entry<String, String> entrada) {
+		String uri = PreferencesManager.get(PREFERENCE_URI_PSSDEF_SERVICE, "");
+		String keySubjetName = PreferencesManager.get(PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE, "");
+		String servicePolice = PreferencesManager.get(PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE, "");
+		if(entrada.getKey().equals(PssdefMapping.descPssDefUri)){
+			if(!uri.isEmpty()){
+				entrada.setValue(uri);
+			}			
+		}
+		if(entrada.getKey().equals(PssdefMapping.descKeySubjectName)){
+			if(!keySubjetName.isEmpty()){
+				entrada.setValue(keySubjetName);
+			}			
+		}
+		if(entrada.getKey().equals(PssdefMapping.descDsvServPolicy)){
+			if(!servicePolice.isEmpty()){
+				entrada.setValue(servicePolice);
+			}			
+		}
+		
+	}
+
+	/** Comprueba si los valores son dis  
+	 * entorno del registro del sistema  
+	 */
+	private boolean checkValuesPssdefProperties(){
+		boolean checkRegistryPssdef = false;
+		int parameterContains = 0;
+		String uri = PreferencesManager.get(PREFERENCE_URI_PSSDEF_SERVICE, "");
+		String keySubjetName = PreferencesManager.get(PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE, "");
+		String servicePolice = PreferencesManager.get(PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE, "");
+		
+		
+		File file = new File(APPLICATION_HOME_PSSDEF + File.separator + "PSSDEF.properties");
+
+		try {
+		    Scanner scanner = new Scanner(file);
+		    //int lineNum = 0;
+		    while (scanner.hasNextLine()) {
+		        String line = scanner.nextLine();
+		        //lineNum++;
+		        if(!uri.isEmpty() && line.contains(uri) && compareLineRegistry(line,PssdefMapping.descPssDefUri,uri)) { 
+		        	parameterContains++;
+		        }
+				if(!keySubjetName.isEmpty() && line.contains(keySubjetName) && compareLineRegistry(line,PssdefMapping.descKeySubjectName,keySubjetName)){
+					parameterContains++;
+				}
+				if(!servicePolice.isEmpty() && line.contains(servicePolice) && compareLineRegistry(line,PssdefMapping.descDsvServPolicy,servicePolice)){
+					parameterContains++;
+				}
+		    }
+		    if(parameterContains == 3){
+		    	checkRegistryPssdef = true;
+		    }
+			scanner.close();
+		} catch(FileNotFoundException e) { 
+			LOGGER.severe("No existe el directorio" + e.getMessage());
+		}		
+		return checkRegistryPssdef;
+	}
+
+
+
+	private boolean compareLineRegistry(String line, String KeyData, String dataRegistry) {
+		String lineCompare = line.replace(KeyData, "");
+		lineCompare = lineCompare.replaceFirst("=", "");
+		
+		return lineCompare.trim().equals(dataRegistry.trim());
+	}
+	
 
 }

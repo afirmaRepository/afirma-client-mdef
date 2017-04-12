@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.security.auth.callback.PasswordCallback;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,12 +31,15 @@ import es.gob.afirma.core.misc.AOUtil;
 import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOCertificatesNotFoundException;
+import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
+import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
+import es.gob.afirma.standalone.ui.IsObjectExpiredException;
 
 /**
  * Panel para seleccionar el remitente que se quiere incluir en el sobre digital.
@@ -317,14 +321,15 @@ public class DigitalEnvelopeSender extends JPanel {
     	setCertificateDialogOpenned(true);
 
     	final AOKeyStoreManager keyStoreManager = SimpleAfirma.getAOKeyStoreManager();
-    	if (keyStoreManager == null) {
-    		JOptionPane.showMessageDialog(
-    				this,
-    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.11"), //$NON-NLS-1$
-    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.12"), //$NON-NLS-1$
-    				JOptionPane.WARNING_MESSAGE);
-    		return;
-    	}
+    	
+//    	if (keyStoreManager == null) {
+//    		JOptionPane.showMessageDialog(
+//    				this,
+//    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.11"), //$NON-NLS-1$
+//    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.12"), //$NON-NLS-1$
+//    				JOptionPane.WARNING_MESSAGE);
+//    		return;
+//    	}
 
         // Solo permitimos usar certificados de firma como remitentes
         final List<CertificateFilter> filtersList = new ArrayList<>();
@@ -340,6 +345,27 @@ public class DigitalEnvelopeSender extends JPanel {
     			false             // mandatoryCertificate
 		);
 
+		//new
+    	//keyStoreManager.getType().getStorePasswordCallback(this).getPassword();
+    	if(keyStoreManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
+    		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
+        	if (psc instanceof TimedPersistentCachePasswordCallback) {
+        		if(((TimedPersistentCachePasswordCallback) psc).isObjectExpired()){
+        			try {
+						throw new IsObjectExpiredException("Se ha superado el tiempo de expiración");
+					} catch (IsObjectExpiredException e) {
+			            AOUIFactory.showMessageDialog(
+			            		this.dialog,
+			            		SimpleAfirmaMessages.getString("SignPanel.103"), //$NON-NLS-1$
+			            		SimpleAfirmaMessages.getString("DigitalEnvelopeSender.25"),  //$NON-NLS-1$
+			                    JOptionPane.ERROR_MESSAGE
+			                );            return;
+					}
+        		}
+        	}
+    	}
+        
+    	//new
     	try {
 			keyStoreDialog.show();
 			keyStoreManager.setParentComponent(this);

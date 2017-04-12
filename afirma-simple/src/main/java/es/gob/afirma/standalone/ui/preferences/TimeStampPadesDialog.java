@@ -309,16 +309,16 @@ final class TimeStampPadesDialog extends JDialog  {
 	static void removeConfiguration() {
 		PreferencesManager.remove(PREFERENCE_PADES_TIMESTAMP_CONFIGURE);
 
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_USR);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_PWD);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE);
-		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_USR);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_PWD);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL);
 	}
 
 	void enableFields(final boolean enable) {

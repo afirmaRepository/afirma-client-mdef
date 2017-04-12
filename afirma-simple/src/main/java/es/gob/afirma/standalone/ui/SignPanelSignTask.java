@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.security.auth.callback.PasswordCallback;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -22,9 +23,11 @@ import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.signers.AOSigner;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOCertificatesNotFoundException;
+import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.filters.CertificateFilter;
+import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.signers.odf.AOODFSigner;
 import es.gob.afirma.signers.ooxml.AOOOXMLSigner;
 import es.gob.afirma.signers.pades.AOPDFSigner;
@@ -54,7 +57,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 		return this.waitDialog;
 	}
 
-	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException {
+	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException {
 		final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,
@@ -65,6 +68,17 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 			this.certFilters, // Filtros
 			false             // mandatoryCertificate
 		);
+		//new
+    	//ksm.getType().getStorePasswordCallback(this.signPanel).getPassword();
+    	if(ksm.getType().getName().equals(AOKeyStore.TEMD.getName())){
+    		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
+        	if (psc instanceof TimedPersistentCachePasswordCallback) {
+        		if(((TimedPersistentCachePasswordCallback) psc).isObjectExpired()){
+        			throw new IsObjectExpiredException("Se ha superado el tiempo de expiración");
+        		}
+        	}
+    	}
+    	//new
     	dialog.show();
     	ksm.setParentComponent(this.signPanel);
     	return ksm.getKeyEntry(
@@ -95,6 +109,15 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             pke = getPrivateKeyEntry();
         }
         catch (final AOCancelledOperationException e) {
+            return;
+        }
+        catch (final IsObjectExpiredException e) {
+        	AOUIFactory.showErrorMessage(
+                    this.signPanel,
+                    SimpleAfirmaMessages.getString("SignPanel.103"), //$NON-NLS-1$,
+                    SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+                    JOptionPane.ERROR_MESSAGE
+                );
             return;
         }
         catch(final AOCertificatesNotFoundException e) {

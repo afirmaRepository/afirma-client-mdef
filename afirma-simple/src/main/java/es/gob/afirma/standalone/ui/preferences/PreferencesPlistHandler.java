@@ -32,7 +32,7 @@ import es.gob.afirma.signers.xades.AOXAdESSigner;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
 
 /** Carga las preferencias de la aplicaci&oacute;n desde un fichero PList. */
-final class PreferencesPlistHandler {
+public final class PreferencesPlistHandler {
 
 	private static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
 
@@ -256,7 +256,7 @@ final class PreferencesPlistHandler {
 
 	}
 
-	private static void importPreferencesFromXml(final String xml) throws InvalidPreferencesFileException {
+	public static void importPreferencesFromXml(final String xml) throws InvalidPreferencesFileException {
 		final Map<String, Object> properties;
 		try {
 			properties = Plist.fromXml(xml);

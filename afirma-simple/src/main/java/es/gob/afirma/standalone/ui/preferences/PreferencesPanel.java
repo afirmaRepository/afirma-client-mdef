@@ -45,11 +45,11 @@ final class PreferencesPanel extends JPanel implements KeyListener, DisposableIn
 
 	private PreferencesPanelGeneral preferencesPanelGeneral;
 	private PreferencesPanelCades preferencesPanelCades;
-	private PreferencesPanelCipherment preferencesPanelCipherment;
 	private PreferencesPanelPades preferencesPanelPades;
 	private PreferencesPanelKeyStores preferencesPanelKeyStores;
 	private PreferencesPanelFacturaE preferencesPanelFacturaE;
 	private PreferencesPanelXades preferencesPanelXades;
+	private PreferencesPanelCipherment preferencesPanelCipherment;
 	private PreferencesPanelValideCerts preferencesPanelValideCerts;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
@@ -175,7 +175,7 @@ final class PreferencesPanel extends JPanel implements KeyListener, DisposableIn
 		//****************************************************************************
 		//**** PREFERENCIAS CIFRADO ************************************************
 		//****************************************************************************
-		this.preferencesPanelCipherment.savePreferences();
+		//this.preferencesPanelCipherment.savePreferences();
 
 		//****************************************************************************
 		//**** PREFERENCIAS FACTURAE ************************************************
@@ -201,6 +201,16 @@ final class PreferencesPanel extends JPanel implements KeyListener, DisposableIn
 		//**** PREFERENCIAS XADES ****************************************************
 		//****************************************************************************
 		this.preferencesPanelXades.savePreferences();
+
+		//****************************************************************************
+		//**** PREFERENCIAS VALIDAR CERTIFICADOS *************************************
+		//****************************************************************************
+		this.preferencesPanelCipherment.savePreferences();
+
+		//****************************************************************************
+		//**** PREFERENCIAS VALIDAR CERTIFICADOS *************************************
+		//****************************************************************************
+		this.preferencesPanelValideCerts.savePreferences();
 
 		try {
 			PreferencesManager.flush();
@@ -243,6 +253,17 @@ final class PreferencesPanel extends JPanel implements KeyListener, DisposableIn
     			//**** PREFERENCIAS XADES ****************************************************
     			//****************************************************************************
     			this.preferencesPanelXades.loadPreferences();
+    			
+    			//****************************************************************************
+    			//**** PREFERENCIAS VALIDAR CERTIFICADOS *************************************
+    			//****************************************************************************
+    			this.preferencesPanelCipherment.loadPreferences();
+
+    			//****************************************************************************
+    			//**** PREFERENCIAS VALIDAR CERTIFICADOS ****************************************************
+    			//****************************************************************************
+    			this.preferencesPanelValideCerts.loadPreferences();
+    			
     }
 
 	/** Comprueba que los datos configurados sean v&aacute;lidos.

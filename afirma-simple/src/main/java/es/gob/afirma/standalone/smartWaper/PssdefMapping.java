@@ -2,6 +2,7 @@ package es.gob.afirma.standalone.smartWaper;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * repositorio de propiedades del archivo PSSDEF.properties
@@ -9,6 +10,10 @@ import java.util.Map;
  *
  */
 public class PssdefMapping {
+	
+	public final static String descPssDefUri = "URL";
+	public final static String descKeySubjectName = "KEY_SUBJECT_NAME";
+	public final static String descDsvServPolicy = "DSV_SERVICE_POLICY";
 
     private final static Map<String, String> documentPublicacionMap = prepareDocumentSmartWrapperMap();
     
@@ -27,7 +32,7 @@ public class PssdefMapping {
 //        LinkedHashMap.put("#URL","https://10.7.113.137:8443/trustedx-gw/SoapGateway");
 //        LinkedHashMap.put("#URL","https://10.71.16.14:8443/trustedx-gw/SoapGateway");
 //        LinkedHashMap.put("#URL","https://10.71.17.24:8443/trustedx-gw/SoapGateway");
-        LinkedHashMap.put("URL","https://10.71.17.11:8443/trustedx-gw/SoapGateway");
+        LinkedHashMap.put(descPssDefUri,"https://10.71.17.11:8443/trustedx-gw/SoapGateway");
 //        LinkedHashMap.put("#URL","https://10.71.16.14:8443/trustedx-gw/SoapGateway");
 //        LinkedHashMap.put("#URL","https://10.7.114.206:8443/trustedx-gw/SoapGateway");
 
@@ -35,7 +40,7 @@ public class PssdefMapping {
         LinkedHashMap.put("PWD","");
 
         LinkedHashMap.put("# Selector de la clave de firma ------------------------------------------------------","titulo");
-        LinkedHashMap.put("KEY_SUBJECT_NAME","CN=AUTOFIRMADEF 001, OID.2.5.4.97=#0C0656415445532D, OU=PSSDEF, OU=GENERICAS, O=MINISTERIO DE DEFENSA, C=ES");
+        LinkedHashMap.put(descKeySubjectName,"CN=AUTOFIRMADEF 001, OID.2.5.4.97=#0C0656415445532D, OU=PSSDEF, OU=GENERICAS, O=MINISTERIO DE DEFENSA, C=ES");
 
         LinkedHashMap.put("# Perfil de firma ------------------------------------------------------","titulo");
 //        LinkedHashMap.put("#DS_PROFILE","wss");
@@ -75,6 +80,27 @@ public class PssdefMapping {
     public static Map<String, String> getprepareDocumentPublicacioMap() {
         return documentPublicacionMap;
     }
+
+	public static String getUrlPssdefDefault(){
+		return getDefaultValue(descPssDefUri);
+	}
 	
+	public static String getKeySubjectNameDefault(){
+		return getDefaultValue(descKeySubjectName);
+	}
+
+	public static String getDsvServPolicyDefault(){
+		return  getDefaultValue(descDsvServPolicy);
+	}
 	
+	private static String getDefaultValue(String KeyProp){
+		
+		return documentPublicacionMap.entrySet().stream()
+		  .filter(e -> e.getKey().equals(KeyProp))
+		  .map(Map.Entry::getValue)
+		  .findFirst()
+		  .orElse(null);	
+		
+	}
+    
 }

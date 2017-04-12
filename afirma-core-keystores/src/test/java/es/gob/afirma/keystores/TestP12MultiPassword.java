@@ -41,7 +41,6 @@ public class TestP12MultiPassword {
 			if (i==2 || i==4) {
 				continue;
 			}
-			System.out.println("Certificado: " + ksm.getAliases()[i]); //$NON-NLS-1$
 			ksm.setEntryPasswordCallBack(
 				new CachePasswordCallback("12341234".toCharArray()) //$NON-NLS-1$
 			);

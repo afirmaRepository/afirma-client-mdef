@@ -1,6 +1,8 @@
 package es.gob.afirma.keystores.temd;
 
 import java.awt.Component;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.prefs.Preferences;
 
 import javax.security.auth.callback.PasswordCallback;
@@ -99,14 +101,28 @@ public final class TimedPersistentCachePasswordCallback extends PasswordCallback
 
 	@Override
 	public char[] getPassword() {
-		final String pin = new String (preferences.getByteArray(KEY_TEMD_OBJ, null));
+		final String pin = preferences.get(KEY_TEMD_OBJ, null);
 		if (pin != null && !isObjectExpired()) {
 			resetTimer();
-			return pin.toCharArray();
+			//return pin.toCharArray();
+			try {
+				byte[] asBytes = Base64.getDecoder().decode(pin);
+				return new String(Base64.getDecoder().decode(pin), "utf-8").trim().toCharArray();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		final char[] newpin = new UIPasswordCallback(this.dialogMsg, this.parent).getPassword();
 		if (this.milisecondsToClose != 0) {
-			preferences.putByteArray(KEY_TEMD_OBJ, (new String(newpin)).getBytes());
+			//preferences.put(KEY_TEMD_OBJ, new String(newpin));
+			try {
+				String newPinString = new String (newpin).trim();
+				preferences.put(KEY_TEMD_OBJ, Base64.getEncoder().encodeToString(newPinString.getBytes("utf-8")));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		resetTimer();
 		return newpin;
@@ -123,7 +139,14 @@ public final class TimedPersistentCachePasswordCallback extends PasswordCallback
 		if (password != null && !(password.length < 1)) {
 			super.setPassword(password);
 			if (this.milisecondsToClose != 0) {
-				preferences.putByteArray(KEY_TEMD_OBJ, new String(password).getBytes());
+				//preferences.put(KEY_TEMD_OBJ, new String(password));
+				try {
+					preferences.put(KEY_TEMD_OBJ, new String(Base64.getEncoder().encodeToString(password.toString().trim().getBytes("utf-8"))));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 			resetTimer();
 		}

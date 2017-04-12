@@ -15,7 +15,7 @@ public final class TestWaitForConnection {
 
 	private static final int PORT = 6629;
 
-	/** Main para pruebas.
+	/** AesEcryptTest para pruebas.
 	 * @param args No se usa.
 	 * @throws Exception En cualquier error no controlado. */
 	public static void main(final String[] args) {

@@ -55,8 +55,4 @@ public class DicodefClientWs extends WebServiceGatewaySupport {
     			.marshalSendAndReceive(new ObjectFactory().
     					createObtenerCertificadoRequest(identidad))).getValue();
     }    
-	
-	
-	
-
 }

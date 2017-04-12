@@ -252,6 +252,8 @@
 			<artifactId>afirma-client-pssdef</artifactId>
 			<version>3.3.2-SNAPSHOT</version>
 		</dependency>
+		
+		
 	</dependencies>
 	
 	<scm>

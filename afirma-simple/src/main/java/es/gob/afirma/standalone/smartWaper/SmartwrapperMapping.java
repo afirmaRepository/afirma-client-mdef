@@ -18,10 +18,10 @@ public class SmartwrapperMapping {
         Map<String, String> LinkedHashMap = new LinkedHashMap<String, String>();
 
         LinkedHashMap.put("Truststore.active","true");
-        LinkedHashMap.put("Truststore.path", (configurePssdefPropeties.APPLICATION_HOME_PSSDEF + File.separator + "trustedx-inethandler.truststore").replaceAll("\\\\", "/"));
+        LinkedHashMap.put("Truststore.path", (ConfigurePssdefPropeties.APPLICATION_HOME_PSSDEF + File.separator + "trustedx-inethandler.truststore").replaceAll("\\\\", "/"));
         LinkedHashMap.put("Truststore.password","trustedx");
         LinkedHashMap.put("Keystore.active","true");
-        LinkedHashMap.put("Keystore.path", (configurePssdefPropeties.APPLICATION_HOME_PSSDEF + File.separator + "PSSDEF_Autofirma.jks").replaceAll("\\\\", "/"));
+        LinkedHashMap.put("Keystore.path", (ConfigurePssdefPropeties.APPLICATION_HOME_PSSDEF + File.separator + "PSSDEF_Autofirma.jks").replaceAll("\\\\", "/"));
         LinkedHashMap.put("Keystore.password","Autofirma");
         LinkedHashMap.put("Proxy.active","false");
         LinkedHashMap.put("Proxy.host","");

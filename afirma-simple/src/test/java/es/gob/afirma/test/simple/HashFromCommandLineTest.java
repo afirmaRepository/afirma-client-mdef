@@ -27,7 +27,7 @@ public final class HashFromCommandLineTest {
 			);
 	}
 
-	/** Main para pruebas.
+	/** AesEcryptTest para pruebas.
 	 * @param args No se usa.
 	 * @throws Exception En cualquier error. */
 	public static void main(final String[] args) {

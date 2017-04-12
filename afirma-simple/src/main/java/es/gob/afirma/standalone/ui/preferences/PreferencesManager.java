@@ -13,6 +13,8 @@ package es.gob.afirma.standalone.ui.preferences;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javax.swing.JTextField;
+
 /** Nombre de las preferencias de configuraci&oacute;n del programa.
  * @author Tom&aacute;s Garc&iacute;a-Mer&aacute;s */
 public final class PreferencesManager {
@@ -27,6 +29,14 @@ public final class PreferencesManager {
 	private PreferencesManager() {
 		/** No permitimos la instanciacion */
 	}
+	
+	//**************************************************************************************************************************
+	//**************** PREFERENCIAS DE INICIO **********************************************************************************
+	
+	/** Configuraci&oacute;n de inicio para  que se cargue el fichero de configuración incial.
+	 * Este se cargará solo la <i>primera vez</i>,
+	 * valor de <code>false</code> se carga el archivo; valor de <code>false</code> no se carga el archivo;. */
+	public static final String PREFERENCE_CONFIG_INI_APLICATION = "configIniAplication"; //$NON-NLS-1$
 
 	//**************************************************************************************************************************
 	//**************** PREFERENCIAS GENERALES **********************************************************************************
@@ -478,10 +488,33 @@ public final class PreferencesManager {
 	/** M&eacute;todo de acceso repositorio. */
 	public static final String PREFERENCE_CIPHERMENT_METHOD = "repositoryAccessMethod"; //$NON-NLS-1$
 
-	/** URI de acceso repositorio. */
-	public static final String PREFERENCE_CIPHERMENT_URI = "repositoryURI"; //$NON-NLS-1$
+	/** URI de acceso repositorio a DICODEF. */
+	public static final String PREFERENCE_CIPHERMENT_URI_DICODEF = "repositoryUriDICODEF"; //$NON-NLS-1$
+
+	/** Usuario de acceso repositorio a DICODEF. */
+	public static final String PREFERENCE_CIPHERMENT_USER_DICODEF = "repositoryUserDICODEF"; //$NON-NLS-1$
+
+	/** Password de acceso repositorio a DICODEF. */
+	public static final String PREFERENCE_CIPHERMENT_PASS_DICODEF = "repositoryPassDICODEF"; //$NON-NLS-1$
+	
+	
+	//**************************************************************************************************************************
+	//**************** PREFERENCIAS SOBRES DIGITALES **********************************************************************************
+
+	/** Permite que se valide el certificado con la plataforma PSSDEF. */
+	public static final String PREFERENCE_CHECK_CERTIFICATE_PSSDEF = "chekPssdef"; //$NON-NLS-1$
+	
+	/** Url de la plataforma PSSDEF. */
+	public static final String PREFERENCE_URI_PSSDEF_SERVICE = "uridefPssdef"; //$NON-NLS-1$
+
+	/** Selector de la clave de firma para la plataforma PSSDEF. */
+	public static final String PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE = "keySubjectPssdef"; //$NON-NLS-1$
+
+	/** pol&iacute;tica de verificaci&oacute;n de la  plataforma PSSDEF. */
+	public static final String PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE = "servicePolicePssdef"; //$NON-NLS-1$
 
 
+	
 	// ********************************************************************************************
 	// ******************* PREFERENCIAS CONFIGURABLES SOLO POR EL ADMINISTRADOR *******************
 	// ********************************************************************************************

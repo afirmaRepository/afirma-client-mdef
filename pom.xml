@@ -16,13 +16,13 @@
 	<description>Librerías del núcleo de afirma</description>
 	
 	<modules>
+		<module>afirma-dicodef-clientws</module>
+		<module>afirma-client-pssdef</module>
 		<module>afirma-core-keystores</module>
 		<!-- <module>afirma-keystores-temd</module>  
 		<module>afirma-keyone</module>  -->
 		<module>afirma-crypto-validation</module>
 		<module>afirma-local-batch-sign</module>
-		<module>afirma-dicodef-clientws</module>
-		<module>afirma-client-pssdef</module>
 		<module>afirma-simple</module>
 		<module>afirma-trayIcon</module>
 	</modules>

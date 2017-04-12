@@ -14,6 +14,7 @@ import es.gob.afirma.ws.client.modelo.ListaUsuarioSistemaType;
 import es.gob.afirma.ws.client.modelo.UsuarioSistemaExtendType;
 import es.gob.afirma.ws.client.modelo.UsuarioSistemaMailType;
 import es.gob.afirma.ws.client.modelo.UsuarioSistemaType;
+import es.gob.afirma.ws.client.services.ConfigParameters;
 import es.gob.afirma.ws.client.services.DicodefClientWs;
 import es.gob.afirma.ws.client.services.SoapClientConfig;
 
@@ -24,6 +25,7 @@ public class RunClient {
     
     public static void main(String[] args) {
 	    System.out.println("entrar en el sistema");
+	    ConfigParameters.inicializeValues("url", "usuario", "password");
 	    context = new AnnotationConfigApplicationContext(SoapClientConfig.class);
       DicodefClientWs client = context.getBean(DicodefClientWs.class);
 
