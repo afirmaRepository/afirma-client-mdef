@@ -218,12 +218,19 @@ Section "Programa" sPrograma
 	;Descifrar / Abrir sobres digitales (enveloped)
  	WriteRegStr HKEY_CLASSES_ROOT ".enveloped\shell\afirma.enveloped" "" "Descifrar"
 	WriteRegStr HKEY_CLASSES_ROOT ".enveloped\shell\afirma.enveloped" "Icon" "$INSTDIR\AutoFirma\AutoFirma.exe"
-	WriteRegStr HKEY_CLASSES_ROOT ".enveloped\shell\afirma.enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -i %1" 
+	WriteRegStr HKEY_CLASSES_ROOT ".enveloped\shell\afirma.enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -gui -i %1" 
 
 	;Descifrar / Abrir sobres digitales (p7m)
- 	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped" "" "Descifrar"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped" "Icon" "$INSTDIR\AutoFirma\AutoFirma.exe"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -i %1" 
+ 	;WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped" "" "Descifrar"
+	;WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped" "Icon" "$INSTDIR\AutoFirma\AutoFirma.exe"
+	;WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -gui -i %1" 
+
+	;Descifrar
+	; .p7m
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m" "" "Descifrar"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped" "" "Descifrar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -gui -i %1"
 
 	;Verify
 	; .csig
