@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+	<key>omitAskOnClose</key>
+	<true/>
+	<key>signatureAlgorithm</key>
+	<string>SHA-512</string>
+	<key>repositoryUriDICODEF</key>
+	<string>https://dpdes01.mdef.es:10005/Servicios/ConsultarDICODEF</string>
+	<key>repositoryUserDICODEF</key>
+	<string>CG3mRpixNsmM4dKJeBAyYw==</string>
+	<key>repositoryPassDICODEF</key>
+	<string>8E7tHeNLTI3Mztc/bAvwLw==</string>
+</dict>
+</plist>
