@@ -3,6 +3,10 @@ package es.gob.afirma.standalone.ui;
 import java.awt.Cursor;
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.net.URISyntaxException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -52,12 +56,20 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 	private final SignPanel signPanel;
 	private final List<? extends CertificateFilter> certFilters;
 
-	private final CommonWaitDialog waitDialog;
+    /** Indica si la operaci&oacute;n a realizar es una cofirma. */
+    private boolean cosign = false;
+	
+    boolean isCosign() {
+    	return this.cosign;
+    }
+
+    private final CommonWaitDialog waitDialog;
 	CommonWaitDialog getWaitDialog() {
 		return this.waitDialog;
 	}
 
-	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException {
+	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException, URISyntaxException, IOException {
+	//private synchronized PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException {	
 		final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,
@@ -69,21 +81,48 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 			false             // mandatoryCertificate
 		);
 		//new
-    	//ksm.getType().getStorePasswordCallback(this.signPanel).getPassword();
-    	if(ksm.getType().getName().equals(AOKeyStore.TEMD.getName())){
-    		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
-        	if (psc instanceof TimedPersistentCachePasswordCallback) {
-        		if(((TimedPersistentCachePasswordCallback) psc).isObjectExpired()){
-        			throw new IsObjectExpiredException("Se ha superado el tiempo de expiración");
-        		}
-        	}
-    	}
+    	ksm.getType().getStorePasswordCallback(this).getPassword();
     	//new
-    	dialog.show();
-    	ksm.setParentComponent(this.signPanel);
+    	dialog.show();    	
+    	
+    	
+    	//isKeyStoreReady(ksm, dialog);
+
     	return ksm.getKeyEntry(
 			dialog.getSelectedAlias()
 		);
+	}
+	
+	void isKeyStoreReady(AOKeyStoreManager ksm, AOKeyStoreDialog dialog){
+		if(!this.cosign){
+			if(null != ksm){
+				this.cosign = true;
+				LOGGER.info("inicializado KeyStore: " + ksm);
+	            System.out.println("finding deadlocked threads");
+	            ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
+	            long[] ids = tmx.findDeadlockedThreads();
+	            if (ids != null) {
+	                ThreadInfo[] infos = tmx.getThreadInfo(ids, true, true);
+	                System.out.println("the following threads are deadlocked:");
+	                for (ThreadInfo ti : infos) {
+	                    System.out.println(ti);
+	                }
+	            }
+	            System.out.println("finished finding deadlocked threads");
+				
+		    	System.out.println("pin : "+(ksm.getType().getStorePasswordCallback(this.signPanel).getPassword()).toString());
+		    	try {
+		    		LOGGER.info("busca la clave");
+					ksm.getKeyEntry(dialog.getSelectedAlias());
+				} catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+					LOGGER.info("da error al buscar la clave");
+					e.printStackTrace();
+				}
+			}else{
+				LOGGER.info("no esta inicializado KeyStore");				
+				isKeyStoreReady(ksm,dialog);
+			}
+		}
 	}
 
 
@@ -96,7 +135,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         this.waitDialog = signWaitDialog;
     }
 
-    void doSignature(final AOSigner currentSigner, final Properties initialExtraParams) {
+	void doSignature(final AOSigner currentSigner, final Properties initialExtraParams) {
 
         this.signPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
@@ -107,6 +146,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         final PrivateKeyEntry pke;
         try {
             pke = getPrivateKeyEntry();
+            
         }
         catch (final AOCancelledOperationException e) {
             return;
@@ -138,6 +178,8 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
                 SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
                 JOptionPane.ERROR_MESSAGE
             );
+        	//this.signPanel.getSimpleAfirma().closeApplication(0);
+        	restartApp();
         	return;
     	}
         finally {
@@ -153,6 +195,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 
         // Anadimos las propiedades del sistema, habilitando asi que se puedan indicar opciones de uso con -D en linea
         // de comandos
+        //Class.forName(clsname, init, classloader); 
         final Properties p = new Properties();
         p.putAll(prefProps);
         p.putAll(System.getProperties());
@@ -233,6 +276,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
                 SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
                 JOptionPane.ERROR_MESSAGE
             );
+            restartApp();
             return;
         }
         catch(final OutOfMemoryError ooe) {
@@ -370,6 +414,8 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         	this.signPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
+        try{
+        	
         this.signPanel.getSimpleAfirma().setCurrentDir(fd);
 
         this.signPanel.getSimpleAfirma().loadResultsPanel(
@@ -377,9 +423,19 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
     		fd.getAbsolutePath(),
     		(X509Certificate) pke.getCertificate()
 		);
+        }catch(Exception e){
+            LOGGER.severe(
+                    "No se ha podido guardar el resultado de la firma: " + e //$NON-NLS-1$
+            		);
+        }
+              
     }
 
-    @Override
+    private void restartApp() {
+    	this.signPanel.getSimpleAfirma().restartApplication();
+	}
+
+	@Override
     public Void doInBackground() {
 
         final AOSigner currentSigner = this.signPanel.getSigner();
@@ -398,6 +454,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             	final List<SignatureField> emptySignatureFields = PdfUtil.getPdfEmptySignatureFields(this.signPanel.getDataToSign());
             	final String oldMessage = this.waitDialog.getMessage();
             	this.waitDialog.setMessage(SimpleAfirmaMessages.getString("SignPanelSignTask.0")); //$NON-NLS-1$
+                this.waitDialog.setVisible(true);
             	if (!emptySignatureFields.isEmpty()) {
             		final SignatureField field = PdfEmptySignatureFieldsChooserDialog.selectField(emptySignatureFields);
             		if (field != null) {
@@ -501,4 +558,19 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
     	}
         return null;
     }
+    
+/*    @Override
+    public void done() {
+            try {
+               get(); 
+            } catch (InterruptedException | ExecutionException ex) {
+                JOptionPane.showMessageDialog(null,
+                "Somethings Wrong: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            this.waitDialog.dispose();
+            this.waitDialog.setVisible(false);
+        }
+*/    public void cancel(SignPanelSignTask worker){
+        worker.cancel(true);
+     }    
 }

@@ -113,7 +113,8 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 	private static final String SPACE_SEPARATOR = " "; //$NON-NLS-1$
 	private static final String SPLIT_REGEXP = "\\s+"; //$NON-NLS-1$
 	static final String IMAGE_EXT[] = { "jpg", "jpeg", "png", "gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	private static final String RUBRIC_NAME = "rubric.jpg"; //$NON-NLS-1$
+	//private static final String RUBRIC_NAME = "rubric.jpg"; //$NON-NLS-1$
+	private static final String RUBRIC_NAME = "logoEjercito.png"; //$NON-NLS-1$
 	private float scale = 1;
 	private BufferedImage image;
 	private BufferedImage signImage;
@@ -405,7 +406,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 				} else {
 					try {
 						final String imPath = AOUIFactory.getLoadFiles(
-								SignPdfUiMessages.getString("SignPdfUiPreview.21.1"), //$NON-NLS-1$ ,
+								SignPdfUiMessages.getString("SignPdfUiPreview.21"), //$NON-NLS-1$ ,
 								null, null, IMAGE_EXT, SignPdfUiMessages.getString("SignPdfUiPreview.22"), //$NON-NLS-1$ ,,
 								false, false, null, SignPdfUiPanelPreview.this)[0].getAbsolutePath();
 						paintImage(imPath);
@@ -804,7 +805,7 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 							getProp().getProperty("signaturePage") //$NON-NLS-1$
 					);
 					try {
-						saveRubric();
+						//saveRubric();
 					} catch (final AOCancelledOperationException ex) {
 						LOGGER.severe("Operacion cancelada por el usuario: " + ex); //$NON-NLS-1$
 						return;
@@ -1279,15 +1280,15 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 	private boolean ErrorMaxValueExceded() {
 		boolean rejected = false;
 		if (AOUIFactory.showConfirmDialog(SignPdfUiPanelPreview.this,
-				SimpleAfirmaMessages.getString("SignResultPanel.10.1"),
-				SimpleAfirmaMessages.getString("SignResultPanel.11.1"), //$NON-NLS-1$
+				SimpleAfirmaMessages.getString("SignResultPanel.10"),
+				SimpleAfirmaMessages.getString("SignResultPanel.11"), //$NON-NLS-1$
 				AOUIFactory.YES_NO_OPTION, AOUIFactory.ERROR_MESSAGE) != AOUIFactory.YES_OPTION) {
 			rejected = true;
 		}
 		return rejected;
 	}
 
-	private void loadRubric() {
+	private void loadRubric2() {
 		try {
 			this.signImageDefault = ImageIO
 					.read(new ByteArrayInputStream(PreferencesManager.getByteArray(PREFERENCE_RUBRIC_IMAGE, null)));
@@ -1296,6 +1297,16 @@ public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 			this.signImageDefault = null;
 		}
 	}
+	
+	private void loadRubric() {
+    	try {
+            this.signImageDefault = ImageIO.read(new File(SimpleAfirma.APPLICATION_HOME + File.separator + RUBRIC_NAME));
+        }
+        catch (final Exception e) {
+        	LOGGER.warning("No se ha podido cargar la rubrica por defecto: " + e); //$NON-NLS-1$
+        	this.signImageDefault = null;
+        }
+	}	
 	
 	private void loadPreferences() {
 		this.padesSignReason.setText(PreferencesManager.get(PREFERENCE_PADES_SIGN_REASON, null)); //$NON-NLS-1$

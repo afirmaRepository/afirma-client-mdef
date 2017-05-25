@@ -346,8 +346,8 @@ public class DigitalEnvelopeSender extends JPanel {
 		);
 
 		//new
-    	//keyStoreManager.getType().getStorePasswordCallback(this).getPassword();
-    	if(keyStoreManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
+    	keyStoreManager.getType().getStorePasswordCallback(this).getPassword();
+/*    	if(keyStoreManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
     		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
         	if (psc instanceof TimedPersistentCachePasswordCallback) {
         		if(((TimedPersistentCachePasswordCallback) psc).isObjectExpired()){
@@ -364,7 +364,7 @@ public class DigitalEnvelopeSender extends JPanel {
         		}
         	}
     	}
-        
+*/        
     	//new
     	try {
 			keyStoreDialog.show();

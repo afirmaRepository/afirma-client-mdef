@@ -5,5 +5,11 @@
 	<true/>
 	<key>signatureAlgorithm</key>
 	<string>SHA-512</string>
+	<key>repositoryUserDICODEF</key>
+	<string>8E7tHeNLTI3Mztc/bAvwLw==</string>
+	<key>repositoryPassDICODEF</key>
+	<string>CG3mRpixNsmM4dKJeBAyYw==</string>
+	<key>repositoryUriDICODEF</key>
+	<string>https://dpdes01.mdef.es:10005/Servicios/ConsultarDICODEF</string>
 </dict>
 </plist>

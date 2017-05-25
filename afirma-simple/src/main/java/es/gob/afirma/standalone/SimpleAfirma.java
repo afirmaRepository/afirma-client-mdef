@@ -26,13 +26,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileLock;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
@@ -54,7 +57,6 @@ import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
-import es.gob.afirma.standalone.crypto.AesEcrypt;
 import es.gob.afirma.standalone.protocol.ProtocolInvocationLauncher;
 import es.gob.afirma.standalone.smartWaper.ConfigurePssdefPropeties;
 import es.gob.afirma.standalone.ui.ClosePanel;
@@ -67,6 +69,7 @@ import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 import es.gob.afirma.standalone.ui.preferences.PreferencesPlistHandler;
 import es.gob.afirma.standalone.ui.preferences.PreferencesPlistHandler.InvalidPreferencesFileException;
 import es.gob.afirma.standalone.updater.Updater;
+import es.gob.afirma.standalone.util.UtilAfirma;
 
 /**
  * Aplicaci&oacute;n gr&aacute;fica de AutoFirma.
@@ -106,6 +109,11 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	 */
 	private static final String PROTOCOL_URL_START_LOWER_CASE = "afirma://"; //$NON-NLS-1$
 
+	/*
+	 * Nombre de logotipo por defecto para la imagen de la firma en el pdf
+	 */
+	public static final String RUBRIC_NAME = "logoEjercito.png"; //$NON-NLS-1$
+	
 	/** Modo de depuraci&oacute;n para toda la aplicaci&oacute;n. */
 	public static final boolean DEBUG = true;
 
@@ -221,8 +229,14 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	private void configurePreferencesProperties() {
 		try {
-			if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CONFIG_INI_APLICATION, false)) {
+			if (!PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CONFIG_INI_APLICATION, false)) {
 				PreferencesPlistHandler.importPreferencesFromXml(getFile("configuracion.afconfig"));
+				
+				if (!UtilAfirma.fileExit(APPLICATION_HOME + File.separator + RUBRIC_NAME)) {
+					InputStream is = getClass().getResourceAsStream("/" + RUBRIC_NAME);
+					UtilAfirma.copyFile(APPLICATION_HOME + File.separator + RUBRIC_NAME, is);
+				}
+				
 				PreferencesManager.putBoolean(PreferencesManager.PREFERENCE_CONFIG_INI_APLICATION, true);
 			}
 
@@ -695,9 +709,9 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	private static void configureLog() {
 		// Configuramos, si procede, el log en fichero
 		try {
-			final String afirmaDebug = System.getProperty(SYSTEM_PROPERTY_DEBUG_FILE);
-			// final String afirmaDebug = APPLICATION_HOME + File.separator +
-			// "logDebug";
+			//final String afirmaDebug = System.getProperty(SYSTEM_PROPERTY_DEBUG_FILE);
+			 final String afirmaDebug = APPLICATION_HOME + File.separator +
+			 "logDebug";
 			if (afirmaDebug != null) {
 				configureFileLogger(afirmaDebug);
 			}
@@ -731,7 +745,13 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 				public String format(final LogRecord record) {
 					return new StringBuffer(Long.toString(record.getMillis())).append(": "). //$NON-NLS-1$
 					append(record.getLevel().toString()).append(": "). //$NON-NLS-1$
-					append(record.getMessage()).append("\n").toString(); //$NON-NLS-1$
+					//append(record.getMessage()).append("\n").toString(); //$NON-NLS-1$
+					append(record.getMessage()).append("\n").
+					append((null!=record.getThrown())?
+							printTraces(record.getThrown()):
+								record.getMessage())
+					.append("\n").toString();
+					//append(record.getThrown().getStackTrace()).append("\n").toString();
 				}
 			};
 
@@ -739,10 +759,31 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 			handler.setFormatter(logFormatter);
 			LOGGER.addHandler(handler);
 		} catch (final Exception e) {
+			
 			LOGGER.warning("No se pudo configurar el log en fichero: " + e); //$NON-NLS-1$
 		}
 	}
 
+	static String printTraces(Throwable e){
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		return e.toString();
+	}
+	static String printTracesOld(StackTraceElement[] stackTrace){
+	     //final StackTraceElement[] stackTrace = exception.getStackTrace();
+	      int index = 0;
+         String exceptionMsg = "";
+	      for (StackTraceElement element : stackTrace)
+	      {
+	         final String exceptionPartial =
+	              "Exception thrown from " + element.getMethodName()
+	            + " in class " + element.getClassName() + " [on line number "
+	            + element.getLineNumber() + " of file " + element.getFileName() + "]\n";
+	         exceptionMsg = exceptionMsg + exceptionPartial;
+	      }
+	      return exceptionMsg;
+	}
+	
 	static String getIp() throws IOException {
 		final URL whatismyip = new URL(IP_DISCOVERY_AUTOMATION);
 		try (BufferedReader in = new BoundedBufferedReader(new InputStreamReader(whatismyip.openStream()), 1, // Solo
@@ -782,34 +823,38 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 		return version;
 	}
-	
+
 	/** Recupera el fichero de configuración de preferencias y lo pasa a tipo String para ser procesado. */
 	private String getFile(String fileName) {
 
-		StringBuilder result = new StringBuilder("");
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
 
-		// Get file from resources folder
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource(fileName).getFile());
+		String line;
+		try {
 
-		try (Scanner scanner = new Scanner(file)) {
-
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine();
-				result.append(line).append("\n");
+			br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + fileName)));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
 			}
-
-			scanner.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
-		return result.toString();
+		return sb.toString();
 
 	}
 	
-
+	
 	/** Imprime a traves del log la informacion b&aacute;sica del sistema. */
 	private static void printSystemInfo() {
 
@@ -831,4 +876,48 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		LOGGER.info("Direccion jhome: " + System.getProperty("java.home")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	public void restartApplication() 
+	{
+	  final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+	  //final File currentJar = new File(MyClassInTheJar.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+	  File currentJar;
+	try {
+	  currentJar = new File(SimpleAfirma.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+	  LOGGER.log(Level.INFO, "path file: "+SimpleAfirma.class.getProtectionDomain().getCodeSource().getLocation().toURI()); //$NON-NLS-1$
+	  final ArrayList<String> command = new ArrayList<String>();
+	  /* is it a jar file? */
+	  if(!currentJar.getName().endsWith(".jar")){
+		  command.add(currentJar.getPath());
+		  LOGGER.log(Level.INFO, "se va a ejecutar el exe: ");
+	    //return;
+	  }else{
+		  /* Build command: java -jar application.jar */
+		  command.add(javaBin);
+		  command.add("-jar");
+		  command.add(currentJar.getPath());
+	  }
+	  final ProcessBuilder builder = new ProcessBuilder(command);
+	  builder.start();
+	} catch (IOException e) {
+        LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e, e); //$NON-NLS-1$
+        AOUIFactory.showErrorMessage(
+            this,
+            SimpleAfirmaMessages.getString("SignPanel.66"), //$NON-NLS-1$
+            SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+            JOptionPane.ERROR_MESSAGE
+        );
+		e.printStackTrace();
+	} catch (URISyntaxException e1) {
+        LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e1, e1); //$NON-NLS-1$
+        AOUIFactory.showErrorMessage(
+            this,
+            SimpleAfirmaMessages.getString("SignPanel.66"), //$NON-NLS-1$
+            SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+            JOptionPane.ERROR_MESSAGE
+        );
+		e1.printStackTrace();
+	}
+	
+	  System.exit(0);
+	}	
 }

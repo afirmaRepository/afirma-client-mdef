@@ -113,6 +113,11 @@ public final class TimedPersistentCachePasswordCallback extends PasswordCallback
 				e.printStackTrace();
 			}
 		}
+		//new
+//		else{
+//			clearPassword();
+//		}
+		//new
 		final char[] newpin = new UIPasswordCallback(this.dialogMsg, this.parent).getPassword();
 		if (this.milisecondsToClose != 0) {
 			//preferences.put(KEY_TEMD_OBJ, new String(newpin));

@@ -86,6 +86,8 @@ public class TestAperturaSobres {
 				envelop,
 				pke);
 
+		System.out.println("-------------------");
 		System.out.println(new String(data));
+		System.out.println("-------------------");
 	}
 }

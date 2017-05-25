@@ -126,10 +126,17 @@ final class TimeStampPadesDialog extends JDialog  {
 	boolean isExtensionCriticalCheckBoxSelected() {
 		return this.extensionCriticalCheckBox.isSelected();
 	}
+	
+	private static boolean tsaPadesCheck; 
 
+	private boolean isTsaPadesCheck() {
+		return tsaPadesCheck;
+	}
+	
 	/** Inicia el proceso de creaci&oacute;n de di&aacute;logo de pol&iacute;ticas de certificaci&oacute;n.
 	 * @param parent Componente padre para la modalidad. */
-	static void startTimeStampPadesDialog(final Frame parent) {
+	static void startTimeStampPadesDialog(final Frame parent, boolean tsaPades) {
+		tsaPadesCheck = tsaPades;
 		final TimeStampPadesDialog tsd = new TimeStampPadesDialog(parent);
 		tsd.loadConfiguration();
 		tsd.setSize(720, 650);
@@ -561,12 +568,14 @@ final class TimeStampPadesDialog extends JDialog  {
 
 		add(this.timeStampCheckBox, gbc);
 		gbc.gridy++;
-		gbc.insets = new Insets(10, 40, 5, 10);
-		add(tsTypesLabel, gbc);
-		gbc.gridy++;
-        gbc.insets = new Insets(0, 35, 5, 10);
-		add(this.tsType, gbc);
-		gbc.gridy++;
+		if(this.isTsaPadesCheck()){
+			gbc.insets = new Insets(10, 40, 5, 10);
+			add(tsTypesLabel, gbc);
+			gbc.gridy++;
+	        gbc.insets = new Insets(0, 35, 5, 10);
+			add(this.tsType, gbc);
+			gbc.gridy++;			
+		}
         gbc.insets = new Insets(5, 40, 5, 10);
 		add(tsaHashAlgorithmsLabel, gbc);
 		gbc.gridy++;

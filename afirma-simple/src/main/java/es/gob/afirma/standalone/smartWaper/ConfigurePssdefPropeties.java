@@ -18,7 +18,7 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 import es.gob.afirma.core.misc.Platform;
-import es.gob.afirma.pssdef.config.ConfigPssdef;
+//import es.gob.afirma.pssdef.config.ConfigPssdef;
 import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 

@@ -200,7 +200,7 @@ public final class TimestampsAnalyzer {
 			}
 			catch (final CMSException e) {
 				LOGGER.severe(
-					"La fimra encontrada no es compatible CMS, se continua con las siguientes: " + e //$NON-NLS-1$
+					"La firma encontrada no es compatible CMS, se continua con las siguientes: " + e //$NON-NLS-1$
 				);
 				continue;
 			}

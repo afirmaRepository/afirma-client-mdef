@@ -12,6 +12,8 @@ import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.InvalidKeyException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.security.KeyStoreException;
@@ -373,6 +375,12 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 		}
         catch (final InvalidKeyException e) {
 			LOGGER.log(Level.SEVERE, "La clave indicada no pertenece a ninguno de los destinatarios del envoltorio: " + e, e); //$NON-NLS-1$
+						
+			//return errors.toString();
+			LOGGER.log(Level.INFO, "------------------------");
+			e.printStackTrace();
+			
+			LOGGER.log(Level.INFO, "------------------------");
         	AOUIFactory.showErrorMessage(
                 this,
                 SimpleAfirmaMessages.getString("OpenDigitalEnvelope.17"), //$NON-NLS-1$
@@ -472,6 +480,12 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
     	if (keyStoreManager instanceof TemdKeyStoreManager) {
     		final X509Certificate selectedCert = keyStoreManager.getCertificate(dialog.getSelectedAlias());
     		final PrivateKeyEntry pke = getKeyEntryFromDefaultKeyStore(selectedCert);
+    		pke.getPrivateKey();
+    		//final PrivateKeyEntry pke = keyStoreManager.getKeyEntry(
+    		//		dialog.getSelectedAlias()
+    		//	);
+    		//final PrivateKeyEntry pke = (PrivateKeyEntry) keyStoreManager.getEntry(CERT_ALIAS, new KeyStore.PasswordProtection(CERT_PASS.toCharArray()));
+
     		if (pke != null) {
     			return pke;
     		}

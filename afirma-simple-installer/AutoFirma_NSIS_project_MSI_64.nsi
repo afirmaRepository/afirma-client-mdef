@@ -63,8 +63,8 @@ OutFile AutoFirmaGenerator.exe
 ;la frase en espanol mas larga:
 ; Bienvenido al Asistente de Instalacion de Aplicacion $Name
 ; no se ve el contenido de la variable $Name si el tamano es muy grande
-Name "AutoFirma"
-Caption "Instalador de AutoFirma (Cliente @firma)"
+Name "AutoFirmaDEF"
+Caption "Instalador de AutoFirmaDEF (Cliente @firma)"
 Icon ic_launcher.ico
 
 ;Comprobacion de integridad del fichero activada
@@ -188,28 +188,28 @@ Section "Programa" sPrograma
 	; .p7m
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m" "" "Descifrar"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped" "" "Descifrar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped" "" "Descifrar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -gui -i %1"
 
 	;Verify
 	; .csig
 	WriteRegStr HKEY_CLASSES_ROOT ".csig" "" "Firma binaria CMS/CAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".csig\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"
 
 	;Verify
 	; .xsig
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig" "" "Firma XMLDSig/XAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"	
 	
 	;Verify
 	; .p7s
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s" "" "Firma binaria CMS/CAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"
 
 	;Protocolo afirma

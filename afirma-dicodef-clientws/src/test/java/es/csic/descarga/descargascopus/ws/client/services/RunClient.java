@@ -25,7 +25,7 @@ public class RunClient {
     
     public static void main(String[] args) {
 	    System.out.println("entrar en el sistema");
-	    ConfigParameters.inicializeValues("url", "usuario", "password");
+	    ConfigParameters.inicializeValues("https://dpdes01.mdef.es:10005/Servicios/ConsultarDICODEF", "SILOPDEF", "prueba");
 	    context = new AnnotationConfigApplicationContext(SoapClientConfig.class);
       DicodefClientWs client = context.getBean(DicodefClientWs.class);
 

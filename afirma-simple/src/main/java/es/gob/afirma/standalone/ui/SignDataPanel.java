@@ -271,7 +271,7 @@ final class SignDataPanel extends JPanel {
 									try {
 										validationMessage = validaCertificado.validaCert(cert);
 										if(validationMessage.trim().equals(PssdefConstants.certOK)){
-											validationMessageType = JOptionPane.OK_OPTION;
+											validationMessageType = JOptionPane.INFORMATION_MESSAGE;
 										}else{
 											validationMessageType = JOptionPane.ERROR_MESSAGE;
 										}
@@ -476,6 +476,15 @@ final class SignDataPanel extends JPanel {
 		// Arbol de firmantes
 		final TreeModelManager treeManager = new TreeModelManager(signInfo.getSignsTree());
 		final DefaultMutableTreeNode signersBranch = treeManager.getSwingTree();
+        //for (int i = 0; i < signersBranch.getChildCount(); i++) {		
+//        if(signersBranch.getFirstLeaf().getUserObject().toString().indexOf("(")!=-1 && signersBranch.getFirstLeaf().getUserObject().toString().indexOf(")")!=-1){
+//        	int indice = signersBranch.getFirstLeaf().getUserObject().toString().indexOf("(");
+//        	String datos = signersBranch.getFirstLeaf().getUserObject().toString();
+//        	String datosModificados = datos.substring(0,indice-1).concat(" Hora del sistema ").concat(datos.substring(indice, datos.length()));
+//        	System.out.println(datosModificados);
+//        	signersBranch.getFirstLeaf().setUserObject(datosModificados);        	
+//        }
+		
 		signersBranch.setUserObject(SimpleAfirmaMessages.getString("SignDataPanel.29")); //$NON-NLS-1$
 		root.add(signersBranch);
 

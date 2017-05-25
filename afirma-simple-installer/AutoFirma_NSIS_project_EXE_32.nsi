@@ -65,8 +65,8 @@ OutFile AutoFirma_32_installer.exe
 ;la frase en espanol mas larga:
 ; Bienvenido al Asistente de Instalacion de Aplicacion $Name
 ; no se ve el contenido de la variable $Name si el tamano es muy grande
-Name "AutoFirma"
-Caption "Instalador de AutoFirma (Cliente @firma)"
+Name "AutoFirmaDEF"
+Caption "Instalador de AutoFirmaDEF (Cliente @firma)"
 Icon ic_launcher.ico
 
 ;Comprobacion de integridad del fichero activada
@@ -139,13 +139,13 @@ Section "Programa" sPrograma
 	  ReadRegStr $R1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PATH\" "DisplayVersion"
 	  ${VersionCheckNew} $R1 ${VERSION} "$R2"
 	  ${If} $R2 = 0
-        MessageBox MB_OK "Esta versi?n de AutoFirma ya est? instalada." 
+        MessageBox MB_OK "Esta versi?n de AutoFirmaDEF ya est? instalada." 
 	  ${else}
 		${If} $R2 = 2
-		MessageBox MB_YESNO "Existe una versi?n anterior de AutoFirma en el equipo. ?Desea desinstalarla?" /SD IDYES IDNO Exit
+		MessageBox MB_YESNO "Existe una versi?n anterior de AutoFirmaDEF en el equipo. ?Desea desinstalarla?" /SD IDYES IDNO Exit
 		Goto UninstallOlderVersion
 		${else}
-		MessageBox MB_OK "La versi?n actual de AutoFirma es m?s nueva que la que se quiere instalar."
+		MessageBox MB_OK "La versi?n actual de AutoFirmaDEF es m?s nueva que la que se quiere instalar."
 		${EndIf}
       ${EndIf}
 	Exit:
@@ -229,28 +229,28 @@ Section "Programa" sPrograma
 	; .p7m
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m" "" "Descifrar"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped" "" "Descifrar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped" "" "Descifrar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7m\shell\Enveloped\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe openenvelope -gui -i %1"
 
 	;Verify
 	; .csig
 	WriteRegStr HKEY_CLASSES_ROOT ".csig" "" "Firma binaria CMS/CAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".csig\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".csig\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"
 
 	;Verify
 	; .xsig
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig" "" "Firma XMLDSig/XAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".xsig\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"	
 	
 	;Verify
 	; .p7s
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s" "" "Firma binaria CMS/CAdES"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s\DefaultIcon" "" "$INSTDIR\AutoFirma\ic_firmar.ico"
-	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify" "" "Verificar con AutoFirma"
+	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify" "" "Verificar con AutoFirmaDEF"
 	WriteRegStr HKEY_CLASSES_ROOT ".p7s\shell\Verify\command" "" "$INSTDIR\AutoFirma\AutoFirma.exe verify -gui -i %1"
 
 	;Protocolo afirma
@@ -666,10 +666,16 @@ Section "uninstall"
 	DeleteRegKey HKEY_CLASSES_ROOT "*\shell\afirma.signedenvelop"
 	DeleteRegKey HKEY_CLASSES_ROOT "*\shell\afirma.enveloped"
 	DeleteRegKey HKEY_CLASSES_ROOT ".enveloped\shell\afirma.enveloped"
+	;nueva
+	DeleteRegKey HKEY_CLASSES_ROOT ".p7m\shell\afirma.enveloped"
+	;nueva
 	DeleteRegKey HKEY_CLASSES_ROOT "*\shell\afirma.verify"
 
 	DeleteRegKey HKEY_CLASSES_ROOT ".csig\shell\Verify"
 	DeleteRegKey HKEY_CLASSES_ROOT ".xsig\shell\Verify"
+	;nueva
+	DeleteRegKey HKEY_CLASSES_ROOT ".p7m\shell\Enveloped"
+	;nueva
 
 	DeleteRegKey HKEY_CLASSES_ROOT "afirma"
 	

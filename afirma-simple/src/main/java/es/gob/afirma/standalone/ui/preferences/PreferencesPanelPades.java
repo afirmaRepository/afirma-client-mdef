@@ -284,7 +284,7 @@ final class PreferencesPanelPades extends JPanel {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					TimeStampPadesDialog.startTimeStampPadesDialog(
-						(JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, getParent())
+						(JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, getParent()),true
 					);
 				}
 			}

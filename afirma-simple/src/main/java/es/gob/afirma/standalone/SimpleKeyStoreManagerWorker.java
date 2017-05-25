@@ -33,7 +33,7 @@ final class SimpleKeyStoreManagerWorker extends SwingWorker<Void, String> {
     }
 
     @Override
-    protected Void doInBackground() throws AOKeyStoreManagerException {
+    protected synchronized Void doInBackground() throws AOKeyStoreManagerException {
         if (SimpleAfirma.DEBUG) {
             Logger.getLogger("es.gob.afirma").info("Solicitado establecimiento de KeyStore (DNIe=" + this.dnie + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }

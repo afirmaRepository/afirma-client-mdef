@@ -39,6 +39,8 @@ final class PreferencesPanelCades extends JPanel {
 	private static final long serialVersionUID = -2410844527428138817L;
 
 	private static final String SIGN_FORMAT_CADES = "CAdES"; //$NON-NLS-1$
+	
+	public static boolean tsaTypeFilePDF = false; 
 
 	private boolean unprotected = true;
 
@@ -111,11 +113,13 @@ final class PreferencesPanelCades extends JPanel {
 				SimpleAfirmaMessages.getString("PreferencesPanel.120") //$NON-NLS-1$
 		);
 		this.configureTimeStampOptionsButton.addActionListener(
+				//TimeStampPadesDialog
 			new ActionListener() {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					TimeStampCadesDialog.startTimeStampCadesDialog(
-						(JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, getParent())
+					//TimeStampCadesDialog.startTimeStampCadesDialog(
+					TimeStampPadesDialog.startTimeStampPadesDialog(
+						(JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, getParent()), false
 					);
 				}
 			}
