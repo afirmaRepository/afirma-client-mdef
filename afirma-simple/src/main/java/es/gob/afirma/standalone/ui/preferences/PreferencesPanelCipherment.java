@@ -36,15 +36,6 @@ final class PreferencesPanelCipherment extends JPanel {
 
 	private static final String URL_DICODEF = "https://dpdes01.mdef.es:10005/Servicios/ConsultarDICODEF"; //$NON-NLS-1$
 
-	private static final String[] CIPHER_ALGOS = new String[] { "AES256", //$NON-NLS-1$
-			"Algoritmo 2", //$NON-NLS-1$
-			"Algoritmo 3", //$NON-NLS-1$
-	};
-
-	private static final String[] ACCESS_METHODS = new String[] { "Metodo 1", //$NON-NLS-1$
-			"Metodo 2", //$NON-NLS-1$
-			"Metodo 3", //$NON-NLS-1$
-	};
 
 	private final JCheckBox onlyEncipherment = new JCheckBox(
 			SimpleAfirmaMessages.getString("PreferencesPanelCipherment.21")); //$NON-NLS-1$
@@ -53,13 +44,13 @@ final class PreferencesPanelCipherment extends JPanel {
 		return this.onlyEncipherment.isSelected();
 	}
 
-	private final JComboBox<String> cipherAlgorithms = new JComboBox<>(CIPHER_ALGOS);
+	private final JComboBox<String> cipherAlgorithms = new JComboBox<>(ConstantPreference.getCIPHER_ALGOS());
 
 	String getSelectedCipherAlgorithm() {
 		return this.cipherAlgorithms.getSelectedItem().toString();
 	}
 
-	private final JComboBox<String> accessMethods = new JComboBox<>(ACCESS_METHODS);
+	private final JComboBox<String> accessMethods = new JComboBox<>(ConstantPreference.getAccessMethods());
 
 	String getSelectedAccessMethod() {
 		return this.accessMethods.getSelectedItem().toString();
@@ -104,10 +95,10 @@ final class PreferencesPanelCipherment extends JPanel {
 				PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CIPHERMENT_ONLY_CYPHER_CERTS, true));
 
 		this.cipherAlgorithms.setSelectedItem(
-				PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_ALGORITHM, CIPHER_ALGOS[0]));
+				PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_ALGORITHM, ConstantPreference.getCIPHER_ALGOS()[0]));
 
 		this.accessMethods.setSelectedItem(
-				PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_METHOD, ACCESS_METHODS[0]));
+				PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_METHOD, ConstantPreference.getAccessMethods()[0]));
 
 		this.directoryURI.setText(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_URI_DICODEF, "" //$NON-NLS-1$
 		));
@@ -310,4 +301,5 @@ final class PreferencesPanelCipherment extends JPanel {
 		add(new JPanel(), gbc);
 		loadPreferences();
 	}
+
 }

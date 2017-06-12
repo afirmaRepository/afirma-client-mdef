@@ -37,7 +37,7 @@ import es.gob.afirma.core.AOCancelledOperationException;
 import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.envelopers.cms.AOCMSEnveloper;
-import es.gob.afirma.envelopers.cms.Pkcs11WrapOperationException;
+//import es.gob.afirma.envelopers.cms.Pkcs11WrapOperationException;
 import es.gob.afirma.keystores.AOCertificatesNotFoundException;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
@@ -363,16 +363,16 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 				pke
 			);
 		}
-        catch (final Pkcs11WrapOperationException e) {
-			LOGGER.log(Level.SEVERE, "Error al desensobrar con la clave privada del certificado en tarjeta. Es posible que el PKCS#11 de la tarjeta no permita a Java esta operacion: " + e.getMessage(), e); //$NON-NLS-1$
-        	AOUIFactory.showErrorMessage(
-                this,
-                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.26"), //$NON-NLS-1$
-                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.15"), //$NON-NLS-1$
-                JOptionPane.ERROR_MESSAGE
-            );
-        	return false;
-		}
+//        catch (final Pkcs11WrapOperationException e) {
+//			LOGGER.log(Level.SEVERE, "Error al desensobrar con la clave privada del certificado en tarjeta. Es posible que el PKCS#11 de la tarjeta no permita a Java esta operacion: " + e.getMessage(), e); //$NON-NLS-1$
+//        	AOUIFactory.showErrorMessage(
+//                this,
+//                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.26"), //$NON-NLS-1$
+//                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.15"), //$NON-NLS-1$
+//                JOptionPane.ERROR_MESSAGE
+//            );
+//        	return false;
+//		}
         catch (final InvalidKeyException e) {
 			LOGGER.log(Level.SEVERE, "La clave indicada no pertenece a ninguno de los destinatarios del envoltorio: " + e, e); //$NON-NLS-1$
 						

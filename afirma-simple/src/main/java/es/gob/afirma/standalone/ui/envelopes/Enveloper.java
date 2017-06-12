@@ -19,11 +19,12 @@ import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.CipherCertificateFilter;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
+import es.gob.afirma.standalone.ui.preferences.ConstantPreference;
 
 final class Enveloper {
 
 	private static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
-	private static final Integer AES_KEY_SIZE = Integer.valueOf(256);
+	//private static final Integer AES_KEY_SIZE = Integer.valueOf(256);
 
 	private Enveloper() {
 		// No instanciable
@@ -109,7 +110,8 @@ final class Enveloper {
    						senderPrivateKeyEntry,
    						cipherConfig,
    						certs,
-   						AES_KEY_SIZE
+   						//AES_KEY_SIZE
+   						ConstantPreference.getAesKeySize()
    					);
        				break;
        			case SIMPLE:
@@ -118,7 +120,8 @@ final class Enveloper {
    						senderPrivateKeyEntry,
    						cipherConfig,
    						certs,
-   						AES_KEY_SIZE
+   						//AES_KEY_SIZE
+   						ConstantPreference.getAesKeySize()
    					);
        				break;
    				default:
@@ -203,5 +206,6 @@ final class Enveloper {
 			"No se ha encontrado un certificado de cifrado para el remitente del sobre, se anadira como destinatario el propio de firma" //$NON-NLS-1$
 		);
 		return signingCert;
-	}
+	}	
+
 }
