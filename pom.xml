@@ -5,9 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.gob.afirma</groupId>
 	<version>3.3.2-SNAPSHOT</version>
-	<artifactId>afirma-client-mdef</artifactId>
+	<artifactId>mdef-afirma-simple</artifactId>
 	<packaging>pom</packaging>
-	<name>afirma-client-mdef</name>
+	<name>mdef-afirma-simple</name>
 
 	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
@@ -16,15 +16,15 @@
 	<description>Librerías del núcleo de afirma</description>
 	
 	<modules>
-		<module>afirma-dicodef-clientws</module>
-		<module>afirma-client-pssdef</module>
-		<module>afirma-core-keystores</module>
-		<!-- <module>afirma-keystores-temd</module>  
+		<module>mdef-afirma-dicodef-clientws</module>
+		<module>mdef-afirma-client-pssdef</module>
+		<module>mdef-afirma-keystores-temd</module>
+		<!-- <module>afirma-core-keystores</module>  
 		<module>afirma-keyone</module>  -->
-		<module>afirma-crypto-validation</module>
-		<module>afirma-local-batch-sign</module>
-		<module>afirma-simple</module>
-		<module>afirma-trayIcon</module>
+		<module>mdef-afirma-crypto-validation</module>
+		<module>mdef-afirma-local-batch-sign</module>
+		<module>mdef-afirma-simple</module>
+		<module>mdef-afirma-trayIcon</module>
 	</modules>
 	
 	<repositories>
