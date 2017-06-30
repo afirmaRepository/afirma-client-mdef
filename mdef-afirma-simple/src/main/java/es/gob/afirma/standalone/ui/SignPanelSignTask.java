@@ -79,11 +79,11 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 			this.certFilters, // Filtros
 			false             // mandatoryCertificate
 		);
+    	dialog.show(); 
+    	
     	if(storedTemdStarted){
     		ksm.getType().getCertificatePasswordCallback(this).getPassword();
     	}
-    	dialog.show(); 
-    	
     	
     	//isKeyStoreReady(ksm, dialog);
 

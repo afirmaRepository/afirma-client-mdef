@@ -472,11 +472,12 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 			Arrays.asList(new DecipherCertificateFilter()), // Filtros
 			false             // mandatoryCertificate
 		);
+    	
+    	dialog.show(); 
+
     	if(storedTemdStarted){
     		ksm.getType().getCertificatePasswordCallback(this).getPassword();
     	}
-    	
-    	dialog.show(); 
 
     	return ksm.getKeyEntry(
 			dialog.getSelectedAlias()

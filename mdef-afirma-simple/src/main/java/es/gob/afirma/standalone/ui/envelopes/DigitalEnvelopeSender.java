@@ -353,13 +353,13 @@ public class DigitalEnvelopeSender extends JPanel {
     			false             // mandatoryCertificate
 		);
 
-		//Control para comprobar que es una tarjeta FMNT 
-    	if(storedTemdStarted){
-    		keyStoreManager.getType().getCertificatePasswordCallback(null).getPassword();
-    	}
 
     	try {
 			keyStoreDialog.show();
+			//Control para comprobar que es una tarjeta FMNT 
+	    	if(storedTemdStarted){
+	    		keyStoreManager.getType().getCertificatePasswordCallback(null).getPassword();
+	    	}
 			keyStoreManager.setParentComponent(this);
         	this.senderPrivateKeyEntry = keyStoreManager.getKeyEntry(
     			keyStoreDialog.getSelectedAlias()
