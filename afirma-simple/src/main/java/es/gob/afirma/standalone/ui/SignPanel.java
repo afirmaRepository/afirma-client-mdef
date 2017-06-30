@@ -601,12 +601,14 @@ public final class SignPanel extends JPanel {
 			SimpleAfirmaMessages.getString("SignPanel.48"), //$NON-NLS-1$
 			SimpleAfirmaMessages.getString("SignPanel.50") //$NON-NLS-1$
 		);
-    	new SignPanelSignTask(
+    	SignPanelSignTask signPanelSignTask = new SignPanelSignTask(
     		this,
     		getCertFilters(),
     		signWaitDialog
-		).execute();
+		);
+    	signPanelSignTask.execute();
     	signWaitDialog.setVisible(true);
+    	signPanelSignTask.cancel(true);
     }
 
     /** M&eacute;todo para indicar a la clase que el <code>AOKeyStoreManager</code> est&aacute; listo para usarse. */

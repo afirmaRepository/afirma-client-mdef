@@ -352,4 +352,18 @@ final class ExtraParamsHelper {
 		);
         return p;
 	}
+	
+	/** Obtiene la url de la va del servicio ocsp.
+	 * @return Propiedades para la configuraci&oacute;n de servicio de verificaci&oacute;n por ocsp. */
+	public static Properties loadValidationExtraParams() {
+		final Properties p = new Properties();
+
+        // Url de la va del servicio de validación de certificados por ocsp
+        final String UrlVaOcsp = PreferencesManager.get(PreferencesManager.PREFERENCE_URI_VAOSCP_SERVICE, ""); //$NON-NLS-1$
+        if (!UrlVaOcsp.trim().isEmpty()) {
+			p.put("responderUrlOcsp", UrlVaOcsp); //$NON-NLS-1$
+	    }
+        return p;
+	}
+	
 }

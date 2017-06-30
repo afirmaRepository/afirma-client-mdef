@@ -4,6 +4,9 @@ import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERE
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_PSSDEF_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_VAOSCP_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_CRL_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,6 +30,12 @@ import es.gob.afirma.standalone.smartWaper.PssdefMapping;
 public class PreferencesPanelValideCerts extends JPanel {
 
 	private static final long serialVersionUID = 3776016646875294106L;
+
+	private final JTextField cnCaURI = new JTextField();
+
+	public JTextField getCnCaURI() {
+		return cnCaURI;
+	}
 
 	private final JTextField vaURI = new JTextField();
 
@@ -92,6 +101,11 @@ public class PreferencesPanelValideCerts extends JPanel {
 		mdpc.gridy = 0;
 		mdpc.insets = new Insets(5, 0, 0, 7);
 
+		final JLabel vaCnCaLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.9") //$NON-NLS-1$
+		);
+		
+		vaCnCaLabel.setLabelFor(this.cnCaURI);
+
 		final JLabel vaUriLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.4") //$NON-NLS-1$
 		);
 		vaUriLabel.setLabelFor(this.vaURI);
@@ -120,6 +134,10 @@ public class PreferencesPanelValideCerts extends JPanel {
 	    this.sevicePolice.addKeyListener(keyListener);
 		
 		
+		mdefPanel.add(vaCnCaLabel, mdpc);
+		mdpc.gridy++;
+		mdefPanel.add(this.cnCaURI, mdpc);
+		mdpc.gridy++;
 		mdefPanel.add(vaUriLabel, mdpc);
 		mdpc.gridy++;
 		mdefPanel.add(this.vaURI, mdpc);
@@ -190,6 +208,9 @@ public class PreferencesPanelValideCerts extends JPanel {
 	}	
 	
 	void savePreferences() {
+		PreferencesManager.put(PREFERENCE_CN_CA_CERT_SERVICE, this.cnCaURI.getText());
+		PreferencesManager.put(PREFERENCE_URI_VAOSCP_SERVICE, this.vaURI.getText());
+		PreferencesManager.put(PREFERENCE_URI_CRL_SERVICE, this.getCrlURI());
 		// Opciones de la plataforma PSSDEF
 		PreferencesManager.putBoolean(PREFERENCE_CHECK_CERTIFICATE_PSSDEF, this.pssdef.isSelected());
 		PreferencesManager.put(PREFERENCE_URI_PSSDEF_SERVICE, this.pssdefURI.getText());
@@ -200,14 +221,16 @@ public class PreferencesPanelValideCerts extends JPanel {
 	}
 
 	void loadPreferences() {
+		this.cnCaURI.setText(PreferencesManager.get(PREFERENCE_CN_CA_CERT_SERVICE, ""));
+		this.vaURI.setText(PreferencesManager.get(PREFERENCE_URI_VAOSCP_SERVICE, ""));
+		this.crlURI.setText(PreferencesManager.get(PREFERENCE_URI_CRL_SERVICE, ""));
 		// Opciones de la plataforma PSSDEF
 		this.pssdef.setSelected(PreferencesManager.getBoolean(PREFERENCE_CHECK_CERTIFICATE_PSSDEF, false));
 		this.pssdefURI.setText(PreferencesManager.get(PREFERENCE_URI_PSSDEF_SERVICE, ""));
 		this.keySubjectName.setText(PreferencesManager.get(PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE, ""));
 		this.sevicePolice.setText(PreferencesManager.get(PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE, ""));
 		if(pssdefURI.getText().isEmpty()){
-			this.pssdefURI.setText(PssdefMapping.getUrlPssdefDefault());
-			
+			this.pssdefURI.setText(PssdefMapping.getUrlPssdefDefault());			
 		}
 		if(keySubjectName.getText().isEmpty()){
 			this.keySubjectName.setText(PssdefMapping.getKeySubjectNameDefault());

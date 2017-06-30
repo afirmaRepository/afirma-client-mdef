@@ -28,7 +28,11 @@ public final class OcspCertificateVerifier extends CertificateVerifier {
 		super.setSubjectCert(cert);
 		if(getValidationProperties() != null) {
 			try {
-				getValidationProperties().setProperty("responderUrl", getBestResponder(OcspHelper.getAIALocations(cert))); //$NON-NLS-1$
+				if(null!=getOcspUrlPreference() && !getOcspUrlPreference().isEmpty()){
+					getValidationProperties().setProperty("responderUrl", getOcspUrlPreference()); //$NON-NLS-1$					
+				}else{					
+					getValidationProperties().setProperty("responderUrl", getBestResponder(OcspHelper.getAIALocations(cert))); //$NON-NLS-1$
+				}
 			}
 			catch (final Exception e) {
 				throw new IllegalArgumentException(e);

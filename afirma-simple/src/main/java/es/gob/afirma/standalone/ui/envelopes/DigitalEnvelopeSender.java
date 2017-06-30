@@ -34,11 +34,13 @@ import es.gob.afirma.keystores.AOCertificatesNotFoundException;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
+import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
+import es.gob.afirma.standalone.SimpleKeyStoreManager;
 import es.gob.afirma.standalone.ui.IsObjectExpiredException;
 
 /**
@@ -161,7 +163,18 @@ public class DigitalEnvelopeSender extends JPanel {
 				/** {@inheritDoc} */
 				@Override
 				public void actionPerformed(final ActionEvent ae) {
-					setSender();
+					try {
+						setSender();
+					}catch (final AOKeyStoreManagerException e){
+			        	LOGGER.severe("El almacen no contiene ningun certificado que se pueda usar para firmar: " + e); //$NON-NLS-1$
+			        	AOUIFactory.showErrorMessage(
+			                this,
+			                SimpleAfirmaMessages.getString("SignPanel.29"), //$NON-NLS-1$,
+			                SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+			                JOptionPane.ERROR_MESSAGE
+			            );
+			        	return;        	
+			        }
 				}
 			}
 		);
@@ -315,21 +328,16 @@ public class DigitalEnvelopeSender extends JPanel {
         enableButtons(this.senderPrivateKeyEntry != null);
 	}
 
-    /** A&ntilde;ade un remitente del origen seleccionado en el desplegable. */
-    void setSender() {
+    /** A&ntilde;ade un remitente del origen seleccionado en el desplegable. 
+     * @throws AOKeyStoreManagerException */
+    void setSender() throws AOKeyStoreManagerException {
 
     	setCertificateDialogOpenned(true);
 
+		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this);
     	final AOKeyStoreManager keyStoreManager = SimpleAfirma.getAOKeyStoreManager();
     	
-//    	if (keyStoreManager == null) {
-//    		JOptionPane.showMessageDialog(
-//    				this,
-//    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.11"), //$NON-NLS-1$
-//    				SimpleAfirmaMessages.getString("DigitalEnvelopePresentation.12"), //$NON-NLS-1$
-//    				JOptionPane.WARNING_MESSAGE);
-//    		return;
-//    	}
+    	
 
         // Solo permitimos usar certificados de firma como remitentes
         final List<CertificateFilter> filtersList = new ArrayList<>();
@@ -345,27 +353,11 @@ public class DigitalEnvelopeSender extends JPanel {
     			false             // mandatoryCertificate
 		);
 
-		//new
-    	keyStoreManager.getType().getStorePasswordCallback(this).getPassword();
-/*    	if(keyStoreManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
-    		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
-        	if (psc instanceof TimedPersistentCachePasswordCallback) {
-        		if(((TimedPersistentCachePasswordCallback) psc).isObjectExpired()){
-        			try {
-						throw new IsObjectExpiredException("Se ha superado el tiempo de expiración");
-					} catch (IsObjectExpiredException e) {
-			            AOUIFactory.showMessageDialog(
-			            		this.dialog,
-			            		SimpleAfirmaMessages.getString("SignPanel.103"), //$NON-NLS-1$
-			            		SimpleAfirmaMessages.getString("DigitalEnvelopeSender.25"),  //$NON-NLS-1$
-			                    JOptionPane.ERROR_MESSAGE
-			                );            return;
-					}
-        		}
-        	}
+		//Control para comprobar que es una tarjeta FMNT 
+    	if(storedTemdStarted){
+    		keyStoreManager.getType().getCertificatePasswordCallback(null).getPassword();
     	}
-*/        
-    	//new
+
     	try {
 			keyStoreDialog.show();
 			keyStoreManager.setParentComponent(this);
@@ -376,13 +368,15 @@ public class DigitalEnvelopeSender extends JPanel {
     	}
     	catch (final UnrecoverableEntryException e) {
         	LOGGER.warning("Error de contrasena: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
             // Control de la excepcion generada al introducir mal la contrasena para el certificado
             AOUIFactory.showMessageDialog(
         		this.dialog,
         		SimpleAfirmaMessages.getString("DigitalEnvelopeSender.22"), //$NON-NLS-1$
         		SimpleAfirmaMessages.getString("DigitalEnvelopeSender.25"),  //$NON-NLS-1$
                 JOptionPane.ERROR_MESSAGE
-            );            return;
+            );            
+            return;
         }
         catch (final AOCancelledOperationException e) {
         	LOGGER.info("Operacion cancelada por el usuario: " + e); //$NON-NLS-1$
@@ -390,6 +384,7 @@ public class DigitalEnvelopeSender extends JPanel {
         }
     	catch (final AOCertificatesNotFoundException e) {
         	LOGGER.warning("No se han encontrado certificados validos en el almacen: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
         	// Control de la excepcion generada al introducir mal la contrasena para el certificado
             AOUIFactory.showMessageDialog(
         		this.dialog,
@@ -401,6 +396,7 @@ public class DigitalEnvelopeSender extends JPanel {
         }
     	catch (final Exception e) {
         	LOGGER.severe("Error recuperando la clave privada: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
         	// Control de la excepcion generada al introducir mal la contrasena para el certificado
             AOUIFactory.showMessageDialog(
         		this.dialog,

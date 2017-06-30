@@ -24,6 +24,7 @@ public final class TestCertValidation {
 			cert
 		).validateCertificate();
 		vr.check();
+		System.out.println("resultado : "+vr);
 	}
 	
 	/** Prueba de certificados MDEF.

@@ -32,6 +32,10 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
     /** Tiempo (en segundos) que se mantiene abierto el almacen de la TEMD. */
     private static final int DEFAULT_TIME_TO_CLOSE_KEYSTORE = 24 * 3600; // 1 dia
 
+    public final static String TIPO_DE_TARJETA_FNMT = "Tarjeta del Ministerio de Defensa (FNMT)"; 
+    public final static String TIPO_DE_TARJETA_MMAR = "Tarjeta del Ministerio de Defensa (MMAR)"; 
+    private static String tipoTarjeta = null; 
+    
 	static Logger getLogger() {
 		return LOGGER;
 	}
@@ -174,7 +178,7 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
 		        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
 		        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF
 		    },
-			"Tarjeta del Ministerio de Defensa (MMAR)" //$NON-NLS-1$
+			TIPO_DE_TARJETA_MMAR //$NON-NLS-1$
 		),
 		FNMT(
 			getFNMTLibrary(),
@@ -192,7 +196,7 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
 		        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
 		        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF
 		    },
-			"Tarjeta del Ministerio de Defensa (FNMT)" //$NON-NLS-1$
+			TIPO_DE_TARJETA_FNMT //$NON-NLS-1$
 		);
 
 		private final String lib;
@@ -231,6 +235,7 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
 
 		@Override
 		public String toString() {
+			tipoTarjeta = this.description;
 			return this.description;
 		}
 
@@ -357,6 +362,13 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
 		final TEMD_CARD card = getInsertedTemd();
 
 		if (card == null) {
+//        	AOUIFactory.showErrorMessage(
+//                    this,
+//                    "prueba", //$NON-NLS-1$,
+//                    "prueba", //$NON-NLS-1$
+//                    JOptionPane.ERROR_MESSAGE
+//                );
+//        	getTemdPkcs11KeyStoreManager();
 			throw new AOKeyStoreManagerException("No hay ninguna TEMD insertada"); //$NON-NLS-1$
 		}
 
@@ -380,4 +392,40 @@ public final class TemdKeyStoreManager extends AggregatedKeyStoreManager impleme
 			throw new AOKeyStoreManagerException(e);
 		}
 	}
+
+	public static String getTipoTarjeta() {
+		return tipoTarjeta;
+	}
+	
+    public static void closeFNMTTemd() {
+
+    	List<CardTerminal> terminales = null;
+		try {
+			terminales = TerminalFactory.getDefault().terminals().list();
+		}
+		catch (final CardException e) {
+			LOGGER.warning("No se ha podido obtener la lista de lectores del sistema: " + e); //$NON-NLS-1$
+		}
+
+    	for (final CardTerminal cardTerminal : terminales) {
+			try {
+				if (cardTerminal.isCardPresent()) {
+					final Card card = cardTerminal.connect("*"); //$NON-NLS-1$
+					final byte[] currentAtr = card.getATR().getBytes();
+					if (TEMD_CARD.FNMT.itsMe(currentAtr)) {
+						System.out.println("entra para cerrar la conexión");
+						card.disconnect(true);
+					}
+				}
+			}
+			catch (final CardException e) {
+				LOGGER.warning(
+					"Error comprobando la presencia de una tarjeta: " + e //$NON-NLS-1$
+				);
+			}
+    	}
+
+    }
+
+	
 }

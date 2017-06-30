@@ -25,8 +25,11 @@ public final class TestPkcs11 {
 	//private static final String LIB_NAME = "C:\\Users\\tomas\\workspace_32\\afirma-core-keystores\\src\\test\\resources\\CardOS\\cardos11.dll"; //$NON-NLS-1$
 	//private static final String LIB_NAME = "C:\\WINDOWS\\SysWOW64\\cardos11.dll"; //$NON-NLS-1$
 	//private static final String LIB_NAME = "C:\\WINDOWS\\SysWOW64\\TIF_P11.dll"; //$NON-NLS-1$
-	private static final String LIB_NAME = "C:\\WINDOWS\\SysWOW64\\DNIe_P11_priv.dll"; //$NON-NLS-1$
-	private static final char[] PIN = "12345678".toCharArray(); //$NON-NLS-1$
+	//private static final String LIB_NAME = "C:\\WINDOWS\\SysWOW64\\DNIe_P11_priv.dll"; //$NON-NLS-1$
+	//private static final String LIB_NAME = "C:\\WINDOWS\\SysWOW64\\DNIe_P11_priv.dll"; //$NON-NLS-1$
+	private static final String LIB_NAME = "C:\\WINDOWS\\system32\\FNMT_P11_x64.dll"; //$NON-NLS-1$
+	//private static final char[] PIN = "12345678".toCharArray(); //$NON-NLS-1$
+	private static final char[] PIN = "A111111a".toCharArray(); //$NON-NLS-1$
 
 	/** Prueba de firma con PKCS#11.
 	 * @throws Exception En cualquier error. */
@@ -38,6 +41,7 @@ public final class TestPkcs11 {
     		AOKeyStore.PKCS11,
     		LIB_NAME,
     		"Afirma-P11", //$NON-NLS-1$
+    		//"showInfo=false",
     		AOKeyStore.PKCS11.getStorePasswordCallback(null),
     		null
 		);

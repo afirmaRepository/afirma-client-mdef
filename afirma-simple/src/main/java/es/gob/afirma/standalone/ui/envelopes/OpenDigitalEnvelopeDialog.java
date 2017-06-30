@@ -42,6 +42,7 @@ import es.gob.afirma.keystores.AOCertificatesNotFoundException;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
+import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
 import es.gob.afirma.keystores.filters.DecipherCertificateFilter;
 import es.gob.afirma.keystores.temd.TemdKeyStoreManager;
@@ -50,6 +51,7 @@ import es.gob.afirma.standalone.AutoFirmaUtil;
 import es.gob.afirma.standalone.LookAndFeelManager;
 import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
+import es.gob.afirma.standalone.SimpleKeyStoreManager;
 import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 /**
@@ -87,7 +89,7 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 	 * @param filePath Ruta hacia el sobre digital.
 	 * @param sa Instancia de SimpleAfirma para utilizar el almac&eacute;n de la aplicaci&oacute;n.
 	 */
-	public static void startOpenDigitalEnvelopeDialog(final Frame parent,													  final String filePath) {
+	public static void startOpenDigitalEnvelopeDialog(final Frame parent, final String filePath) {
 		final OpenDigitalEnvelopeDialog ode = new OpenDigitalEnvelopeDialog(parent, filePath);
 		ode.setSize(PREFERRED_WIDTH, PREFERRED_HEIGHT);
 		ode.setResizable(false);
@@ -335,6 +337,18 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
         }
     	catch (final AOCertificatesNotFoundException e) {
         	LOGGER.warning("No se han encontrado certificados validos en el almacen: " + e); //$NON-NLS-1$
+    		SimpleAfirma.resetAOKeyStoreManager(false);
+            AOUIFactory.showMessageDialog(
+        		this,
+        		SimpleAfirmaMessages.getString("OpenDigitalEnvelope.22"), //$NON-NLS-1$
+        		SimpleAfirmaMessages.getString("OpenDigitalEnvelope.21"),  //$NON-NLS-1$
+                JOptionPane.ERROR_MESSAGE
+            );
+        	return false;
+        }
+    	catch (final AOKeyStoreManagerException e) {
+        	LOGGER.warning("No se han encontrado certificados validos en el almacen: " + e); //$NON-NLS-1$
+    		SimpleAfirma.resetAOKeyStoreManager(false);
             AOUIFactory.showMessageDialog(
         		this,
         		SimpleAfirmaMessages.getString("OpenDigitalEnvelope.22"), //$NON-NLS-1$
@@ -345,6 +359,7 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
         }
     	catch (final Exception e) {
         	LOGGER.log(Level.SEVERE, "Error recuperando la clave privada: " + e, e); //$NON-NLS-1$
+    		SimpleAfirma.resetAOKeyStoreManager(true);
             AOUIFactory.showMessageDialog(
         		this,
         		SimpleAfirmaMessages.getString("OpenDigitalEnvelope.23"), //$NON-NLS-1$
@@ -363,19 +378,9 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 				pke
 			);
 		}
-//        catch (final Pkcs11WrapOperationException e) {
-//			LOGGER.log(Level.SEVERE, "Error al desensobrar con la clave privada del certificado en tarjeta. Es posible que el PKCS#11 de la tarjeta no permita a Java esta operacion: " + e.getMessage(), e); //$NON-NLS-1$
-//        	AOUIFactory.showErrorMessage(
-//                this,
-//                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.26"), //$NON-NLS-1$
-//                SimpleAfirmaMessages.getString("OpenDigitalEnvelope.15"), //$NON-NLS-1$
-//                JOptionPane.ERROR_MESSAGE
-//            );
-//        	return false;
-//		}
         catch (final InvalidKeyException e) {
 			LOGGER.log(Level.SEVERE, "La clave indicada no pertenece a ninguno de los destinatarios del envoltorio: " + e, e); //$NON-NLS-1$
-						
+        	SimpleAfirma.resetAOKeyStoreManager(false);						
 			//return errors.toString();
 			LOGGER.log(Level.INFO, "------------------------");
 			e.printStackTrace();
@@ -391,6 +396,7 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 		}
         catch (final Exception e) {
 			LOGGER.log(Level.SEVERE, "Error desensobrando el fichero: " + e, e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
         	AOUIFactory.showErrorMessage(
                 this,
                 SimpleAfirmaMessages.getString("OpenDigitalEnvelope.18"), //$NON-NLS-1$
@@ -450,21 +456,15 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 	}
 
 	/** Recupera la entrada de un certificado seleccionado por el usuario para la apertura del sobre.
-	 * @return Entrada con el certificado y la referencia a su clave privada. */
-	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, UninitializedKeyStoreException {
+	 * @return Entrada con el certificado y la referencia a su clave privada. 
+	 * @throws AOKeyStoreManagerException */
+	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, UninitializedKeyStoreException, AOKeyStoreManagerException {
 
-		setCertificateDialogOpenned(true);
-
-    	final AOKeyStoreManager keyStoreManager = SimpleAfirma.getAOKeyStoreManager();
-
-    	if (keyStoreManager == null) {
-    		throw new UninitializedKeyStoreException("El almacen configurado aun no se ha incializado"); //$NON-NLS-1$
-    	}
-
-    	keyStoreManager.setParentComponent(this);
-
+		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this);
+    	final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
+		//final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
-			keyStoreManager,
+			ksm,
 			this,
 			true,             // Comprobar claves privadas
 			false,            // Mostrar certificados caducados
@@ -472,80 +472,20 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 			Arrays.asList(new DecipherCertificateFilter()), // Filtros
 			false             // mandatoryCertificate
 		);
-    	dialog.show();
-
-    	// IMPORTANTE: Si se trata de la tarjeta de defensa, como sabemos que no se puede descifrar
-    	// los datos desde su PKCS#11, buscaremos ese mismo certificado en el almacen por defecto
-    	// para cargar la clave desde ahi
-    	if (keyStoreManager instanceof TemdKeyStoreManager) {
-    		final X509Certificate selectedCert = keyStoreManager.getCertificate(dialog.getSelectedAlias());
-    		final PrivateKeyEntry pke = getKeyEntryFromDefaultKeyStore(selectedCert);
-    		pke.getPrivateKey();
-    		//final PrivateKeyEntry pke = keyStoreManager.getKeyEntry(
-    		//		dialog.getSelectedAlias()
-    		//	);
-    		//final PrivateKeyEntry pke = (PrivateKeyEntry) keyStoreManager.getEntry(CERT_ALIAS, new KeyStore.PasswordProtection(CERT_PASS.toCharArray()));
-
-    		if (pke != null) {
-    			return pke;
-    		}
+    	if(storedTemdStarted){
+    		ksm.getType().getCertificatePasswordCallback(this).getPassword();
     	}
+    	
+    	dialog.show(); 
 
-    	return keyStoreManager.getKeyEntry(dialog.getSelectedAlias());
+    	return ksm.getKeyEntry(
+			dialog.getSelectedAlias()
+		);
 	}
+	
+	/** Recupera la entrada de un certificado seleccionado por el usuario para la apertura del sobre.
+	 * @return Entrada con el certificado y la referencia a su clave privada. */
 
-	/**
-	 * Devuelve la referencia a la claves de un certificado igual al indicado pero alojado en el
-	 * almac&eacute;n por defecto configurado.
-	 * @param originalCert Certificado que se desea seleccionar.
-	 * @return Referencia a las claves del certificado en el almac&eacute;n por defecto o {@code null},
-	 * si no se pudo obtener.
-	 */
-	private PrivateKeyEntry getKeyEntryFromDefaultKeyStore(final X509Certificate originalCert) {
-
-		final PasswordCallback psc = AOKeyStore.TEMD.getStorePasswordCallback(this);
-    	if (psc instanceof TimedPersistentCachePasswordCallback) {
-    		((TimedPersistentCachePasswordCallback) psc).setSecondsToClose(
-    				60 *
-    				Long.parseLong(
-							PreferencesManager.get(
-    							PreferencesManager.PREFERENCE_KEYSTORE_CLOSE_KEYSTORE_TIMEOUT,
-    							Integer.toString(TimedPersistentCachePasswordCallback.INFINITE)
-    						)
-					)
-    		);
-    	}
-    	AOKeyStoreManager systemKsm;
-		try {
-			systemKsm = AOKeyStoreManagerFactory.getAOKeyStoreManager(
-					AOKeyStore.WINDOWS,
-					null,
-					null,
-					psc,
-					this);
-		} catch (final Exception e) {
-			LOGGER.warning("No se pudo cargar el almacen por defecto para usar las claves desde ahi. " //$NON-NLS-1$
-					+ "Se utilizara el de la tarjeta: " + e); //$NON-NLS-1$
-			return null;
-		}
-
-    	for (final String alias : systemKsm.getAliases()) {
-    		final X509Certificate cert = systemKsm.getCertificate(alias);
-    		if (cert.getSerialNumber().equals(originalCert.getSerialNumber()) &&
-    				Arrays.equals(cert.getKeyUsage(), originalCert.getKeyUsage()) &&
-    				cert.getIssuerX500Principal().equals(originalCert.getIssuerX500Principal())) {
-    			try {
-					return systemKsm.getKeyEntry(alias);
-				} catch (final Exception e) {
-					LOGGER.warning("No se pudo extraer la referencia las claves del certificado del almacen por defecto. " //$NON-NLS-1$
-							+ "Se utilizara el de la tarjeta: " + e); //$NON-NLS-1$
-					break;
-				}
-    		}
-    	}
-
-    	return null;
-	}
 
 	/** {@inheritDoc} */
 	@Override

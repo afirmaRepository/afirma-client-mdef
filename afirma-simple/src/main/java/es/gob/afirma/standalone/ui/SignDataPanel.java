@@ -10,8 +10,9 @@
 
 package es.gob.afirma.standalone.ui;
 
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CHECK_CERTIFICATE_PSSDEF;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -28,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Logger;
 
@@ -53,7 +55,9 @@ import javax.swing.tree.TreeSelectionModel;
 
 import es.gob.afirma.cert.certvalidation.CertificateVerificable;
 import es.gob.afirma.cert.certvalidation.CertificateVerifierFactory;
+import es.gob.afirma.cert.certvalidation.MdefCertificateVerifier;
 import es.gob.afirma.cert.certvalidation.ValidationResult;
+import es.gob.afirma.core.misc.AOUtil;
 import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.signers.AOSigner;
 import es.gob.afirma.core.signers.AOSignerFactory;
@@ -268,18 +272,49 @@ final class SignDataPanel extends JPanel {
 								}else{
 									ValidaCertificadoImpl validaCertificado = new ValidaCertificadoImpl();
 									validationMessageType = JOptionPane.INFORMATION_MESSAGE;
+									validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.19");//quitar
 									try {
 										validationMessage = validaCertificado.validaCert(cert);
 										if(validationMessage.trim().equals(PssdefConstants.certOK)){
 											validationMessageType = JOptionPane.INFORMATION_MESSAGE;
+											//para quitar
+											//throw new PssdefValidaException("");
+											//para quitar
 										}else{
 											validationMessageType = JOptionPane.ERROR_MESSAGE;
 										}
 									} catch (PssdefValidaException e) {
-										LOGGER.severe(e.getMessage()+e);
-										validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.43");
-										validationMessageType = JOptionPane.WARNING_MESSAGE;
-										//validationMessage = validationMessage + "\n"+ "Error en la conexión de los servicios";
+										if(PreferencesManager.get(PREFERENCE_CN_CA_CERT_SERVICE, "").contains(
+												AOUtil.getCN(cert.getIssuerX500Principal().getName()))){
+											
+											MdefCertificateVerifier mdefCertificateVerifier = new MdefCertificateVerifier();
+											try {
+												mdefCertificateVerifier.setP(ExtraParamsHelper.loadValidationExtraParams());
+												mdefCertificateVerifier.verifyRevocation(cert).check();
+												ValidationResult validationResult = mdefCertificateVerifier.verifyRevocation(cert);
+												if(validationResult.isValid()){
+													validationMessageType = JOptionPane.INFORMATION_MESSAGE;
+													
+												}else{
+													//hay que cambiar
+													validationMessage = validationResult.toString();
+													validationMessageType = JOptionPane.WARNING_MESSAGE;
+												}
+											} catch (CertificateException e1) {
+												LOGGER.severe(e.getMessage()+e1);
+												validationMessage = e1.getMessage();
+												//validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.43");
+												validationMessageType = JOptionPane.WARNING_MESSAGE;
+											} 
+											
+											
+										}else{												
+											LOGGER.severe(e.getMessage()+e);
+											validationMessage = SimpleAfirmaMessages.getString("SignDataPanel.43");
+											validationMessageType = JOptionPane.WARNING_MESSAGE;
+											//validationMessage = validationMessage + "\n"+ "Error en la conexión de los servicios";
+										}
+									
 									}									
 								}
 

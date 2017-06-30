@@ -17,7 +17,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.security.auth.callback.PasswordCallback;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -27,11 +26,10 @@ import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.signers.AOSigner;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOCertificatesNotFoundException;
-import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
+import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.filters.CertificateFilter;
-import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.signers.odf.AOODFSigner;
 import es.gob.afirma.signers.ooxml.AOOOXMLSigner;
 import es.gob.afirma.signers.pades.AOPDFSigner;
@@ -68,8 +66,9 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 		return this.waitDialog;
 	}
 
-	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException, URISyntaxException, IOException {
-	//private synchronized PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException {	
+	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException, URISyntaxException, IOException, AOKeyStoreManagerException {
+
+		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this.signPanel);
 		final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,
@@ -80,10 +79,10 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 			this.certFilters, // Filtros
 			false             // mandatoryCertificate
 		);
-		//new
-    	ksm.getType().getStorePasswordCallback(this).getPassword();
-    	//new
-    	dialog.show();    	
+    	if(storedTemdStarted){
+    		ksm.getType().getCertificatePasswordCallback(this).getPassword();
+    	}
+    	dialog.show(); 
     	
     	
     	//isKeyStoreReady(ksm, dialog);
@@ -162,6 +161,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         }
         catch(final AOCertificatesNotFoundException e) {
         	LOGGER.severe("El almacen no contiene ningun certificado que se pueda usar para firmar: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
         	AOUIFactory.showErrorMessage(
                 this.signPanel,
                 SimpleAfirmaMessages.getString("SignPanel.29"), //$NON-NLS-1$,
@@ -170,8 +170,20 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             );
         	return;
         }
+        catch (final AOKeyStoreManagerException e){
+        	LOGGER.severe("El almacen no contiene ningun certificado que se pueda usar para firmar: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
+        	AOUIFactory.showErrorMessage(
+                this.signPanel,
+                SimpleAfirmaMessages.getString("SignPanel.29"), //$NON-NLS-1$,
+                SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+                JOptionPane.ERROR_MESSAGE
+            );
+        	return;        	
+        }
         catch (final Exception e) {
         	LOGGER.severe("Ocurrio un error al extraer la clave privada del certificiado seleccionado: " + e); //$NON-NLS-1$
+        	SimpleAfirma.resetAOKeyStoreManager(false);
         	AOUIFactory.showErrorMessage(
                 this.signPanel,
                 SimpleAfirmaMessages.getString("SignPanel.56"), //$NON-NLS-1$
@@ -179,7 +191,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
                 JOptionPane.ERROR_MESSAGE
             );
         	//this.signPanel.getSimpleAfirma().closeApplication(0);
-        	restartApp();
+        	//restartApp();
         	return;
     	}
         finally {
@@ -269,6 +281,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             return;
         }
         catch(final Exception e) {
+        	SimpleAfirma.resetAOKeyStoreManager(false);
             LOGGER.log(Level.SEVERE, "Error durante el proceso de firma: " + e, e); //$NON-NLS-1$
             AOUIFactory.showErrorMessage(
                 this.signPanel,
@@ -276,7 +289,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
                 SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
                 JOptionPane.ERROR_MESSAGE
             );
-            restartApp();
+            //restartApp();
             return;
         }
         catch(final OutOfMemoryError ooe) {

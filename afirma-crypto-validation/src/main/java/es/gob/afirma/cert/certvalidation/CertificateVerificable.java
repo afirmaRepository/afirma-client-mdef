@@ -20,6 +20,10 @@ public interface CertificateVerificable {
 	 * @param properties Propiedades a definir. */
 	void setValidationProperties(String properties);
 
+	/** Define las propiedades del certificado X.509v3.
+	 * @param cert Certificado a validar. */
+	void setValidationProperties(final X509Certificate cert);
+	
 	/** Valida el certificado X.509v3 que se ha proporcionado en el constructor.
 	 * @return Resultado de la validaci&oacute;n. */
 	ValidationResult validateCertificate();
@@ -39,4 +43,9 @@ public interface CertificateVerificable {
 	 * @param cert Certificado a validar.
 	 * @return Resultado de la validaci&oacute;n. */
 	ValidationResult validateCertificate(final X509Certificate cert);
+	
+	/** Introduce el valor de la url de validación desde un paramentreo.
+	 * @param String Url de validación.
+	 * @return Resultado de la validaci&oacute;n. */
+	public void setOcspUrlPreference(String ocspUrlPreference); 
 }

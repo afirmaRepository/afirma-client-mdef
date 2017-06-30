@@ -11,6 +11,7 @@
 package es.gob.afirma.standalone;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -34,6 +35,7 @@ import java.net.URL;
 import java.nio.channels.FileLock;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.FileHandler;
@@ -42,6 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.TerminalFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,7 +61,9 @@ import es.gob.afirma.core.misc.Platform.OS;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreManager;
+import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
+import es.gob.afirma.keystores.temd.TemdKeyStoreManager;
 import es.gob.afirma.standalone.protocol.ProtocolInvocationLauncher;
 import es.gob.afirma.standalone.smartWaper.ConfigurePssdefPropeties;
 import es.gob.afirma.standalone.ui.ClosePanel;
@@ -87,6 +94,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		}
 	}
 
+	public static SimpleAfirma saf = null;
 	private static final int DEFAULT_WINDOW_WIDTH = 780;
 	private static final int DEFAULT_WINDOW_HEIGHT = 550;
 
@@ -226,6 +234,8 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		// preferencias de la aplicación
 		configurePreferencesProperties();
 	}
+	
+
 
 	private void configurePreferencesProperties() {
 		try {
@@ -376,7 +386,120 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	public static synchronized AOKeyStoreManager getAOKeyStoreManager() {
 		return ksManager;
 	}
+	
+	/**
+	 * Preguntamos por el estado del Key Store Manager <code>AOKeyStoreManager</code> en caso de estar cerrado reiniciamos
+	 * Para cuando no haya tarjeta y queramos reiniciar el Key Store Manager. En el caso de que exista Preguntamos si es una
+	 * tarjeta FNMT, en este caso devolvemos el control a la clase que la instancia para que no existan errores en la instanciación
+	 * si es la otra tarjeta MMAR volvermos a reiniciar el Key Store Manager para que nos pregunte por el password.
+	 * @param Componet
+	 *            Componente de pantalla para iniciar el Key Store Manager 
+	 *            en caso de que sea una tarjeta MMAR.
+	 * @return boolean nos informa si es Key Store Manager de tipo FMNT.
+	 */
+	public static synchronized boolean iniciarAOKeyStoreManager(Component componente){
+		boolean storedTemdStarted =false;
+		try{
+			if(listCardCeck() && null != ksManager){
+				if(ksManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
+					if(((TemdKeyStoreManager)ksManager).getTipoTarjeta().equals(TemdKeyStoreManager.TIPO_DE_TARJETA_FNMT)){
+						if(!((TemdKeyStoreManager)ksManager).isOpen()){
+							storedTemdStarted = true;							
+						}
+					}else{
+						ksManager = null;
+						//ksManager = SimpleKeyStoreManager.getKeyStore(false, componente);
+						ksManager = SimpleKeyStoreManager.getKeyStore(false, null);
+					}
+					
+				}
+			}else{
+				ksManager = null;
+				ksManager = SimpleKeyStoreManager.getKeyStore(false, null);								
+			}
+		} catch (AOKeyStoreManagerException e) {
+			ksManager = null;
+			System.out.println("entra por el catch de iniciar");
+			LOGGER.warning("No ha recuperar el  Key Store Manager" + e);		
+		}
+		return storedTemdStarted;
+	}
 
+	private static boolean listCardCeck(){
+		boolean cardPresent = false;
+		List<CardTerminal> terminales = null;
+		try {
+			terminales = TerminalFactory.getDefault().terminals().list();
+		}
+		catch (final CardException e) {
+			LOGGER.warning("No se ha podido obtener la lista de lectores del sistema: " + e); 
+		}
+    	for (final CardTerminal cardTerminal : terminales) {
+			try {
+				if(cardTerminal.isCardPresent()){
+					cardPresent = true;
+				}
+			}
+			catch (final CardException e) {
+				LOGGER.warning(
+					"Error comprobando la presencia de una tarjeta: " + e //$NON-NLS-1$
+				);
+			}
+    	}
+    	if(cardPresent == false){
+	        AOUIFactory.showErrorMessage(
+	                null,
+	                "No Hay introducida ninguna tarjeta, para continuar ha de introducir la tajeta", //$NON-NLS-1$
+	                SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+	                JOptionPane.ERROR_MESSAGE
+	            );
+	        listCardCeck();
+    	}
+		return cardPresent;
+	}
+	
+	public static synchronized void resetAOKeyStoreManager(boolean isDecipher){
+		//ksManager.deactivateEntry(getVersion());
+		//ksManager = null;
+		try {
+			if(((TemdKeyStoreManager)ksManager).getTipoTarjeta().equals(TemdKeyStoreManager.TIPO_DE_TARJETA_FNMT)){
+				((TemdKeyStoreManager)ksManager).closeFNMTTemd();
+				System.out.println("cierra el KeyStore de FMNT");
+			
+				ksManager = SimpleKeyStoreManager.getKeyStore(false, null);
+				System.out.println("abre el KeyStore");
+				if(!ksManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
+					System.out.println("no lo ha abierto correctamente");
+			        AOUIFactory.showErrorMessage(
+			                null,
+			                "No se ha podido recupera la aplicación por lo que se reiniciara", //$NON-NLS-1$
+			                SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
+			                JOptionPane.ERROR_MESSAGE
+			            );
+					
+					if(isDecipher){
+						restartApplication();					
+					}
+				}
+			}
+			if(ksManager!=null){
+				if(!ksManager.getType().getName().equals(AOKeyStore.TEMD.getName())
+						&& isDecipher){
+					restartApplication();
+				}
+				
+			}
+		} catch (AOKeyStoreManagerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			if(isDecipher){
+				restartApplication();					
+			}
+		}
+	}
+
+
+	
 	/**
 	 * Elimina el panel actual y carga el panel de resultados de firma.
 	 * 
@@ -590,7 +713,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 					printSystemInfo();
 
-					final SimpleAfirma saf = new SimpleAfirma();
+					saf = new SimpleAfirma();
 
 					final OS os = Platform.getOS();
 					if (OS.WINDOWS != os && OS.MACOSX != os) {
@@ -876,7 +999,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		LOGGER.info("Direccion jhome: " + System.getProperty("java.home")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void restartApplication() 
+	public static void restartApplication() 
 	{
 	  final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 	  //final File currentJar = new File(MyClassInTheJar.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -901,21 +1024,19 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	} catch (IOException e) {
         LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e, e); //$NON-NLS-1$
         AOUIFactory.showErrorMessage(
-            this,
+            null,
             SimpleAfirmaMessages.getString("SignPanel.66"), //$NON-NLS-1$
             SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
             JOptionPane.ERROR_MESSAGE
         );
-		e.printStackTrace();
 	} catch (URISyntaxException e1) {
         LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e1, e1); //$NON-NLS-1$
         AOUIFactory.showErrorMessage(
-            this,
+            null,
             SimpleAfirmaMessages.getString("SignPanel.66"), //$NON-NLS-1$
             SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
             JOptionPane.ERROR_MESSAGE
         );
-		e1.printStackTrace();
 	}
 	
 	  System.exit(0);

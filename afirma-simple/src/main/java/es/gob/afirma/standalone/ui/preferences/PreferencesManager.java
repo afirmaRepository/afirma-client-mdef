@@ -479,6 +479,15 @@ public final class PreferencesManager {
 
 	//**************** PREFERENCIAS DE CIFRADO*****************************************************************
 
+	/** URI de acceso a la comprovación de certificados revocados por servicio OSCP. */
+	public static final String PREFERENCE_CN_CA_CERT_SERVICE = "cnCaCert"; //$NON-NLS-1$
+
+	/** URI de acceso a la comprovación de certificados revocados por servicio OSCP. */
+	public static final String PREFERENCE_URI_VAOSCP_SERVICE = "uriVaOcsp"; //$NON-NLS-1$
+
+	/** URI de acceso a la comprovación de certificados revocados por servicio CRL. */
+	public static final String PREFERENCE_URI_CRL_SERVICE = "uriCrl"; //$NON-NLS-1$
+	
 	/** En el cifrado de sobres digitales, restringir que &uacute;nicamente se puedan usar certificados de cifrado. */
 	public static final String PREFERENCE_CIPHERMENT_ONLY_CYPHER_CERTS = "useOnlyEnciphermentCertificates"; //$NON-NLS-1$
 
