@@ -419,7 +419,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		} catch (final AOKeyStoreManagerException e) {
 			ksManager = null;
 			System.out.println("entra por el catch de iniciar");
-			LOGGER.warning("No ha recuperar el  Key Store Manager" + e);
+			LOGGER.warning("No ha recuperar el  Key Store Manager_ " + e);
 		}
 		return storedTemdStarted;
 	}
@@ -946,7 +946,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		return version;
 	}
 
-	/** Recupera el fichero de configuración de preferencias y lo pasa a tipo String para ser procesado. */
+	/** Recupera el fichero de configuracion de preferencias y lo pasa a tipo String para ser procesado. */
 	private String getFile(final String fileName) {
 
 		BufferedReader br = null;
@@ -960,9 +960,11 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 				sb.append(line);
 			}
 
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
-		} finally {
+		}
+		finally {
 			if (br != null) {
 				try {
 					br.close();
@@ -1012,7 +1014,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		  command.add(currentJar.getPath());
 		  LOGGER.log(Level.INFO, "se va a ejecutar el exe: ");
 	    //return;
-	  }else{
+	  } else{
 		  /* Build command: java -jar application.jar */
 		  command.add(javaBin);
 		  command.add("-jar");
