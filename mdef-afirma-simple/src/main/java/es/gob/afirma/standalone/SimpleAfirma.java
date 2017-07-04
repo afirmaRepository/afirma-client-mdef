@@ -75,7 +75,6 @@ import es.gob.afirma.standalone.ui.SignPanel;
 import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 import es.gob.afirma.standalone.ui.preferences.PreferencesPlistHandler;
 import es.gob.afirma.standalone.ui.preferences.PreferencesPlistHandler.InvalidPreferencesFileException;
-import es.gob.afirma.standalone.updater.Updater;
 import es.gob.afirma.standalone.util.UtilAfirma;
 
 /**
@@ -699,11 +698,11 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		}
 
 		// Comprobamos actualizaciones
-		if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_GENERAL_UPDATECHECK, false)) {
-			Updater.checkForUpdates(null);
-		} else {
-			LOGGER.info("Se ha pedido no comprobar actualizaciones al inicio"); //$NON-NLS-1$
-		}
+//		if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_GENERAL_UPDATECHECK, false)) {
+//			Updater.checkForUpdates(null);
+//		} else {
+//			LOGGER.info("Se ha pedido no comprobar actualizaciones al inicio"); //$NON-NLS-1$
+//		}
 
 		try {
 			// Invocacion normal modo grafico
