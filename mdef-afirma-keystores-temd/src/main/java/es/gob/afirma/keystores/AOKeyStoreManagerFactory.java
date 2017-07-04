@@ -173,26 +173,26 @@ public final class AOKeyStoreManagerFactory {
         		return null;
         	}
 			final AggregatedKeyStoreManager aks = new AggregatedKeyStoreManager();
-			 for (int x = 0; x < ficheros.length; x++) {
+			 for (final String fichero : ficheros) {
 				 String extension = ""; //$NON-NLS-1$
 				 // Se obtiene la extension del certificado
-				 final int i = ficheros[x].lastIndexOf('.');
+				 final int i = fichero.lastIndexOf('.');
 				 if (i > 0) {
-				     extension = ficheros[x].substring(i+1);
+				     extension = fichero.substring(i+1);
 				 }
 
 				 if("p12".equals(extension) || "pfx".equals(extension)) { //$NON-NLS-1$ //$NON-NLS-2$
-					 aks.addKeyStoreManager(getPkcs12KeyStoreManager(ficheros[x], pssCallback, forceReset, parentComponent));
+					 aks.addKeyStoreManager(getPkcs12KeyStoreManager(fichero, pssCallback, forceReset, parentComponent));
 				 }
 				 else if("dll".equals(extension) || "so".equals(extension)) { //$NON-NLS-1$ //$NON-NLS-2$
-					 aks.addKeyStoreManager(getPkcs11KeyStoreManager(ficheros[x], description, pssCallback, forceReset, parentComponent));
+					 aks.addKeyStoreManager(getPkcs11KeyStoreManager(fichero, description, pssCallback, forceReset, parentComponent));
 				 }
 				 else if("jceks".equals(extension) || "jks".equals(extension)) { //$NON-NLS-1$ //$NON-NLS-2$
-					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.JCEKS, lib + ficheros[x], pssCallback, forceReset, parentComponent));
+					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.JCEKS, lib + fichero, pssCallback, forceReset, parentComponent));
 				 } else if("jce".equals(extension)) { //$NON-NLS-1$
-					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.JAVACE, lib + ficheros[x], pssCallback, forceReset, parentComponent));
+					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.JAVACE, lib + fichero, pssCallback, forceReset, parentComponent));
 				 } else if("pem".equals(extension) || "crt".equals(extension) || "cer".equals(extension) || "p7b".equals(extension) || "p7s".equals(extension)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.SINGLE, lib + ficheros[x], pssCallback, forceReset, parentComponent));
+					 aks.addKeyStoreManager(getFileKeyStoreManager(AOKeyStore.SINGLE, lib + fichero, pssCallback, forceReset, parentComponent));
 				 }
 			 }
 			 return aks;
@@ -540,10 +540,12 @@ public final class AOKeyStoreManagerFactory {
                                                                                                            AOKeystoreAlternativeException {
     	final AOKeyStoreManager ksm = new AppleKeyStoreManager();
         // En Mac OS X podemos inicializar un KeyChain en un fichero particular o el "defecto del sistema"
-        try {
+        try (
+    		final InputStream fis = lib == null || lib.isEmpty() ? null : new FileInputStream(lib);
+		) {
             ksm.init(
                  store,
-                 lib == null || lib.isEmpty() ? null : new FileInputStream(lib),
+                 fis,
         		 NullPasswordCallback.getInstance(),
                  null,
                  forceReset
