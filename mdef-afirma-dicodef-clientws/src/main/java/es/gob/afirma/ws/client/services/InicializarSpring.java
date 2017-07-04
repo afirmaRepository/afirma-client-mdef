@@ -4,15 +4,10 @@ import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-/**
- * Clase que inicializa el contexto de spring para la aplicaci&oacute;n y utilizar los
+/** Inicializa el contexto de spring para la aplicaci&oacute;n y utilizar los
  * servicios web.
- * 
- * @author Fernando Hern&aacute;ndez Cebri&aacute;n.
- */
+ * @author Fernando Hern&aacute;ndez Cebri&aacute;n. */
 public class InicializarSpring {
 
 	static AnnotationConfigApplicationContext context;
@@ -24,7 +19,7 @@ public class InicializarSpring {
 				LOGGER.info("Dentro de InicializaSpring busca el contexto para inicializar spring Boot");
 		        context = new AnnotationConfigApplicationContext(SoapClientConfig.class);
 				LOGGER.info("Ha iniciado el contexto de spring");
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				LOGGER.severe("no se ha podido inicializar el contexto :"+e);
 			}
 		}
