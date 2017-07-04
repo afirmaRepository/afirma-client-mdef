@@ -20,7 +20,7 @@ public final class PreferencesDialog extends JDialog{
 		super(parent, modal);
 		setTitle(SimpleAfirmaMessages.getString("MainMenu.24")); //$NON-NLS-1$
 		this.add(new PreferencesPanel(this, selectedPreferencesTabIndex));
-		this.setSize(800, 715);
+		this.setSize(640, 760);
 		setResizable(false);
 		setLocationRelativeTo(parent);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

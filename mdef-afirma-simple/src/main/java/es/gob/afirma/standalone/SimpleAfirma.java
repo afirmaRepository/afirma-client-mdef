@@ -80,7 +80,7 @@ import es.gob.afirma.standalone.util.UtilAfirma;
 
 /**
  * Aplicaci&oacute;n gr&aacute;fica de AutoFirma.
- * 
+ *
  * @author Tom&aacute;s Garc&iacute;a-Mer&aacute;s
  */
 public final class SimpleAfirma implements PropertyChangeListener, WindowListener {
@@ -121,7 +121,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	 * Nombre de logotipo por defecto para la imagen de la firma en el pdf
 	 */
 	public static final String RUBRIC_NAME = "logoEjercito.png"; //$NON-NLS-1$
-	
+
 	/** Modo de depuraci&oacute;n para toda la aplicaci&oacute;n. */
 	public static final boolean DEBUG = true;
 
@@ -131,7 +131,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Devuelve el marco principal de la aplicaci&oacute;n.
-	 * 
+	 *
 	 * @return Marco principal de la aplicaci&oacute;n.
 	 */
 	public Frame getMainFrame() {
@@ -158,7 +158,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/**
 	 * Indica si el <code>AOKeyStoreManager</code> ha terminado de inicializarse
 	 * y est&aacute; listo para su uso.
-	 * 
+	 *
 	 * @return <code>true</code> si el <code>AOKeyStoreManager</code>
 	 *         est&aacute; listo para usarse, <code>false</code> en caso
 	 *         contrario
@@ -234,26 +234,26 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		// preferencias de la aplicación
 		configurePreferencesProperties();
 	}
-	
+
 
 
 	private void configurePreferencesProperties() {
 		try {
 			if (!PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CONFIG_INI_APLICATION, false)) {
 				PreferencesPlistHandler.importPreferencesFromXml(getFile("configuracion.afconfig"));
-				
+
 				if (!UtilAfirma.fileExit(APPLICATION_HOME + File.separator + RUBRIC_NAME)) {
-					InputStream is = getClass().getResourceAsStream("/" + RUBRIC_NAME);
+					final InputStream is = getClass().getResourceAsStream("/" + RUBRIC_NAME);
 					UtilAfirma.copyFile(APPLICATION_HOME + File.separator + RUBRIC_NAME, is);
 				}
-				
+
 				PreferencesManager.putBoolean(PreferencesManager.PREFERENCE_CONFIG_INI_APLICATION, true);
 			}
 
-		} catch (InvalidPreferencesFileException e) {
+		} catch (final InvalidPreferencesFileException e) {
 			LOGGER.warning("No se ha podido encontrar el fichero de configuración de preferencias: " + e //$NON-NLS-1$
 			);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.warning("No se ha podido cargar el fichero de configuración de preferencias: " + e //$NON-NLS-1$
 			);
 		}
@@ -366,7 +366,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Cierra la aplicaci&oacute;n.
-	 * 
+	 *
 	 * @param exitCode
 	 *            C&oacute;digo de cierre de la aplicaci&oacute;n (negativo
 	 *            indica error y cero indica salida normal.
@@ -380,47 +380,47 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Obtiene el <code>AOKeyStoreManager</code> en uso en la aplicaci&oacute;n.
-	 * 
+	 *
 	 * @return <code>AOKeyStoreManager</code> en uso en la aplicaci&oacute;n
 	 */
 	public static synchronized AOKeyStoreManager getAOKeyStoreManager() {
 		return ksManager;
 	}
-	
+
 	/**
 	 * Preguntamos por el estado del Key Store Manager <code>AOKeyStoreManager</code> en caso de estar cerrado reiniciamos
 	 * Para cuando no haya tarjeta y queramos reiniciar el Key Store Manager. En el caso de que exista Preguntamos si es una
 	 * tarjeta FNMT, en este caso devolvemos el control a la clase que la instancia para que no existan errores en la instanciación
 	 * si es la otra tarjeta MMAR volvermos a reiniciar el Key Store Manager para que nos pregunte por el password.
 	 * @param Componet
-	 *            Componente de pantalla para iniciar el Key Store Manager 
+	 *            Componente de pantalla para iniciar el Key Store Manager
 	 *            en caso de que sea una tarjeta MMAR.
 	 * @return boolean nos informa si es Key Store Manager de tipo FMNT.
 	 */
-	public static synchronized boolean iniciarAOKeyStoreManager(Component componente){
+	public static synchronized boolean iniciarAOKeyStoreManager(final Component componente){
 		boolean storedTemdStarted =false;
 		try{
 			if(listCardCeck() && null != ksManager){
 				if(ksManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
 					if(((TemdKeyStoreManager)ksManager).getTipoTarjeta().equals(TemdKeyStoreManager.TIPO_DE_TARJETA_FNMT)){
 						if(!((TemdKeyStoreManager)ksManager).isOpen()){
-							storedTemdStarted = true;							
+							storedTemdStarted = true;
 						}
 					}else{
 						ksManager = null;
 						//ksManager = SimpleKeyStoreManager.getKeyStore(false, componente);
 						ksManager = SimpleKeyStoreManager.getKeyStore(false, null);
 					}
-					
+
 				}
 			}else{
 				ksManager = null;
-				ksManager = SimpleKeyStoreManager.getKeyStore(false, null);								
+				ksManager = SimpleKeyStoreManager.getKeyStore(false, null);
 			}
-		} catch (AOKeyStoreManagerException e) {
+		} catch (final AOKeyStoreManagerException e) {
 			ksManager = null;
 			System.out.println("entra por el catch de iniciar");
-			LOGGER.warning("No ha recuperar el  Key Store Manager" + e);		
+			LOGGER.warning("No ha recuperar el  Key Store Manager" + e);
 		}
 		return storedTemdStarted;
 	}
@@ -432,7 +432,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 			terminales = TerminalFactory.getDefault().terminals().list();
 		}
 		catch (final CardException e) {
-			LOGGER.warning("No se ha podido obtener la lista de lectores del sistema: " + e); 
+			LOGGER.warning("No se ha podido obtener la lista de lectores del sistema: " + e);
 		}
     	for (final CardTerminal cardTerminal : terminales) {
 			try {
@@ -457,15 +457,15 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
     	}
 		return cardPresent;
 	}
-	
-	public static synchronized void resetAOKeyStoreManager(boolean isDecipher){
+
+	public static synchronized void resetAOKeyStoreManager(final boolean isDecipher){
 		//ksManager.deactivateEntry(getVersion());
 		//ksManager = null;
 		try {
 			if(((TemdKeyStoreManager)ksManager).getTipoTarjeta().equals(TemdKeyStoreManager.TIPO_DE_TARJETA_FNMT)){
 				((TemdKeyStoreManager)ksManager).closeFNMTTemd();
 				System.out.println("cierra el KeyStore de FMNT");
-			
+
 				ksManager = SimpleKeyStoreManager.getKeyStore(false, null);
 				System.out.println("abre el KeyStore");
 				if(!ksManager.getType().getName().equals(AOKeyStore.TEMD.getName())){
@@ -476,9 +476,9 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 			                SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
 			                JOptionPane.ERROR_MESSAGE
 			            );
-					
+
 					if(isDecipher){
-						restartApplication();					
+						restartApplication();
 					}
 				}
 			}
@@ -487,22 +487,22 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 						&& isDecipher){
 					restartApplication();
 				}
-				
+
 			}
-		} catch (AOKeyStoreManagerException e) {
+		} catch (final AOKeyStoreManagerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			if(isDecipher){
-				restartApplication();					
+				restartApplication();
 			}
 		}
 	}
 
 
-	
+
 	/**
 	 * Elimina el panel actual y carga el panel de resultados de firma.
-	 * 
+	 *
 	 * @param sign
 	 *            Firma o fichero firmado sobre el que queremos mostrar un
 	 *            resumen
@@ -554,7 +554,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Obtiene los idiomas disponibles para la aplicaci&oacute;n
-	 * 
+	 *
 	 * @return Locales disponibles para la aplicaci&oacute;n
 	 */
 	public static Locale[] getAvailableLocales() {
@@ -563,7 +563,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Establece el idioma de la aplicaci&oacute;n.
-	 * 
+	 *
 	 * @param l
 	 *            Locale a establecer
 	 */
@@ -578,7 +578,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/**
 	 * Habilita o desabilita el men&uacute; <i>Archivo</i> de la barra de
 	 * men&uacute;.
-	 * 
+	 *
 	 * @param e
 	 *            <code>true</code> para habilitar el men&uacute;
 	 *            <i>Archivo</i>, <code>false</code> para deshabilitarlo
@@ -591,7 +591,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Establece el directorio actual para la lectura y guardado de ficheros.
-	 * 
+	 *
 	 * @param dir
 	 *            Directorio actual, incluyendo su ruta completa
 	 */
@@ -601,7 +601,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Obtiene el directorio actual para la lectura y guardado de ficheros.
-	 * 
+	 *
 	 * @return Directorio actual para la lectura y guardado de ficheros.
 	 */
 	public File getCurrentDir() {
@@ -648,7 +648,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/**
 	 * Carga el fichero a firmar. Este m&eacute;todo se situa aqu&iacute; para
 	 * permitir su acceso desde la barra de men&uacute;
-	 * 
+	 *
 	 * @param file
 	 *            Fichero a firmar, incluyendo su ruta completa
 	 */
@@ -674,7 +674,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	 * <li>Si falla la invocaci&oacute;n por protocolo debido a que no se cuenta
 	 * con entorno gr&aacute;fico, se iniciar&aacute; el modo consola.</li>
 	 * </ol>
-	 * 
+	 *
 	 * @param args
 	 *            Par&aacute;metros en l&iacute;nea de comandos
 	 */
@@ -699,7 +699,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		}
 
 		// Comprobamos actualizaciones
-		if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_GENERAL_UPDATECHECK, true)) {
+		if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_GENERAL_UPDATECHECK, false)) {
 			Updater.checkForUpdates(null);
 		} else {
 			LOGGER.info("Se ha pedido no comprobar actualizaciones al inicio"); //$NON-NLS-1$
@@ -810,7 +810,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	/**
 	 * Pregunta al usuario si desea cerrar la aplicaci&oacute;n.
-	 * 
+	 *
 	 * @return <code>true</code> si el usuario responde que s&iacute;,
 	 *         <code>false</code> en caso contrario
 	 */
@@ -856,7 +856,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/**
 	 * Configura que el registro de la ejecuci&oacute;n se guarde tambien en
 	 * fichero.
-	 * 
+	 *
 	 * @param logPath
 	 *            Fichero en donde se almacenar&aacute; el registro.
 	 */
@@ -870,7 +870,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 					append(record.getLevel().toString()).append(": "). //$NON-NLS-1$
 					//append(record.getMessage()).append("\n").toString(); //$NON-NLS-1$
 					append(record.getMessage()).append("\n").
-					append((null!=record.getThrown())?
+					append(null!=record.getThrown()?
 							printTraces(record.getThrown()):
 								record.getMessage())
 					.append("\n").toString();
@@ -882,21 +882,21 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 			handler.setFormatter(logFormatter);
 			LOGGER.addHandler(handler);
 		} catch (final Exception e) {
-			
+
 			LOGGER.warning("No se pudo configurar el log en fichero: " + e); //$NON-NLS-1$
 		}
 	}
 
-	static String printTraces(Throwable e){
-		StringWriter errors = new StringWriter();
+	static String printTraces(final Throwable e){
+		final StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		return e.toString();
 	}
-	static String printTracesOld(StackTraceElement[] stackTrace){
+	static String printTracesOld(final StackTraceElement[] stackTrace){
 	     //final StackTraceElement[] stackTrace = exception.getStackTrace();
-	      int index = 0;
+	      final int index = 0;
          String exceptionMsg = "";
-	      for (StackTraceElement element : stackTrace)
+	      for (final StackTraceElement element : stackTrace)
 	      {
 	         final String exceptionPartial =
 	              "Exception thrown from " + element.getMethodName()
@@ -906,7 +906,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	      }
 	      return exceptionMsg;
 	}
-	
+
 	static String getIp() throws IOException {
 		final URL whatismyip = new URL(IP_DISCOVERY_AUTOMATION);
 		try (BufferedReader in = new BoundedBufferedReader(new InputStreamReader(whatismyip.openStream()), 1, // Solo
@@ -924,7 +924,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	/**
 	 * Recupera el identificador del numero de version del MiniApplet a partir
 	 * de su Manifest.
-	 * 
+	 *
 	 * @return Identificador de la versi&oacute;n.
 	 */
 	public static String getVersion() {
@@ -948,10 +948,10 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	}
 
 	/** Recupera el fichero de configuración de preferencias y lo pasa a tipo String para ser procesado. */
-	private String getFile(String fileName) {
+	private String getFile(final String fileName) {
 
 		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		String line;
 		try {
@@ -961,13 +961,13 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 				sb.append(line);
 			}
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
 				try {
 					br.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -976,8 +976,8 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		return sb.toString();
 
 	}
-	
-	
+
+
 	/** Imprime a traves del log la informacion b&aacute;sica del sistema. */
 	private static void printSystemInfo() {
 
@@ -999,7 +999,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		LOGGER.info("Direccion jhome: " + System.getProperty("java.home")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public static void restartApplication() 
+	public static void restartApplication()
 	{
 	  final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 	  //final File currentJar = new File(MyClassInTheJar.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -1007,7 +1007,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	try {
 	  currentJar = new File(SimpleAfirma.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 	  LOGGER.log(Level.INFO, "path file: "+SimpleAfirma.class.getProtectionDomain().getCodeSource().getLocation().toURI()); //$NON-NLS-1$
-	  final ArrayList<String> command = new ArrayList<String>();
+	  final ArrayList<String> command = new ArrayList<>();
 	  /* is it a jar file? */
 	  if(!currentJar.getName().endsWith(".jar")){
 		  command.add(currentJar.getPath());
@@ -1021,7 +1021,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	  }
 	  final ProcessBuilder builder = new ProcessBuilder(command);
 	  builder.start();
-	} catch (IOException e) {
+	} catch (final IOException e) {
         LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e, e); //$NON-NLS-1$
         AOUIFactory.showErrorMessage(
             null,
@@ -1029,7 +1029,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
             SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
             JOptionPane.ERROR_MESSAGE
         );
-	} catch (URISyntaxException e1) {
+	} catch (final URISyntaxException e1) {
         LOGGER.log(Level.SEVERE, "Error durante el reinicio de la aplicacion: " + e1, e1); //$NON-NLS-1$
         AOUIFactory.showErrorMessage(
             null,
@@ -1038,7 +1038,7 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
             JOptionPane.ERROR_MESSAGE
         );
 	}
-	
+
 	  System.exit(0);
-	}	
+	}
 }
