@@ -61,6 +61,7 @@ import es.gob.afirma.core.signers.AOSignerFactory;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.MultipleCertificateFilter;
+import es.gob.afirma.keystores.filters.PolicyIdFilter;
 import es.gob.afirma.keystores.filters.PseudonymFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.signers.xades.AOFacturaESigner;
@@ -430,7 +431,7 @@ public final class SignPanel extends JPanel {
             }
         }, true);
         setVisible(true);
-        
+
         if (getFilePanel() != null && getDropTgt() != null) {
         	getFilePanel().setDropTarget(getDropTgt());
         }
@@ -608,7 +609,7 @@ public final class SignPanel extends JPanel {
 			SimpleAfirmaMessages.getString("SignPanel.50") //$NON-NLS-1$
 		);
     	new SignPanelSignTask(
-    		this, 
+    		this,
     		getCertFilters(),
     		signWaitDialog
 		).execute();
@@ -644,6 +645,15 @@ public final class SignPanel extends JPanel {
     	}
     	if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_KEYSTORE_ALIAS_ONLY_CERTS, false)) {
     		filters.add(new PseudonymFilter());
+    	}
+    	if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_KEYSTORE_ACCEPTED_POLICIES_ONLY_CERTS, false)) {
+    		final String polis = PreferencesManager.get(
+				PreferencesManager.PREFERENCE_KEYSTORE_ACCEPTED_POLICIES_LIST,
+				null
+			);
+    		if (polis != null && !polis.trim().isEmpty()) {
+    			filters.add(new PolicyIdFilter(polis));
+    		}
     	}
     	if (filters.size() > 1) {
     		return Arrays.asList(
