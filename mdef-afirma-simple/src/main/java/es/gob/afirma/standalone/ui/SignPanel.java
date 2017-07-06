@@ -144,7 +144,9 @@ public final class SignPanel extends JPanel {
     private File currentFile = null;
 
     File getCurrentFile() {
-    	return this.currentFile;
+    	return this.currentFile != null ?
+			AutoFirmaUtil.getCanonicalFile(this.currentFile) :
+				null;
     }
 
     /** Carga el fichero a firmar.
@@ -428,6 +430,10 @@ public final class SignPanel extends JPanel {
             }
         }, true);
         setVisible(true);
+        
+        if (getFilePanel() != null && getDropTgt() != null) {
+        	getFilePanel().setDropTarget(getDropTgt());
+        }
     }
 
     /** Construye el panel de firma, en el que se selecciona y se firma un fichero.
@@ -601,14 +607,12 @@ public final class SignPanel extends JPanel {
 			SimpleAfirmaMessages.getString("SignPanel.48"), //$NON-NLS-1$
 			SimpleAfirmaMessages.getString("SignPanel.50") //$NON-NLS-1$
 		);
-    	SignPanelSignTask signPanelSignTask = new SignPanelSignTask(
-    		this,
+    	new SignPanelSignTask(
+    		this, 
     		getCertFilters(),
     		signWaitDialog
-		);
-    	signPanelSignTask.execute();
+		).execute();
     	signWaitDialog.setVisible(true);
-    	signPanelSignTask.cancel(true);
     }
 
     /** M&eacute;todo para indicar a la clase que el <code>AOKeyStoreManager</code> est&aacute; listo para usarse. */
