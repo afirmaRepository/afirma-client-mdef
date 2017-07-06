@@ -1,18 +1,17 @@
 package es.gob.afirma.standalone.ui.preferences;
 
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CHECK_CERTIFICATE_PSSDEF;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_CRL_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_PSSDEF_SERVICE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_VAOSCP_SERVICE;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_URI_CRL_SERVICE;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.util.logging.Logger;
 
@@ -33,8 +32,8 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 	private final JTextField cnCaURI = new JTextField();
 
-	public JTextField getCnCaURI() {
-		return cnCaURI;
+	JTextField getCnCaURI() {
+		return this.cnCaURI;
 	}
 
 	private final JTextField vaURI = new JTextField();
@@ -49,17 +48,17 @@ public class PreferencesPanelValideCerts extends JPanel {
 		return this.crlURI.getText();
 	}
 
-	
-	private final JCheckBox pssdef = new JCheckBox(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.3"));
+
+	private final JCheckBox pssdef = new JCheckBox(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.3")); //$NON-NLS-1$
 
 	boolean ispssdefSelected() {
 		return this.pssdef.isSelected();
 	}
-	
+
 	private final JTextField pssdefURI = new JTextField();
 
 	private final JTextField keySubjectName = new JTextField();
-	
+
 	private final JTextField sevicePolice = new JTextField();
 
 	String getPssdefURI() {
@@ -78,7 +77,8 @@ public class PreferencesPanelValideCerts extends JPanel {
 	void createUI(final KeyListener keyListener, final ModificationListener modificationListener,
 			final boolean unprotected) {
 
-		getAccessibleContext().setAccessibleDescription(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.0") //$NON-NLS-1$
+		getAccessibleContext().setAccessibleDescription(
+			SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.0") //$NON-NLS-1$
 		);
 
 		setLayout(new GridBagLayout());
@@ -91,7 +91,7 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 		final JPanel mdefPanel = new JPanel(new GridBagLayout());
 		mdefPanel.setBorder(BorderFactory.createTitledBorder(
-				BorderFactory.createTitledBorder(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.1")) //$NON-NLS-1$
+			BorderFactory.createTitledBorder(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.1")) //$NON-NLS-1$
 		));
 
 		final GridBagConstraints mdpc = new GridBagConstraints();
@@ -103,7 +103,7 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 		final JLabel vaCnCaLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.9") //$NON-NLS-1$
 		);
-		
+
 		vaCnCaLabel.setLabelFor(this.cnCaURI);
 
 		final JLabel vaUriLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.4") //$NON-NLS-1$
@@ -119,9 +119,10 @@ public class PreferencesPanelValideCerts extends JPanel {
 		pssdefUriLabel.setLabelFor(this.pssdefURI);
 	    this.pssdefURI.addKeyListener(modificationListener);
 	    this.pssdefURI.addKeyListener(keyListener);
-		
 
-		final JLabel keySubjectNameLabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.7") //$NON-NLS-1$
+
+		final JLabel keySubjectNameLabel = new JLabel(
+			SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.7") //$NON-NLS-1$
 		);
 		keySubjectNameLabel.setLabelFor(this.keySubjectName);
 	    this.keySubjectName.addKeyListener(modificationListener);
@@ -132,8 +133,8 @@ public class PreferencesPanelValideCerts extends JPanel {
 		sevicePoliceLabel.setLabelFor(this.sevicePolice);
 	    this.sevicePolice.addKeyListener(modificationListener);
 	    this.sevicePolice.addKeyListener(keyListener);
-		
-		
+
+
 		mdefPanel.add(vaCnCaLabel, mdpc);
 		mdpc.gridy++;
 		mdefPanel.add(this.cnCaURI, mdpc);
@@ -148,26 +149,23 @@ public class PreferencesPanelValideCerts extends JPanel {
 		mdpc.gridy++;
 		this.pssdef.setMnemonic('U');
 		this.pssdef.addItemListener(modificationListener);
-		this.pssdef.addKeyListener(keyListener);		
+		this.pssdef.addKeyListener(keyListener);
 		this.pssdef.setSelected(PreferencesManager.getBoolean(
 				PreferencesManager.PREFERENCE_CHECK_CERTIFICATE_PSSDEF,
 				false
 			)
 		);
 		this.pssdef.addItemListener(
-			new ItemListener() {
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						enableComponents(true);
-					}
-					else {
-						enableComponents(false);
-					}
+			e -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					enableComponents(true);
+				}
+				else {
+					enableComponents(false);
 				}
 			}
 		);
-		
+
 		mdefPanel.add(this.pssdef, mdpc);
 		mdpc.gridy++;
 		mdefPanel.add(pssdefUriLabel, mdpc);
@@ -184,7 +182,7 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 		final JPanel noMdefPanel = new JPanel(new GridBagLayout());
 		noMdefPanel.setBorder(BorderFactory.createTitledBorder(
-				BorderFactory.createTitledBorder(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.2")) //$NON-NLS-1$
+			BorderFactory.createTitledBorder(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.2")) //$NON-NLS-1$
 		));
 
 		final GridBagConstraints nmdpc = new GridBagConstraints();
@@ -196,21 +194,21 @@ public class PreferencesPanelValideCerts extends JPanel {
 
 
 		add(mdefPanel, gbc);
-		gbc.gridy++;
-		add(noMdefPanel, gbc);
+		//gbc.gridy++;
+		//add(noMdefPanel, gbc);
 		gbc.gridy++;
 		gbc.weighty = 1.0;
 		add(new JPanel(), gbc);
-		
+
 		loadPreferences();
 		enableComponents(this.pssdef.isSelected());
 
-	}	
-	
+	}
+
 	void savePreferences() {
 		PreferencesManager.put(PREFERENCE_CN_CA_CERT_SERVICE, this.cnCaURI.getText());
 		PreferencesManager.put(PREFERENCE_URI_VAOSCP_SERVICE, this.vaURI.getText());
-		PreferencesManager.put(PREFERENCE_URI_CRL_SERVICE, this.getCrlURI());
+		PreferencesManager.put(PREFERENCE_URI_CRL_SERVICE, getCrlURI());
 		// Opciones de la plataforma PSSDEF
 		PreferencesManager.putBoolean(PREFERENCE_CHECK_CERTIFICATE_PSSDEF, this.pssdef.isSelected());
 		PreferencesManager.put(PREFERENCE_URI_PSSDEF_SERVICE, this.pssdefURI.getText());
@@ -221,33 +219,33 @@ public class PreferencesPanelValideCerts extends JPanel {
 	}
 
 	void loadPreferences() {
-		this.cnCaURI.setText(PreferencesManager.get(PREFERENCE_CN_CA_CERT_SERVICE, ""));
-		this.vaURI.setText(PreferencesManager.get(PREFERENCE_URI_VAOSCP_SERVICE, ""));
-		this.crlURI.setText(PreferencesManager.get(PREFERENCE_URI_CRL_SERVICE, ""));
+		this.cnCaURI.setText(PreferencesManager.get(PREFERENCE_CN_CA_CERT_SERVICE, "")); //$NON-NLS-1$
+		this.vaURI.setText(PreferencesManager.get(PREFERENCE_URI_VAOSCP_SERVICE, "")); //$NON-NLS-1$
+		this.crlURI.setText(PreferencesManager.get(PREFERENCE_URI_CRL_SERVICE, "")); //$NON-NLS-1$
 		// Opciones de la plataforma PSSDEF
 		this.pssdef.setSelected(PreferencesManager.getBoolean(PREFERENCE_CHECK_CERTIFICATE_PSSDEF, false));
-		this.pssdefURI.setText(PreferencesManager.get(PREFERENCE_URI_PSSDEF_SERVICE, ""));
-		this.keySubjectName.setText(PreferencesManager.get(PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE, ""));
-		this.sevicePolice.setText(PreferencesManager.get(PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE, ""));
-		if(pssdefURI.getText().isEmpty()){
-			this.pssdefURI.setText(PssdefMapping.getUrlPssdefDefault());			
+		this.pssdefURI.setText(PreferencesManager.get(PREFERENCE_URI_PSSDEF_SERVICE, "")); //$NON-NLS-1$
+		this.keySubjectName.setText(PreferencesManager.get(PREFERENCE_KEY_SUBJET_PSSDEF_SERVICE, "")); //$NON-NLS-1$
+		this.sevicePolice.setText(PreferencesManager.get(PREFERENCE_SEVICE_POLICE_PSSDEF_SERVICE, "")); //$NON-NLS-1$
+		if(this.pssdefURI.getText().isEmpty()){
+			this.pssdefURI.setText(PssdefMapping.getUrlPssdefDefault());
 		}
-		if(keySubjectName.getText().isEmpty()){
+		if(this.keySubjectName.getText().isEmpty()){
 			this.keySubjectName.setText(PssdefMapping.getKeySubjectNameDefault());
-			
+
 		}
-		if(sevicePolice.getText().isEmpty()){
+		if(this.sevicePolice.getText().isEmpty()){
 			this.sevicePolice.setText(PssdefMapping.getDsvServPolicyDefault());
-			
+
 		}
-		
+
 	}
-	
+
 	void enableComponents(final boolean enable) {
 		this.pssdefURI.setEnabled(enable);
 		this.keySubjectName.setEnabled(enable);
 		this.sevicePolice.setEnabled(enable);
 	}
-	
-	
+
+
 }
