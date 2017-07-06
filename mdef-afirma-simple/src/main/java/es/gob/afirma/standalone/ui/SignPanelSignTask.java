@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.net.URISyntaxException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -22,7 +21,6 @@ import javax.swing.SwingWorker;
 
 import es.gob.afirma.core.AOCancelledOperationException;
 import es.gob.afirma.core.AOFormatFileException;
-import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.signers.AOSigner;
 import es.gob.afirma.core.ui.AOUIFactory;
 import es.gob.afirma.keystores.AOCertificatesNotFoundException;
@@ -44,7 +42,6 @@ import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
 import es.gob.afirma.standalone.ui.pdf.PdfEmptySignatureFieldsChooserDialog;
 import es.gob.afirma.standalone.ui.pdf.SignPdfDialog;
-import es.gob.afirma.standalone.ui.pdf.SignPdfDialog.SignPdfDialogListener;
 import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 final class SignPanelSignTask extends SwingWorker<Void, Void> {
@@ -56,7 +53,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 
     /** Indica si la operaci&oacute;n a realizar es una cofirma. */
     private boolean cosign = false;
-	
+
     boolean isCosign() {
     	return this.cosign;
     }
@@ -66,9 +63,14 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 		return this.waitDialog;
 	}
 
-	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, IsObjectExpiredException, URISyntaxException, IOException, AOKeyStoreManagerException {
+	private PrivateKeyEntry getPrivateKeyEntry() throws AOCertificatesNotFoundException,
+	                                                    KeyStoreException,
+	                                                    NoSuchAlgorithmException,
+	                                                    UnrecoverableEntryException,
+	                                                    IsObjectExpiredException,
+	                                                    AOKeyStoreManagerException {
 
-		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this.signPanel);
+		final boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this.signPanel);
 		final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,
@@ -79,46 +81,48 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 			this.certFilters, // Filtros
 			false             // mandatoryCertificate
 		);
-    	dialog.show(); 
-    	
+    	dialog.show();
+
     	if(storedTemdStarted){
     		ksm.getType().getCertificatePasswordCallback(this).getPassword();
     	}
-    	
+
     	//isKeyStoreReady(ksm, dialog);
 
     	return ksm.getKeyEntry(
 			dialog.getSelectedAlias()
 		);
 	}
-	
-	void isKeyStoreReady(AOKeyStoreManager ksm, AOKeyStoreDialog dialog){
+
+	void isKeyStoreReady(final AOKeyStoreManager ksm, final AOKeyStoreDialog dialog){
 		if(!this.cosign){
 			if(null != ksm){
 				this.cosign = true;
 				LOGGER.info("inicializado KeyStore: " + ksm);
 	            System.out.println("finding deadlocked threads");
-	            ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
-	            long[] ids = tmx.findDeadlockedThreads();
+	            final ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
+	            final long[] ids = tmx.findDeadlockedThreads();
 	            if (ids != null) {
-	                ThreadInfo[] infos = tmx.getThreadInfo(ids, true, true);
+	                final ThreadInfo[] infos = tmx.getThreadInfo(ids, true, true);
 	                System.out.println("the following threads are deadlocked:");
-	                for (ThreadInfo ti : infos) {
+	                for (final ThreadInfo ti : infos) {
 	                    System.out.println(ti);
 	                }
 	            }
 	            System.out.println("finished finding deadlocked threads");
-				
-		    	System.out.println("pin : "+(ksm.getType().getStorePasswordCallback(this.signPanel).getPassword()).toString());
+
+		    	System.out.println("pin : "+ksm.getType().getStorePasswordCallback(this.signPanel).getPassword().toString());
 		    	try {
 		    		LOGGER.info("busca la clave");
 					ksm.getKeyEntry(dialog.getSelectedAlias());
-				} catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+				}
+		    	catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
 					LOGGER.info("da error al buscar la clave");
 					e.printStackTrace();
 				}
-			}else{
-				LOGGER.info("no esta inicializado KeyStore");				
+			}
+			else{
+				LOGGER.info("no esta inicializado KeyStore");
 				isKeyStoreReady(ksm,dialog);
 			}
 		}
@@ -145,7 +149,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         final PrivateKeyEntry pke;
         try {
             pke = getPrivateKeyEntry();
-            
+
         }
         catch (final AOCancelledOperationException e) {
             return;
@@ -179,7 +183,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
                 SimpleAfirmaMessages.getString("SimpleAfirma.7"), //$NON-NLS-1$
                 JOptionPane.ERROR_MESSAGE
             );
-        	return;        	
+        	return;
         }
         catch (final Exception e) {
         	LOGGER.severe("Ocurrio un error al extraer la clave privada del certificiado seleccionado: " + e); //$NON-NLS-1$
@@ -207,7 +211,6 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 
         // Anadimos las propiedades del sistema, habilitando asi que se puedan indicar opciones de uso con -D en linea
         // de comandos
-        //Class.forName(clsname, init, classloader); 
         final Properties p = new Properties();
         p.putAll(prefProps);
         p.putAll(System.getProperties());
@@ -390,18 +393,13 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         final String fDescription = filterDescription;
         final String[] fExtensions = filterExtensions;
 
-        if (this.signPanel.getSimpleAfirma().getCurrentDir() == null) {
-            this.signPanel.getSimpleAfirma().setCurrentDir(new File(Platform.getUserHome()));
-        }
-
         final File fd;
         try {
+        	final File currentDataFile = this.signPanel.getCurrentFile();
 	    	fd = AOUIFactory.getSaveDataToFile(
     			signResult,
     			SimpleAfirmaMessages.getString("SignPanel.81"), //$NON-NLS-1$
-    			this.signPanel.getSimpleAfirma().getCurrentDir() != null ?
-					this.signPanel.getSimpleAfirma().getCurrentDir().getAbsolutePath() :
-						null,
+    			currentDataFile != null ? currentDataFile.getParent() : null,
     			newFileName,
     			fExtensions,
     			fDescription,
@@ -427,28 +425,24 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
         	this.signPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
-        try{
-        	
-        this.signPanel.getSimpleAfirma().setCurrentDir(fd);
+        try {
+		    this.signPanel.getSimpleAfirma().setCurrentDir(fd);
 
-        this.signPanel.getSimpleAfirma().loadResultsPanel(
-    		signResult,
-    		fd.getAbsolutePath(),
-    		(X509Certificate) pke.getCertificate()
-		);
-        }catch(Exception e){
-            LOGGER.severe(
-                    "No se ha podido guardar el resultado de la firma: " + e //$NON-NLS-1$
-            		);
+		    this.signPanel.getSimpleAfirma().loadResultsPanel(
+				signResult,
+				fd.getAbsolutePath(),
+				(X509Certificate) pke.getCertificate()
+			);
         }
-              
+        catch(final Exception e){
+            LOGGER.severe(
+                "No se ha podido guardar el resultado de la firma: " + e //$NON-NLS-1$
+    		);
+        }
+
     }
 
-    private void restartApp() {
-    	this.signPanel.getSimpleAfirma().restartApplication();
-	}
-
-	@Override
+    @Override
     public Void doInBackground() {
 
         final AOSigner currentSigner = this.signPanel.getSigner();
@@ -477,19 +471,16 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             						currentSigner.isSign(this.signPanel.getDataToSign()),
             						this.signPanel.getDataToSign(),
             						this.signPanel.getWindow(),
-            						new SignPdfDialogListener() {
-            							@Override
-            							public void propertiesCreated(final Properties extraParams) {
-            								// Solo hacemos la firma si hay propiedades visibles
-            								if (extraParams != null && !extraParams.isEmpty()) {
-            									SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
-            									doSignature(currentSigner, extraParams);
-            								}
-            					        	if (getWaitDialog() != null) {
-            					        		getWaitDialog().dispose();
-            					        	}
-            							}
-            						}
+            						extraParams -> {
+										// Solo hacemos la firma si hay propiedades visibles
+										if (extraParams != null && !extraParams.isEmpty()) {
+											SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
+											doSignature(currentSigner, extraParams);
+										}
+										if (getWaitDialog() != null) {
+											getWaitDialog().dispose();
+										}
+									}
             					);
             				}
             				catch (final Exception e) {
@@ -509,17 +500,14 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 							this.signPanel.getDataToSign(),
 							this.signPanel.getWindow(),
 							field,
-							new SignPdfDialogListener() {
-								@Override
-								public void propertiesCreated(final Properties extraParams) {
-									// Solo hacemos la firma si hay propiedades visibles
-									if (extraParams != null && !extraParams.isEmpty()) {
-										SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
-										doSignature(currentSigner, extraParams);
-									}
-						        	if (getWaitDialog() != null) {
-						        		getWaitDialog().dispose();
-						        	}
+							extraParams -> {
+								// Solo hacemos la firma si hay propiedades visibles
+								if (extraParams != null && !extraParams.isEmpty()) {
+									SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
+									doSignature(currentSigner, extraParams);
+								}
+								if (getWaitDialog() != null) {
+									getWaitDialog().dispose();
 								}
 							}
 						);
@@ -535,17 +523,14 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
 						currentSigner.isSign(this.signPanel.getDataToSign()),
 						this.signPanel.getDataToSign(),
 						this.signPanel.getWindow(),
-						new SignPdfDialogListener() {
-							@Override
-							public void propertiesCreated(final Properties extraParams) {
-								// Solo hacemos la firma si hay propiedades visibles
-								if (extraParams != null && !extraParams.isEmpty()) {
-									SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
-									doSignature(currentSigner, extraParams);
-								}
-					        	if (getWaitDialog() != null) {
-					        		getWaitDialog().dispose();
-					        	}
+						extraParams -> {
+							// Solo hacemos la firma si hay propiedades visibles
+							if (extraParams != null && !extraParams.isEmpty()) {
+								SignPanelSignTask.this.getWaitDialog().setMessage(oldMessage);
+								doSignature(currentSigner, extraParams);
+							}
+							if (getWaitDialog() != null) {
+								getWaitDialog().dispose();
 							}
 						}
 					);
@@ -571,11 +556,11 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
     	}
         return null;
     }
-    
+
 /*    @Override
     public void done() {
             try {
-               get(); 
+               get();
             } catch (InterruptedException | ExecutionException ex) {
                 JOptionPane.showMessageDialog(null,
                 "Somethings Wrong: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -583,7 +568,7 @@ final class SignPanelSignTask extends SwingWorker<Void, Void> {
             this.waitDialog.dispose();
             this.waitDialog.setVisible(false);
         }
-*/    public void cancel(SignPanelSignTask worker){
+*/    public void cancel(final SignPanelSignTask worker){
         worker.cancel(true);
-     }    
+     }
 }
