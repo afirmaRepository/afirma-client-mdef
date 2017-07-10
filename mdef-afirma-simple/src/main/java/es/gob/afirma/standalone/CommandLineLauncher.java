@@ -249,12 +249,10 @@ final class CommandLineLauncher {
 			throw new CommandLineException(CommandLineMessages.getString("CommandLineLauncher.5")); //$NON-NLS-1$
 		}
 		try {
-			OpenDigitalEnvelopeDialog.startOpenDigitalEnvelopeDialog(null, AutoFirmaUtil.getCanonicalFile(inputFile).getAbsolutePath());
-//			final OpenDigitalEnvelopeDialog oed = new OpenDigitalEnvelopeDialog(
-//				null,
-//
-//			);
-//			oed.open();
+			OpenDigitalEnvelopeDialog.startOpenDigitalEnvelopeDialog(
+				null,
+				AutoFirmaUtil.getCanonicalFile(inputFile).getAbsolutePath()
+			);
 		}
 		catch (final Exception e) {
 			throw new CommandLineException(
