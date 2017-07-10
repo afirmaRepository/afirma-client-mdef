@@ -1,8 +1,5 @@
 package es.gob.afirma.standalone.trayicon;
 
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_KEYSTORE_DEFAULT_STORE;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_KEYSTORE_PRIORITARY_STORE;
-
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.Image;
@@ -35,13 +32,11 @@ import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
 import es.gob.afirma.keystores.temd.TemdKeyStoreManager;
-import es.gob.afirma.standalone.AutoFirmaUtil;
 import es.gob.afirma.standalone.LookAndFeelManager;
 import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleKeyStoreManager;
 import es.gob.afirma.standalone.ui.MainMenu;
 import es.gob.afirma.standalone.ui.preferences.PreferencesDialog;
-import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 import es.gob.afirma.ui.core.jse.certificateselection.CertificateSelectionDialog;
 
 /** Clase que genera el TrayIcon de la configuraci&oacute;n de AutoFirma. */
@@ -135,50 +130,6 @@ public final class AutoFirmaTrayIcon {
 
 		final Menu displayMenu = new Menu(TrayIconMessages.getString("TrayIcon.9")); //$NON-NLS-1$
 
-		final MenuItem selectPriorityKeyStore = new MenuItem(TrayIconMessages.getString("TrayIcon.10")); //$NON-NLS-1$
-		selectPriorityKeyStore.addActionListener(
-			e -> {
-				final String keyStore = (String) AOUIFactory.showInputDialog(
-					HIDDEN_FRAME,
-					TrayIconMessages.getString("TrayIcon.22"), //$NON-NLS-1$
-					TrayIconMessages.getString("TrayIcon.21"), //$NON-NLS-1$
-					JOptionPane.QUESTION_MESSAGE,
-					AutoFirmaUtil.getDefaultDialogsIcon(),
-					PRIORITY_STORES,
-					SimpleKeyStoreManager.getDefaultKeyStoreType()
-				);
-				if (keyStore != null && !keyStore.trim().isEmpty()) {
-					PreferencesManager.put(
-						PREFERENCE_KEYSTORE_PRIORITARY_STORE,
-						keyStore
-					);
-				}
-			}
-		);
-		selectPriorityKeyStore.getAccessibleContext().setAccessibleDescription(TrayIconMessages.getString("TrayIcon.11")); //$NON-NLS-1$
-
-		final MenuItem selecDefaultKeyStore = new MenuItem(TrayIconMessages.getString("TrayIcon.16")); //$NON-NLS-1$
-		selecDefaultKeyStore.addActionListener(
-			e -> {
-				final AOKeyStore keyStore = (AOKeyStore) AOUIFactory.showInputDialog(
-					HIDDEN_FRAME,
-					null,
-					TrayIconMessages.getString("TrayIcon.20"), //$NON-NLS-1$
-					JOptionPane.QUESTION_MESSAGE,
-					AutoFirmaUtil.getDefaultDialogsIcon(),
-					DEFAULT_STORES,
-					SimpleKeyStoreManager.getDefaultKeyStoreType()
-				);
-				if (keyStore != null) {
-					PreferencesManager.put(
-						PREFERENCE_KEYSTORE_DEFAULT_STORE,
-						keyStore.toString()
-					);
-				}
-			}
-		);
-		selecDefaultKeyStore.getAccessibleContext().setAccessibleDescription(TrayIconMessages.getString("TrayIcon.17")); //$NON-NLS-1$
-
 		final MenuItem showCertificates = new MenuItem(TrayIconMessages.getString("TrayIcon.12")); //$NON-NLS-1$
 		showCertificates.addActionListener(new ActionListener() {
 			@Override
@@ -234,8 +185,6 @@ public final class AutoFirmaTrayIcon {
 		closeKeyStoreMenuItem.getAccessibleContext().setAccessibleDescription(TrayIconMessages.getString("AutoFirmaTrayIcon.9")); //$NON-NLS-1$
 
 		// add menu items to menu
-		displayMenu.add(selectPriorityKeyStore);
-		displayMenu.add(selecDefaultKeyStore);
 		displayMenu.add(showCertificates);
 		displayMenu.add(closeKeyStoreMenuItem);
 
