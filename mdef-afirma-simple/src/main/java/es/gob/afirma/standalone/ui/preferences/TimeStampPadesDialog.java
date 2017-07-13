@@ -1,8 +1,8 @@
 package es.gob.afirma.standalone.ui.preferences;
 
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_TIMESTAMP_CERT_REQUIRED;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_TIMESTAMP_CONFIGURE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_TIMESTAMP_OID_CRITICAL;
 
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -148,14 +148,14 @@ final class TimeStampPadesDialog extends JDialog  {
 	private void loadConfiguration() {
 		setTimeStampCheckBoxSelected(
 			PreferencesManager.getBoolean(
-				PREFERENCE_PADES_TIMESTAMP_CONFIGURE,
+				PREFERENCE_TIMESTAMP_CONFIGURE,
 				this.timeStampCheckBox.isSelected()
 			)
 		);
 
 		final TimeStampPdfTypeResource type = TimeStampPdfTypeResource.getName(
 			Integer.parseInt(
-				PreferencesManager.get(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE,
+				PreferencesManager.get(PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_TYPE,
 					Integer.toString(TimeStampPdfTypeResource.SIGN.getIndex())
 				)
 			)
@@ -163,7 +163,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		this.tsType.setSelectedItem(type);
 
 		final String hash = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM,
+			PreferencesManager.PREFERENCE_TIMESTAMP_HASHALGORITHM,
 			"" //$NON-NLS-1$
 		);
 		if (hash != null && !hash.isEmpty()) {
@@ -171,7 +171,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		final String url = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL,
+			PreferencesManager.PREFERENCE_TIMESTAMP_TSA_URL,
 			"" //$NON-NLS-1$
 		);
 		if (url != null && !url.isEmpty()) {
@@ -179,7 +179,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		final String policy = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY,
+			PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_POLICY,
 			"" //$NON-NLS-1$
 		);
 		if (policy != null && !policy.isEmpty()) {
@@ -187,11 +187,11 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		this.certRequiredCheckBox.setSelected(
-			PreferencesManager.getBoolean(PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED, true)
+			PreferencesManager.getBoolean(PREFERENCE_TIMESTAMP_CERT_REQUIRED, true)
 		);
 
 		final String usr = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_USR,
+			PreferencesManager.PREFERENCE_TIMESTAMP_TSA_USR,
 			"" //$NON-NLS-1$
 		);
 		if (usr != null && !usr.isEmpty()) {
@@ -199,7 +199,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		final String pwd = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_PWD,
+			PreferencesManager.PREFERENCE_TIMESTAMP_TSA_PWD,
 			"" //$NON-NLS-1$
 		);
 		if (pwd != null && !pwd.isEmpty()) {
@@ -207,7 +207,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		final String oid = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID,
+			PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_OID,
 			"" //$NON-NLS-1$
 		);
 		if (oid != null && !oid.isEmpty()) {
@@ -215,7 +215,7 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		final String extValue = PreferencesManager.get(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE,
+			PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_VALUE,
 			"" //$NON-NLS-1$
 		);
 		if (extValue != null && !extValue.isEmpty()) {
@@ -223,100 +223,100 @@ final class TimeStampPadesDialog extends JDialog  {
 		}
 
 		this.extensionCriticalCheckBox.setSelected(
-			PreferencesManager.getBoolean(PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL, false)
+			PreferencesManager.getBoolean(PREFERENCE_TIMESTAMP_OID_CRITICAL, false)
 		);
 		enableFields(isTimeStampCheckBoxSelected());
 	}
 
 	void saveConfiguration() {
-		PreferencesManager.putBoolean(PREFERENCE_PADES_TIMESTAMP_CONFIGURE, this.timeStampCheckBox.isSelected());
+		PreferencesManager.putBoolean(PREFERENCE_TIMESTAMP_CONFIGURE, this.timeStampCheckBox.isSelected());
 
 		PreferencesManager.put(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE,
+			PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_TYPE,
 			Integer.toString(
 					((TimeStampPdfTypeResource)getTsType().getSelectedItem()).getIndex()
 			)
 		);
 		PreferencesManager.put(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM,
+			PreferencesManager.PREFERENCE_TIMESTAMP_HASHALGORITHM,
 			getSelectedHashAlgorithm()
 		);
 
 		if (getTsaUrlText() != null && !getTsaUrlText().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL,
+				PreferencesManager.PREFERENCE_TIMESTAMP_TSA_URL,
 				getTsaUrlText()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_TSA_URL);
 		}
 
 		if (getTsaPolicyText() != null && !getTsaPolicyText().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY,
+				PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_POLICY,
 				getTsaPolicyText()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_POLICY);
 		}
 
 		PreferencesManager.putBoolean(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED,
+			PreferencesManager.PREFERENCE_TIMESTAMP_CERT_REQUIRED,
 			isCertRequiredCheckBoxSelected()
 		);
 
 		if (getTsaUsrText() != null && !getTsaUsrText().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_USR,
+				PreferencesManager.PREFERENCE_TIMESTAMP_TSA_USR,
 				getTsaUsrText()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_USR);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_TSA_USR);
 		}
 
 		if (getPassword() != null && !getPassword().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_PWD,
+				PreferencesManager.PREFERENCE_TIMESTAMP_TSA_PWD,
 				getPassword()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_PWD);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_TSA_PWD);
 		}
 
 		if (getTsaExtensionOid() != null && !getTsaExtensionOid().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID,
+				PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_OID,
 				getTsaExtensionOid()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_OID);
 		}
 
 		if (getTsaExtensionValueBase64Field() != null && !getTsaExtensionValueBase64Field().isEmpty()) {
 			PreferencesManager.put(
-				PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE,
+				PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_VALUE,
 				getTsaExtensionValueBase64Field()
 			);
 		}
 		else {
-			PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE);
+			PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_EXTENSION_VALUE);
 		}
 
 		PreferencesManager.putBoolean(
-			PreferencesManager.PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL,
+			PreferencesManager.PREFERENCE_TIMESTAMP_OID_CRITICAL,
 			isExtensionCriticalCheckBoxSelected()
 		);
 	}
 
 	static void removeConfiguration() {
-		PreferencesManager.remove(PREFERENCE_PADES_TIMESTAMP_CONFIGURE);
+		PreferencesManager.remove(PREFERENCE_TIMESTAMP_CONFIGURE);
 
-//		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE);
+//		PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_STAMP_TYPE);
 //		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM);
 //		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL);
 //		PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY);
@@ -542,7 +542,7 @@ final class TimeStampPadesDialog extends JDialog  {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					if (getTsaUrlText() == null || getTsaUrlText().isEmpty()) {
-						PreferencesManager.remove(PreferencesManager.PREFERENCE_PADES_TIMESTAMP_TSA_URL);
+						PreferencesManager.remove(PreferencesManager.PREFERENCE_TIMESTAMP_TSA_URL);
 					}
 					TimeStampPadesDialog.this.setVisible(false);
 					TimeStampPadesDialog.this.dispose();

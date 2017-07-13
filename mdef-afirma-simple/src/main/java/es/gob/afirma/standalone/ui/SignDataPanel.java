@@ -12,7 +12,7 @@ package es.gob.afirma.standalone.ui;
 
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CHECK_CERTIFICATE_PSSDEF;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_TIMESTAMP_CONFIGURE;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -397,10 +397,11 @@ final class SignDataPanel extends JPanel {
 
 		final JLabel detailPanelText = new JLabel(SimpleAfirmaMessages.getString("SignDataPanel.22")); //$NON-NLS-1$
 
-		if (PreferencesManager.getBoolean(PREFERENCE_PADES_TIMESTAMP_CONFIGURE, false)) {
-			if (null == signInfo.getTimestampsInfo() || signInfo.getTimestampsInfo().isEmpty()) {
+		if (PreferencesManager.getBoolean(PREFERENCE_TIMESTAMP_CONFIGURE, false)) {
+			if ("true".equals(System.getProperty("tsaIsError")) ) {
 				detailPanelText.setText(SimpleAfirmaMessages.getString("SignDataPanel.22.1",
 						SimpleAfirmaMessages.getString("SignDataPanel.22")));
+	    		System.setProperty("tsaIsError", "false");
 			}
 		}
 

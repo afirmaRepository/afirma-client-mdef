@@ -9,7 +9,7 @@ import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERE
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGNER_POSITION;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_PRODUCTION_CITY;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_SIGN_REASON;
-import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_TIMESTAMP_CONFIGURE;
+import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_TIMESTAMP_CONFIGURE;
 import static es.gob.afirma.standalone.ui.preferences.PreferencesManager.PREFERENCE_PADES_VISIBLE;
 
 import java.awt.FlowLayout;
@@ -412,7 +412,7 @@ final class PreferencesPanelPades extends JPanel {
 				)
 			)
 		);
-	    this.configureTimeStampOptionsButton.setEnabled(PreferencesManager.getBoolean(PREFERENCE_PADES_TIMESTAMP_CONFIGURE, false));
+	    this.configureTimeStampOptionsButton.setEnabled(PreferencesManager.getBoolean(PREFERENCE_TIMESTAMP_CONFIGURE, false));
 
         final ComboBoxModel<Object> padesFormatModel = this.padesBasicFormat.getModel();
         final String selectedValue = PreferencesManager.get(

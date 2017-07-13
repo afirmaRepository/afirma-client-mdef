@@ -282,7 +282,7 @@ public final class PreferencesManager {
 	//**************** PREFERENCIAS DE SELLOS DE TIEMPO PADES*****************************************************************
 
 	/** Indica si la configuraci&oacute;n de sello de tiempo est&aacute; activada. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_CONFIGURE = "isTimeStampConfiguredPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_CONFIGURE = "isTimeStampConfiguredPades"; //$NON-NLS-1$
 
 	/** Tipo de sello de tiempo a aplicar en las firmas PAdES.
 	 * Debe contener un valor nu&eacute;rico entre uno y tres:
@@ -291,35 +291,35 @@ public final class PreferencesManager {
      *  <li>2 = Solo sello a nivel de documento.</li>
      *  <li>3 = Dos sellos, uno a nivel de firma y otro a nivel de documento.</li>
      * </ul> */
-	public static final String PREFERENCE_PADES_TIMESTAMP_STAMP_TYPE = "tsType"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_STAMP_TYPE = "tsType"; //$NON-NLS-1$
 
 	/** Algoritmo de huella digital a utilizar en sellos de tiempo para las firmas PAdES. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_HASHALGORITHM = "tsaHashAlgorithmsPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_HASHALGORITHM = "tsaHashAlgorithmsPades"; //$NON-NLS-1$
 
 	/** URL de la autoridad de sello de tiempo para las firmas PAdES. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_TSA_URL = "tsaUrlPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_TSA_URL = "tsaUrlPades"; //$NON-NLS-1$
 
 	/** Pol&iacute;tica de sellado de tiempo para las firmas PAdES. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_STAMP_POLICY = "tsaPolicyPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_STAMP_POLICY = "tsaPolicyPades"; //$NON-NLS-1$
 
 	/** Nombre de usuario de la TSA para las firmas PAdES. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_TSA_USR = "tsaUsrPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_TSA_USR = "tsaUsrPades"; //$NON-NLS-1$
 
 	/** Contrase&ntilde;a del usuario de la TSA para las firmas PAdES. */
-	public static final String PREFERENCE_PADES_TIMESTAMP_TSA_PWD = "tsaPwdPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_TSA_PWD = "tsaPwdPades"; //$NON-NLS-1$
 
 	/** OID de la extensi&oacute;n a a&ntilde;adir a la petici&oacute;n al servidor de sello de tiempo (para las firmas PAdES). */
-	public static final String PREFERENCE_PADES_TIMESTAMP_EXTENSION_OID = "tsaExtensionOidPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_EXTENSION_OID = "tsaExtensionOidPades"; //$NON-NLS-1$
 
 	/** Valor, en binario convertido a Base64, de la extensi&oacute;n a a&ntilde;adir a la petici&oacute;n al
 	 * servidor de sello de tiempo (para las firmas PAdES). */
-	public static final String PREFERENCE_PADES_TIMESTAMP_EXTENSION_VALUE = "tsaExtensionValueBase64Pades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_EXTENSION_VALUE = "tsaExtensionValueBase64Pades"; //$NON-NLS-1$
 
 	/** Indica si se requiere el certificado de la TSA (para las firmas PAdES). */
-	public static final String PREFERENCE_PADES_TIMESTAMP_CERT_REQUIRED = "isCertRequiredPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_CERT_REQUIRED = "isCertRequiredPades"; //$NON-NLS-1$
 
 	/** Indica si la extensi&oacute;n indicada en <code>tsaExtensionOid</code> es cr&iacute;tica (para las firmas PAdES). */
-	public static final String PREFERENCE_PADES_TIMESTAMP_OID_CRITICAL = "isExtensionCriticalPades"; //$NON-NLS-1$
+	public static final String PREFERENCE_TIMESTAMP_OID_CRITICAL = "isExtensionCriticalPades"; //$NON-NLS-1$
 
 	//**************** FIN PREFERENCIAS DE SELLOS DE TIEMPO PADES*****************************************************************
 

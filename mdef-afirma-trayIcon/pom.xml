@@ -49,7 +49,7 @@
 	        </exclusion>
 	        <exclusion>
 	          <groupId>es.gob.afirma</groupId>
-	          <artifactId>afirma-crypto-cades</artifactId>
+	          <artifactId>mdef-afirma-crypto-cades</artifactId>
 	        </exclusion>
 	        <exclusion>
 	          <groupId>es.gob.afirma</groupId>
@@ -57,7 +57,7 @@
 	        </exclusion>
 	        <exclusion>
 	          <groupId>es.gob.afirma</groupId>
-	          <artifactId>afirma-crypto-pdf</artifactId>
+	          <artifactId>mdef-afirma-crypto-pdf</artifactId>
 	        </exclusion>
 	        <exclusion>
 	          <groupId>es.gob.afirma</groupId>

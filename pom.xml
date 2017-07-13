@@ -16,6 +16,8 @@
 	<description>Librerías del núcleo de afirma</description>
 	
 	<modules>
+		<module>mdef-afirma-crypto-cades</module>
+		<module>mdef-afirma-crypto-pdf</module>
 		<module>mdef-afirma-dicodef-clientws</module>
 		<module>mdef-afirma-client-pssdef</module>
 		<module>mdef-afirma-keystores-temd</module>

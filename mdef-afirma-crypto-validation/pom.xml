@@ -27,7 +27,7 @@
 		
 		<dependency>
 			<groupId>es.gob.afirma</groupId>
-			<artifactId>afirma-crypto-cades</artifactId>
+			<artifactId>mdef-afirma-crypto-cades</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
@@ -39,7 +39,7 @@
 		
 		<dependency>
 			<groupId>es.gob.afirma</groupId>
-			<artifactId>afirma-crypto-pdf</artifactId>
+			<artifactId>mdef-afirma-crypto-pdf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
