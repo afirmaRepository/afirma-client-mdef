@@ -4,7 +4,8 @@
 
   <groupId>es.gob.afirma.local</groupId>
   <artifactId>mdef-afirma-local-batch-sign</artifactId>
-  <version>3.3.2-SNAPSHOT</version>
+<!--   <version>3.3.2-SNAPSHOT</version> -->
+  <version>1.6</version>
   <packaging>jar</packaging>
 
   <name>mdef-afirma-local-batch-sign</name>

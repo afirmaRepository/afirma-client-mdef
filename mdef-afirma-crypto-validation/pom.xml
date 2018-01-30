@@ -9,7 +9,8 @@
 	<parent>
 		<groupId>es.gob.afirma</groupId>
 		<artifactId>mdef-afirma-simple</artifactId>
-		<version>3.3.2-SNAPSHOT</version>
+<!-- 		<version>3.3.2-SNAPSHOT</version> -->
+		<version>1.6</version>
 	</parent>
 
 	<dependencies>
@@ -74,9 +75,11 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>es.gob.afirma</groupId>
+<!-- 			<groupId>es.gob.afirma</groupId> -->
+			<groupId>es.gob.afirma.lib</groupId>
 			<artifactId>afirma-lib-itext</artifactId>
-			<version>${project.version}</version>
+<!-- 			<version>${project.version}</version> -->
+			<version>1.0</version>
 		</dependency>
 		
 	</dependencies>

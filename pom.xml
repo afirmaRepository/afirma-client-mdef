@@ -4,7 +4,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.gob.afirma</groupId>
-	<version>3.3.2-SNAPSHOT</version>
+<!-- 	<version>3.3.2-SNAPSHOT</version> -->
+	<version>1.6</version>
 	<artifactId>mdef-afirma-simple</artifactId>
 	<packaging>pom</packaging>
 	<name>mdef-afirma-simple</name>

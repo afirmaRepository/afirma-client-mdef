@@ -4,7 +4,8 @@
 	<parent>
 		<groupId>es.gob.afirma</groupId>
 		<artifactId>mdef-afirma-simple</artifactId>
-		<version>3.3.2-SNAPSHOT</version>
+<!-- 		<version>3.3.2-SNAPSHOT</version> -->
+		<version>1.6</version>
 	</parent>
 
 	<artifactId>mdef-afirma-dicodef-clientws</artifactId>

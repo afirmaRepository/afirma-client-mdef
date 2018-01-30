@@ -92,7 +92,7 @@ import es.gob.afirma.standalone.ui.EditorFocusManager;
 import es.gob.afirma.standalone.ui.pdf.SignPdfUiPanel.SignPdfUiPanelListener;
 import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
-final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
+public final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1848879900511003335L;
 	static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
@@ -908,7 +908,7 @@ final class SignPdfUiPanelPreview extends JPanel implements KeyListener {
 		return Math.min(scalex, scaley);
 	}
 
-	static String breakLines(final String input, final int maxLineLength, final FontMetrics fm) {
+	public static String breakLines(final String input, final int maxLineLength, final FontMetrics fm) {
 		final String[] tokens = input.split(SPLIT_REGEXP);
 		final StringBuilder output = new StringBuilder(input.length());
 		int lineLen = 0;

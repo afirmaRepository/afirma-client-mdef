@@ -116,11 +116,11 @@
 	          <artifactId>pkix</artifactId>
 	        </exclusion>
 	        <exclusion>
-	          <groupId>es.gob</groupId>
+	          <groupId>es.gob.afirma.jmulticard</groupId>
 	          <artifactId>jmulticard-ui</artifactId>
 	        </exclusion>
 	        <exclusion>
-	          <groupId>es.gob</groupId>
+	          <groupId>es.gob.afirma.jmulticard</groupId>
 	          <artifactId>jmulticard-jse</artifactId>
 	        </exclusion>
 	        <exclusion>

@@ -116,9 +116,9 @@ public final class ServiceInvocationManager {
 			+ "kill -9 $(ps -ef | grep " + idSession + " | awk '{print $2}')"  //$NON-NLS-1$ //$NON-NLS-2$
 			+ "\" " //$NON-NLS-1$
 		;
-		final ScriptEngine se = MozillaKeyStoreUtilitiesOsX.getAppleScriptEngine();
+		//final ScriptEngine se = MozillaKeyStoreUtilitiesOsX.getAppleScriptEngine();//MozillaKeyStoreUtilitiesOsX.getAppleScriptEngine();
 		try {
-			se.eval(script);
+			//se.eval(script);
 		} catch (final Exception e) {
 			LOGGER.warning("Fallo kill: " + e); //$NON-NLS-1$
 		}
@@ -127,9 +127,9 @@ public final class ServiceInvocationManager {
 	/** Coge el foco del sistema en OS X. En el resto del sistemas no hace nada. */
 	public static void focusApplication() {
 		final String script = "tell me to activate"; //$NON-NLS-1$
-		final ScriptEngine se = MozillaKeyStoreUtilitiesOsX.getAppleScriptEngine();
+//		final ScriptEngine se = MozillaKeyStoreUtilitiesOsX.getAppleScriptEngine();
 		try {
-			se.eval(script);
+//			se.eval(script);
 		}
 		catch (final Exception e) {
 			LOGGER.warning("Fallo cogiendo el foco en mac: " + e); //$NON-NLS-1$
