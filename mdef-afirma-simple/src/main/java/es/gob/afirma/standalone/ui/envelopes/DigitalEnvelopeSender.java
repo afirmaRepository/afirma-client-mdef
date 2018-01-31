@@ -10,11 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.security.KeyStore.PrivateKeyEntry;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.security.auth.callback.PasswordCallback;
@@ -27,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import es.gob.afirma.core.AOCancelledOperationException;
+import es.gob.afirma.core.keystores.NameCertificateBean;
 import es.gob.afirma.core.misc.AOUtil;
 import es.gob.afirma.core.misc.Platform;
 import es.gob.afirma.core.ui.AOUIFactory;
@@ -35,6 +40,9 @@ import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerException;
+import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
+import es.gob.afirma.keystores.AOKeystoreAlternativeException;
+import es.gob.afirma.keystores.KeyStoreUtilities;
 import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
@@ -101,7 +109,11 @@ public class DigitalEnvelopeSender extends JPanel {
 	public DigitalEnvelopeSender(final DigitalEnvelopePresentation parent) {
 		this.dialog = parent;
 
+		//EnvelopeData envelopeData 
+		
 		if (this.dialog != null && this.dialog.getEnvelopeData().getFilePath() != null) {
+					
+			//..................................................................................................
 			this.senderKeyStoreManager = this.dialog.getEnvelopeData().getSenderKeyStoreManager();
 			this.senderPrivateKeyEntry = this.dialog.getEnvelopeData().getSenderPrivateKeyEntry();
 
@@ -110,7 +122,79 @@ public class DigitalEnvelopeSender extends JPanel {
 		}
 
 		createUI();
-	}
+		
+		// isr mod 2018
+		cargarRemitente();
+			
+	}//end method
+
+	// isr mod 2018
+	// para cargar automaticamente el remitente sin tener
+	// abrir el dialogo de seleccion
+	public void cargarRemitente(){
+		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this);
+		final AOKeyStore ks = AOKeyStore.TEMD;
+		this.senderKeyStoreManager= null;
+		boolean correcto = true;
+		String ownAlias = null;
+		try {
+			this.senderKeyStoreManager = AOKeyStoreManagerFactory.getAOKeyStoreManager(
+						ks,
+						null,
+						null,
+						ks.getStorePasswordCallback(null),
+						null);
+			
+			ownAlias = getOwnAlias(this.senderKeyStoreManager);
+	    	
+			if(storedTemdStarted){
+				this.senderKeyStoreManager.getType().getCertificatePasswordCallback(null).getPassword();
+		    	}
+			this.senderKeyStoreManager.setParentComponent(this);
+			this.senderPrivateKeyEntry = this.senderKeyStoreManager.getKeyEntry(ownAlias);
+		} 
+		catch (AOKeyStoreManagerException e) {
+			correcto = false;
+		} 
+		catch (AOKeystoreAlternativeException e) {
+			correcto = false;
+		} 
+		catch (IOException e) {
+			correcto = false;
+		} 
+		catch (KeyStoreException e) {
+			correcto = false;
+		} 
+		catch (NoSuchAlgorithmException e) {
+			correcto = false;
+		} 
+		catch (UnrecoverableEntryException e) {
+			correcto = false;
+		}
+		if(correcto && ownAlias!=null){
+			showSenderCertAlias();
+			this.nextButton.setEnabled(true);				
+		}
+	
+	}//end method
+	
+	// isr mod 2018
+	public String getOwnAlias(AOKeyStoreManager keyStoreManager) {	
+        final List<CertificateFilter> filtersList = new ArrayList<>();
+        filtersList.add(new KeyUsageFilter(KeyUsageFilter.SIGN_CERT_USAGE));
+        
+    	final Map<String, String> aliassesByFriendlyName =
+    		KeyStoreUtilities.getAliasesByFriendlyName(
+    				keyStoreManager.getAliases(),
+    				keyStoreManager,
+					true, //checkPrivateKeys
+					true,//showExpiredCertificates
+				filtersList
+			);
+    	String[] arrayAlias =  aliassesByFriendlyName.keySet().toArray(new String[aliassesByFriendlyName.size()]);
+		return arrayAlias[0];
+	}//end method
+	
 
 	/**
 	 * Muestra el CN o alias del certificado seleccionado para firmar la petici&oacute;n.
@@ -337,7 +421,7 @@ public class DigitalEnvelopeSender extends JPanel {
 		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this);
     	final AOKeyStoreManager keyStoreManager = SimpleAfirma.getAOKeyStoreManager();
     	
-    	
+    	showSenderCertAlias();
 
         // Solo permitimos usar certificados de firma como remitentes
         final List<CertificateFilter> filtersList = new ArrayList<>();
