@@ -3,6 +3,8 @@ package es.gob.afirma.standalone.ui.preferences;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.net.URISyntaxException;
@@ -64,15 +66,17 @@ final class PreferencesPanelCipherment extends JPanel {
 	private final JButton checkUriButton = new JButton(SimpleAfirmaMessages.getString("PreferencesPanelCipherment.16")); //$NON-NLS-1$
 
 	//............................................................................................................
-	//isr 2018
-	private final JTextField dicodefUser = new JTextField();
-	public JTextField getDirectoryURI() {
-		return directoryURI;
+	//isr 2018	
+	private final JTextField dicodefPassword = new JTextField();
+	public String getDicodefPassword() {
+		return dicodefPassword.getText();
 	}
 
-	private final JTextField dicodefPassword = new JTextField();
-	public JTextField getDicodefUser() {
-		return dicodefUser;
+	
+	
+	private final JTextField dicodefUser = new JTextField();
+	public String getDicodefUser() {
+		return dicodefUser.getText();
 	}	
 	//............................................................................................................
 	
@@ -91,6 +95,13 @@ final class PreferencesPanelCipherment extends JPanel {
 		PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_ALGORITHM, getSelectedCipherAlgorithm());
 		PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_METHOD, getSelectedAccessMethod());
 		PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_URI_DICODEF, getURI());
+		try {
+			PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_USER_DICODEF, AesEcrypt.encrypt(getDicodefUser()) );
+		PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_PASS_DICODEF, AesEcrypt.encrypt(getDicodefPassword()) );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/*		if (getURI() != null && !getURI().trim().isEmpty()) {
 			if (checkURI()) {
 				PreferencesManager.put(PreferencesManager.PREFERENCE_CIPHERMENT_URI_DICODEF, getURI());
@@ -118,24 +129,20 @@ final class PreferencesPanelCipherment extends JPanel {
 		
 		
 		if(this.unprotected){
-			String dicodefUserDecrypt = "";
-			String dicodefPasswordDecrypt = "";
+
 			try {
-				dicodefUserDecrypt = AesEcrypt .decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_USER_DICODEF, "" ));
-				dicodefPasswordDecrypt = AesEcrypt.decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_PASS_DICODEF, "" ));
+				String dicodefUserDecrypt = AesEcrypt.decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_USER_DICODEF, "" ));
+				String dicodefPasswordDecrypt = AesEcrypt.decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_PASS_DICODEF, "" ));
+				this.dicodefUser.setText(dicodefUserDecrypt);		
+				this.dicodefPassword.setText(dicodefPasswordDecrypt); 					
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.dicodefUser.setText(dicodefUserDecrypt);		
-			this.dicodefPassword.setText(dicodefPasswordDecrypt);			
+		
 		}				
 	}
 
-	/*
-	AesEcrypt .decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_USER_DICODEF, "" )),
-	AesEcrypt.decrypt(PreferencesManager.get(PreferencesManager.PREFERENCE_CIPHERMENT_PASS_DICODEF, "" ))
-	 */
 	boolean checkURI() {
 		boolean ConectionOK = false;
 		if (getURI() != null && !getURI().trim().isEmpty()) {
@@ -283,7 +290,7 @@ final class PreferencesPanelCipherment extends JPanel {
 		dicodefPasswordLabel.setLabelFor(this.dicodefPassword);
 		//....................................................................................................................
 		
-		/*
+		
 		final JLabel directoryURILabel = new JLabel(SimpleAfirmaMessages.getString("PreferencesPanelCipherment.14") //$NON-NLS-1$
 		);
 		directoryURILabel.setLabelFor(this.directoryURI);
@@ -311,7 +318,7 @@ final class PreferencesPanelCipherment extends JPanel {
 		this.accessMethods.addKeyListener(keyListener);
 		this.accessMethods.addItemListener(modificationListener);
 		this.accessMethods.setEnabled(unprotected);
-*/
+
 		//....................................................................................................................
 
 		rpc.insets = new Insets(0, 0, 0, 7);
@@ -330,7 +337,7 @@ final class PreferencesPanelCipherment extends JPanel {
 		
 		//....................................................................................................................
 		
-		/*
+		
 		repositoryPanel.add(directoryURILabel, rpc);
 		rpc.gridy++;
 		rpc.insets = new Insets(50, 0, 0, 7);
@@ -339,6 +346,7 @@ final class PreferencesPanelCipherment extends JPanel {
 		rpc.gridwidth = GridBagConstraints.REMAINDER;
 		rpc.weightx = 0.0;
 		repositoryPanel.add(this.checkUriButton, rpc);
+		/*
 		rpc.gridx--;
 		rpc.gridwidth = GridBagConstraints.LINE_START;
 		rpc.gridy++;
