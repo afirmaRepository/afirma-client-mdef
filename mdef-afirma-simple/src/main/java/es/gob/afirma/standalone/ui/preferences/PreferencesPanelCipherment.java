@@ -3,8 +3,6 @@ package es.gob.afirma.standalone.ui.preferences;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.net.URISyntaxException;
@@ -21,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import es.gob.afirma.core.ui.AOUIFactory;
-import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
 import es.gob.afirma.standalone.crypto.AesEcrypt;
 import es.gob.afirma.ws.client.modelo.IdentidadType;
