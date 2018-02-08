@@ -30,7 +30,7 @@ import es.gob.afirma.ws.client.services.ConfigParameters;
 import es.gob.afirma.ws.client.services.DicodefClientWs;
 import es.gob.afirma.ws.client.services.InicializarSpring;
 
-final class PreferencesPanelCipherment extends JPanel {
+final class PreferencesPanelCipherment extends JPanel { 
 
 	private static final long serialVersionUID = -6602008231996534490L;
 	static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
