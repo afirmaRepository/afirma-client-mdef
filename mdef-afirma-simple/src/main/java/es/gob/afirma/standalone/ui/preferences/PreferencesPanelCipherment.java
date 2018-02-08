@@ -25,7 +25,7 @@ import es.gob.afirma.ws.client.modelo.IdentidadType;
 import es.gob.afirma.ws.client.modelo.UsuarioSistemaMailType;
 import es.gob.afirma.ws.client.services.ConfigParameters;
 import es.gob.afirma.ws.client.services.DicodefClientWs;
-import es.gob.afirma.ws.client.services.InicializarSpring;
+import es.gob.afirma.ws.client.services.InicializarSpring; 
 
 final class PreferencesPanelCipherment extends JPanel {
 
