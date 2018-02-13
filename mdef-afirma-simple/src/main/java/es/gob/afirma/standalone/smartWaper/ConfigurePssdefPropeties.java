@@ -31,6 +31,11 @@ public class ConfigurePssdefPropeties {
 	public static final String APPLICATION_HOME_PSSDEF = Platform.getUserHome() + File.separator + ".afirma"
 			+ File.separator + "AutoFirma" + File.separator + "PssdefService"; //$NON-NLS-1$ //$NON-NLS-2$
 
+	public static final String APPLICATION_HOME_JKS = Platform.getUserHome() + File.separator + ".afirma"
+			+ File.separator + "AutoFirma"; //$NON-NLS-1$ //$NON-NLS-2$
+	
+	public static final String PASS_JKS = "Autofirma"; //$NON-NLS-1$ //$NON-NLS-2$
+
 	private static ConfigurePssdefPropeties configurePssdefPropeties;
 
 	public static void inizializerProperties() {
@@ -69,6 +74,9 @@ public class ConfigurePssdefPropeties {
 			if (!fileExit("PSSDEF_Autofirma.jks")) {
 				copycertPssdef("PSSDEF_Autofirma.jks");
 			}
+			if (!fileExitJks("Autofirma.jks")) {
+				copyJksAutofirma("Autofirma.jks");
+			}
 			if (!fileExit("smartwrapper.properties")) {
 				writeSmartWapper("smartwrapper.properties");
 			}
@@ -95,6 +103,18 @@ public class ConfigurePssdefPropeties {
 		return result;
 	}
 
+	/** Indica si el existe el fichero necesario para el servicios 
+	 * @param filePath Ruta del fichero.
+	 * @return devuelve true si existe .
+	 */
+	private boolean fileExitJks(String file) {
+		boolean result = false;
+		File filePro = new File(APPLICATION_HOME_JKS + File.separator + file);
+		if (filePro.exists()) {
+			result = true;
+		}
+		return result;
+	}	
 	/** construye el archivo de propiedades de smartwraper y lo 
 	 * deposita en el directorio necesario para los pssdef 
 	 * @param filePath Ruta del fichero.
@@ -155,6 +175,24 @@ public class ConfigurePssdefPropeties {
 		os.close();
 	}
 
+	/** copia los certificados necesarios para emplear los servicios 
+	 * @param filePath Ruta del fichero.
+	 * @throws IOException Error al construir el documento.
+	 */	
+	public void copyJksAutofirma(String file) throws IOException {
+		InputStream is = getClass().getResourceAsStream("/" + file);
+
+		OutputStream os = new FileOutputStream(APPLICATION_HOME_JKS + File.separator + file);
+
+		byte[] buffer = new byte[1024];
+		int bytesRead;
+		while ((bytesRead = is.read(buffer)) != -1) {
+			os.write(buffer, 0, bytesRead);
+		}
+		is.close();
+		os.flush();
+		os.close();
+	}	
 	/** crea el directorio para depositar los ficheros
 	 */
 	private void createDirectory() {

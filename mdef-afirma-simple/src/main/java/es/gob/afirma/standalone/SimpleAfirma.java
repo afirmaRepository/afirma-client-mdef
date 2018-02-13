@@ -33,11 +33,17 @@ import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileLock;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
@@ -63,6 +69,7 @@ import es.gob.afirma.keystores.AOKeyStore;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
+import es.gob.afirma.keystores.chain.verifier.CertChainValidator;
 import es.gob.afirma.keystores.temd.TemdKeyStoreManager;
 import es.gob.afirma.standalone.protocol.ProtocolInvocationLauncher;
 import es.gob.afirma.standalone.smartWaper.ConfigurePssdefPropeties;
@@ -127,6 +134,9 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 	static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
 
 	private final JFrame window = new MainScreen();
+	
+	public static String[] arrayIssuerverifiedCaChain = null;
+
 
 	/**
 	 * Devuelve el marco principal de la aplicaci&oacute;n.
@@ -170,6 +180,12 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		if (ksm != null) {
 			LOGGER.info("Establecido KeyStoreManager: " + ksm); //$NON-NLS-1$
 			ksManager = ksm;
+			try {
+				Set<String> arrayIssuer = CertChainValidator.getIssuerValid(APPLICATION_HOME + File.separator +"Autofirma.jks", ConfigurePssdefPropeties.PASS_JKS, ksm);
+				arrayIssuerverifiedCaChain = arrayIssuer.toArray(new String[arrayIssuer.size()]);
+			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException
+					| InvalidAlgorithmParameterException | NoSuchProviderException | IOException e) {
+				LOGGER.severe("No se ha podido recuperar los issuer validos de la cadena de CA");			}
 
 			if (this.currentPanel instanceof SignPanel) {
 				((SignPanel) this.currentPanel).notifyStoreReady();

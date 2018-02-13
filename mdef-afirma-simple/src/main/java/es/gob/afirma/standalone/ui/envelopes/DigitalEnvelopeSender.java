@@ -44,12 +44,14 @@ import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
 import es.gob.afirma.keystores.AOKeystoreAlternativeException;
 import es.gob.afirma.keystores.KeyStoreUtilities;
 import es.gob.afirma.keystores.filters.CertificateFilter;
+import es.gob.afirma.keystores.filters.TextContainedCertificateFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.standalone.SimpleAfirma;
 import es.gob.afirma.standalone.SimpleAfirmaMessages;
 import es.gob.afirma.standalone.SimpleKeyStoreManager;
 import es.gob.afirma.standalone.ui.IsObjectExpiredException;
+import es.gob.afirma.standalone.ui.preferences.PreferencesManager;
 
 /**
  * Panel para seleccionar el remitente que se quiere incluir en el sobre digital.
@@ -124,7 +126,7 @@ public class DigitalEnvelopeSender extends JPanel {
 		createUI();
 		
 		// isr mod 2018
-		cargarRemitente();
+		//cargarRemitente();
 			
 	}//end method
 
@@ -182,6 +184,12 @@ public class DigitalEnvelopeSender extends JPanel {
 	public String getOwnAlias(AOKeyStoreManager keyStoreManager) {	
         final List<CertificateFilter> filtersList = new ArrayList<>();
         filtersList.add(new KeyUsageFilter(KeyUsageFilter.SIGN_CERT_USAGE));
+
+        if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
+    		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
+    			filtersList.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
+    		}
+    	}
         
     	final Map<String, String> aliassesByFriendlyName =
     		KeyStoreUtilities.getAliasesByFriendlyName(
@@ -426,6 +434,12 @@ public class DigitalEnvelopeSender extends JPanel {
         // Solo permitimos usar certificados de firma como remitentes
         final List<CertificateFilter> filtersList = new ArrayList<>();
         filtersList.add(new KeyUsageFilter(KeyUsageFilter.SIGN_CERT_USAGE));
+        
+    	if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
+    		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
+    			filtersList.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
+    		}
+    	}
 
         final AOKeyStoreDialog keyStoreDialog = new AOKeyStoreDialog(
         		keyStoreManager,

@@ -63,6 +63,7 @@ import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.MultipleCertificateFilter;
 import es.gob.afirma.keystores.filters.PolicyIdFilter;
 import es.gob.afirma.keystores.filters.PseudonymFilter;
+import es.gob.afirma.keystores.filters.TextContainedCertificateFilter;
 import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.signers.xades.AOFacturaESigner;
 import es.gob.afirma.signers.xades.AOXAdESSigner;
@@ -653,6 +654,11 @@ public final class SignPanel extends JPanel {
 			);
     		if (polis != null && !polis.trim().isEmpty()) {
     			filters.add(new PolicyIdFilter(polis));
+    		}
+    	}
+    	if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
+    		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
+    			filters.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
     		}
     	}
     	if (filters.size() > 1) {

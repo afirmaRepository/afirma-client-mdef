@@ -20,7 +20,8 @@
 		<dependency>
 			<groupId>es.gob.afirma</groupId>
 			<artifactId>afirma-core</artifactId>
-			<version>3.3.2-SNAPSHOT</version>
+<!-- 			<version>3.3.2-SNAPSHOT</version> -->
+			<version>1.6</version>
 		</dependency>
 
 		<dependency>

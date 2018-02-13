@@ -21,7 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +46,10 @@ import es.gob.afirma.keystores.AOKeyStoreDialog;
 import es.gob.afirma.keystores.AOKeyStoreManager;
 import es.gob.afirma.keystores.AOKeyStoreManagerException;
 import es.gob.afirma.keystores.AOKeyStoreManagerFactory;
+import es.gob.afirma.keystores.filters.CertificateFilter;
 import es.gob.afirma.keystores.filters.DecipherCertificateFilter;
+import es.gob.afirma.keystores.filters.TextContainedCertificateFilter;
+import es.gob.afirma.keystores.filters.rfc.KeyUsageFilter;
 import es.gob.afirma.keystores.temd.TemdKeyStoreManager;
 import es.gob.afirma.keystores.temd.TimedPersistentCachePasswordCallback;
 import es.gob.afirma.standalone.AutoFirmaUtil;
@@ -462,6 +467,14 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 
 		boolean storedTemdStarted = SimpleAfirma.iniciarAOKeyStoreManager(this);
     	final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
+        final List<CertificateFilter> filtersList = new ArrayList<>();
+        filtersList.add(new DecipherCertificateFilter());
+
+        if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
+    		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
+    			filtersList.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
+    		}
+    	}    	
 		//final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,
@@ -469,7 +482,8 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
 			true,             // Comprobar claves privadas
 			false,            // Mostrar certificados caducados
 			true,             // Comprobar validez temporal del certificado
-			Arrays.asList(new DecipherCertificateFilter()), // Filtros
+			//Arrays.asList(new DecipherCertificateFilter()), // Filtros
+			filtersList,
 			false             // mandatoryCertificate
 		);
     	
