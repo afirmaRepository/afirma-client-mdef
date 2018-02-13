@@ -126,7 +126,7 @@ public class DigitalEnvelopeSender extends JPanel {
 		createUI();
 		
 		// isr mod 2018
-		//cargarRemitente();
+		cargarRemitente();
 			
 	}//end method
 
@@ -140,30 +140,14 @@ public class DigitalEnvelopeSender extends JPanel {
 		boolean correcto = true;
 		String ownAlias = null;
 		try {
-			this.senderKeyStoreManager = AOKeyStoreManagerFactory.getAOKeyStoreManager(
-						ks,
-						null,
-						null,
-						ks.getStorePasswordCallback(null),
-						null);
-			
-			ownAlias = getOwnAlias(this.senderKeyStoreManager);
-	    	
+			this.senderKeyStoreManager = SimpleAfirma.getAOKeyStoreManager();
+			ownAlias = getOwnAlias(this.senderKeyStoreManager);	    	
 			if(storedTemdStarted){
 				this.senderKeyStoreManager.getType().getCertificatePasswordCallback(null).getPassword();
-		    	}
+		    }
 			this.senderKeyStoreManager.setParentComponent(this);
 			this.senderPrivateKeyEntry = this.senderKeyStoreManager.getKeyEntry(ownAlias);
-		} 
-		catch (AOKeyStoreManagerException e) {
-			correcto = false;
-		} 
-		catch (AOKeystoreAlternativeException e) {
-			correcto = false;
-		} 
-		catch (IOException e) {
-			correcto = false;
-		} 
+		}
 		catch (KeyStoreException e) {
 			correcto = false;
 		} 
@@ -184,12 +168,6 @@ public class DigitalEnvelopeSender extends JPanel {
 	public String getOwnAlias(AOKeyStoreManager keyStoreManager) {	
         final List<CertificateFilter> filtersList = new ArrayList<>();
         filtersList.add(new KeyUsageFilter(KeyUsageFilter.SIGN_CERT_USAGE));
-
-        if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
-    		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
-    			filtersList.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
-    		}
-    	}
         
     	final Map<String, String> aliassesByFriendlyName =
     		KeyStoreUtilities.getAliasesByFriendlyName(
