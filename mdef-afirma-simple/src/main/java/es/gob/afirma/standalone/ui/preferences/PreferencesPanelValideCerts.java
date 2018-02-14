@@ -48,7 +48,9 @@ public class PreferencesPanelValideCerts extends JPanel {
 	}
 	*/
 
+	// fhc mod 2018
 	private final JCheckBox vaURICheck = new JCheckBox(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.9")); //$NON-NLS-1$
+	// end fhc mod 2018
 	private final JCheckBox pssdef = new JCheckBox(SimpleAfirmaMessages.getString("PreferencesPanelValideCerts.3")); //$NON-NLS-1$
 
 //	boolean ispssdefSelected() {

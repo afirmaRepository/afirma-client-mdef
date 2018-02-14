@@ -30,6 +30,8 @@ import java.util.logging.Logger;
 
 import es.gob.afirma.keystores.AOKeyStoreManager;
 
+// fhc mod 2018 clase creada para las cadenas de responsabilidad
+
 public final class CertChainValidator {
 
     protected static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$

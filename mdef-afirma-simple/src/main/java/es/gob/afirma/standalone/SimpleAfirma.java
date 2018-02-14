@@ -135,7 +135,9 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 
 	private final JFrame window = new MainScreen();
 	
+	// fhc mod 2018
 	public static String[] arrayIssuerverifiedCaChain = null;
+	// end fhc mod 2018
 
 
 	/**
@@ -180,12 +182,14 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
 		if (ksm != null) {
 			LOGGER.info("Establecido KeyStoreManager: " + ksm); //$NON-NLS-1$
 			ksManager = ksm;
+			// fhc mod 2018
 			try {
 				Set<String> arrayIssuer = CertChainValidator.getIssuerValid(APPLICATION_HOME + File.separator +"Autofirma.jks", ConfigurePssdefPropeties.PASS_JKS, ksm);
 				arrayIssuerverifiedCaChain = arrayIssuer.toArray(new String[arrayIssuer.size()]);
 			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException
 					| InvalidAlgorithmParameterException | NoSuchProviderException | IOException e) {
 				LOGGER.severe("No se ha podido recuperar los issuer validos de la cadena de CA");			}
+			// end fhc mod 2018
 
 			if (this.currentPanel instanceof SignPanel) {
 				((SignPanel) this.currentPanel).notifyStoreReady();

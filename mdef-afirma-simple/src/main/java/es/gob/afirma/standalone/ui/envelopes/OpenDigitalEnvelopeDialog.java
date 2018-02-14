@@ -470,11 +470,13 @@ public class OpenDigitalEnvelopeDialog extends JDialog implements KeyListener {
         final List<CertificateFilter> filtersList = new ArrayList<>();
         filtersList.add(new DecipherCertificateFilter());
 
+    	// fhc mod 2018
         if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
     		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
     			filtersList.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
     		}
     	}    	
+    	// end fhc mod 2018
 		//final AOKeyStoreManager ksm = SimpleAfirma.getAOKeyStoreManager();
     	final AOKeyStoreDialog dialog = new AOKeyStoreDialog(
 			ksm,

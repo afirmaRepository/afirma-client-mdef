@@ -656,11 +656,16 @@ public final class SignPanel extends JPanel {
     			filters.add(new PolicyIdFilter(polis));
     		}
     	}
+
+    	// fhc mod 2018
+    	
     	if (PreferencesManager.getBoolean(PreferencesManager.PREFERENCE_CN_CA_CERT_SERVICE, false)) {
     		if(null != SimpleAfirma.arrayIssuerverifiedCaChain){
     			filters.add(new TextContainedCertificateFilter(null, SimpleAfirma.arrayIssuerverifiedCaChain));
     		}
     	}
+    	// end fhc mod 2018
+    	
     	if (filters.size() > 1) {
     		return Arrays.asList(
 				new MultipleCertificateFilter(filters.toArray(new CertificateFilter[0]))
