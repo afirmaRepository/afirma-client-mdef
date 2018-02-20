@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plist version="1.0">
 <dict>
+	<key>preferencesUnprotected</key>
+	<true/>
+	<key>prioritaryStore</key>
+	<string>TEMD (Tarjeta del Ministerio de Defensa)</string>
 	<key>omitAskOnClose</key>
 	<true/>
 	<key>signatureAlgorithm</key>
